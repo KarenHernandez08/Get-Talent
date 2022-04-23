@@ -113,8 +113,6 @@ ENV/
 env.bak/
 venv.bak/
 
-pruebasPersonalesAngela.py
-
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -142,4 +140,3 @@ cython_debug/
 staticfiles/
 .vscode
 .vagrant/*
-
