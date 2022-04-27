@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from decouple import config, Csv
+import datetime
 
 ENV = config('ENV', default='dev')
 
@@ -183,6 +184,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ]
 }
+AUTH_USER_MODEL = 'users.UserModel'
 
 #datos para envio de correo
 EMAIL_USE_TLS=True
@@ -190,3 +192,9 @@ EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_HOST_USER= os.environ.get('EMAIL_HOST_USER') #os.environ.get para obtener la variable de un entorno virtual
 EMAIL_HOST_PASSWORD= os.environ.get('EMAIL_HOST_PASSWORD')
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=25),
+    'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
+
+}

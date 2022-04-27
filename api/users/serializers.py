@@ -4,6 +4,7 @@ from django.core import exceptions
 import django.contrib.auth.password_validation as validators
 from rest_framework.exceptions import ValidationError
 from  rest_framework.exceptions import AuthenticationFailed
+from django.contrib import auth
 
 
 
@@ -52,4 +53,72 @@ class UserSignupSerializer(serializers.ModelSerializer):
         
             return super(UserSignupSerializer, self).validate(data)
 
-   
+
+class LoginSerializer(serializers.ModelSerializer):
+    email=serializers.EmailField(max_length=50)
+    password=serializers.CharField(max_length=20, write_only=True)
+    tokens = serializers.SerializerMethodField()
+    
+    def get_tokens(self, obj):
+        
+        try:
+            user = UserModel.objects.get(email=obj['email'])
+            user = UserModel.objects.get(password=obj['password'])
+          
+            
+            return {
+            'refresh': user.tokens()['refresh'],
+            'access': user.tokens()['access']
+            }
+           
+        except UserModel.DoesNotExist:
+          raise AuthenticationFailed(
+                'Vuelva a intentarlo porfavor'
+            )  
+
+    
+    class Meta:
+        model = UserModel
+        fields = ['email', 'password',  'tokens']
+
+def validate(self, attrs):   
+        
+        email = attrs.get('email', '')
+        password = attrs.get('password', '')
+        
+        if email is None:
+            raise AuthenticationFailed(
+                'Se requiere el email para el login'
+            )
+        if password is None:
+            raise AuthenticationFailed(
+                'Se necesita una contraseña'
+            )
+        user = auth.authenticate(email=email, password=password)
+        
+        if user is None:
+            raise AuthenticationFailed(
+                'No se encuetra el usuario'
+            )
+        
+        if not user.is_active:
+            raise AuthenticationFailed(
+                'Su cuenta esta desactivada'
+            )
+        
+        
+        
+        return {
+        
+        'email':user.email,
+        'tokens':user.tokens
+        }
+        return super().validate(attrs)
+        
+       
+
+
+
+    
+    
+    

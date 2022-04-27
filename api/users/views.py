@@ -1,12 +1,10 @@
-from ast import Try
-from asyncio import exceptions
-from email import message
+
 from django.shortcuts import render 
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from users.models import UserModel
-from users.serializers import UserSignupSerializer
+from users.serializers import LoginSerializer, UserSignupSerializer
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los tokens
 from .utils import Util #importamos nuestra clase y metodo de enviar email
@@ -49,7 +47,7 @@ class UserSignupView(APIView):
         #aqui invocamos el metodo y mandamos la data para utils.py
         Util.send_email(data) 
         #en este caso que todo este correcto enviara un mensaje de exito 
-        return Response({'message':"Succesfully"},status=status.HTTP_201_CREATED) 
+        return Response({'message':"Registrado correctamente"},status=status.HTTP_201_CREATED) 
     
   
 #Verificar Email y activacion de cuenta
@@ -74,10 +72,24 @@ class VerifyEmail(APIView):
             if not user.is_active:
                 user.is_active=True
                 user.save()
-            return Response({'email':'Succeesfully activated'},status=status.HTTP_200_OK)
+            return Response({'email':'ACtivado exitosamente'},status=status.HTTP_200_OK)
         
         #errores de activacion y errores de decodificacion de token 
         except jwt.ExpiredSignatureError as identifier:
-            return Response({'email':'Activation Expired'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'email':'La activación expiro'},status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
-            return Response({'email':'Invalid token'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'email':'token Invalido'},status=status.HTTP_400_BAD_REQUEST)
+        
+
+class LoginAPIView(APIView):
+    
+    permission_classes = [permissions.AllowAny]
+    serializer_class=LoginSerializer
+    def post(self, request):
+        
+        serializer=self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
