@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 from decouple import config, Csv
 
 ENV = config('ENV', default='dev')
@@ -54,6 +55,7 @@ INSTALLED_APPS += [
     'corsheaders',
 
     # Local apps:
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -168,6 +170,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Django Rest Framework
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
@@ -175,3 +183,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ]
 }
+
+#datos para envio de correo
+EMAIL_USE_TLS=True
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER= os.environ.get('EMAIL_HOST_USER') #os.environ.get para obtener la variable de un entorno virtual
+EMAIL_HOST_PASSWORD= os.environ.get('EMAIL_HOST_PASSWORD')
