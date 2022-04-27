@@ -60,15 +60,5 @@ class VacantesRegistroView(APIView):
         print(serializers_vacantes)
         serializers_vacantes.is_valid(raise_exception=True)
         serializers_vacantes.save()
-        # serializers = {
-        #     'Preguntas': PreguntasSerializer(data=request.data),
-        #     'Vacantes': VacantesSerializer(data=request.data)
-        # }
-        #if PreguntasSerializer:
-        #serializers_preguntas.save()
-        
-    
-        #if VacantesSerializer.is_valid():
-        #    serializers_vacante.save()
         
         return Response(status=status.HTTP_201_CREATED)
