@@ -1,5 +1,5 @@
-
 from django.db import models
+from enum import unique
 
 
 # Create your models here.
@@ -19,7 +19,3 @@ class UserModel(models.Model):
     USERNAME_FIELD= "email"
 def __str__(self):
         return self.email
-
-    
-
-    

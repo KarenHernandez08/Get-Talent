@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from decouple import config, Csv
+import os
+
 
 ENV = config('ENV', default='dev')
 
@@ -53,9 +55,11 @@ INSTALLED_APPS += [
     # Third party apps:
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt',
 
     # Local apps:
-    'users'
+        'users',
+        'vacantes',
 ]
 
 MIDDLEWARE = [
@@ -181,12 +185,16 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    
+     
+    )
 }
 
-#datos para envio de correo
 EMAIL_USE_TLS=True
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER= os.environ.get('EMAIL_HOST_USER') #os.environ.get para obtener la variable de un entorno virtual
+EMAIL_HOST_USER= os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD= os.environ.get('EMAIL_HOST_PASSWORD')

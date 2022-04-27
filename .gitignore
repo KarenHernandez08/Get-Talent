@@ -50,6 +50,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+pruebasPersonalesAngela.py
 
 # Translations
 *.mo
@@ -113,6 +114,8 @@ ENV/
 env.bak/
 venv.bak/
 
+pruebasPersonalesAngela.py
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -140,3 +143,4 @@ cython_debug/
 staticfiles/
 .vscode
 .vagrant/*
+
