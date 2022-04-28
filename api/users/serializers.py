@@ -63,7 +63,7 @@ class LoginSerializer(serializers.ModelSerializer):
         
         try:
             user = UserModel.objects.get(email=obj['email'])
-            user = UserModel.objects.get(password=obj['password'])
+            #user = UserModel.objects.get(password=obj['password'])
           
             
             return {
@@ -81,7 +81,7 @@ class LoginSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ['email', 'password',  'tokens']
 
-def validate(self, attrs):   
+    def validate(self, attrs):   
         
         email = attrs.get('email', '')
         password = attrs.get('password', '')
