@@ -45,7 +45,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-    
+#login  
     def tokens(self):
         refresh=RefreshToken.for_user(self)
         return{

@@ -53,7 +53,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         
             return super(UserSignupSerializer, self).validate(data)
 
-
+#login
 class LoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(max_length=50)
     password=serializers.CharField(max_length=20, write_only=True)
@@ -94,6 +94,7 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed(
                 'Se necesita una contraseña'
             )
+            #Aquí me marca el error
         user = auth.authenticate(email=email, password=password)
         
         if user is None:

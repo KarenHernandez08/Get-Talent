@@ -80,7 +80,7 @@ class VerifyEmail(APIView):
         except jwt.exceptions.DecodeError as identifier:
             return Response({'email':'token Invalido'},status=status.HTTP_400_BAD_REQUEST)
         
-
+#Login
 class LoginAPIView(APIView):
     
     permission_classes = [permissions.AllowAny]
