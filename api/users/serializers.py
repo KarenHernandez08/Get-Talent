@@ -1,31 +1,31 @@
-from rest_framework import serializers
-from users.models import UserModel
+
 from django.core import exceptions
-import django.contrib.auth.password_validation as validators
+#import django.contrib.auth.password_validation as validators
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from  rest_framework.exceptions import AuthenticationFailed
-from django.contrib import auth
+from users.models import User
 
 
 
 
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserModel
+        model = User
         fields = '__all__'
+        extra_kwargs={
+            'password':{
+                'write_only':True
+            }
+        }
         
     def validate(self, data):
-            user = UserModel(**data)
             password = data.get('password')
-            errors = dict() 
-            confirm_password = data.get('confirmPassword')
+        
             special_characters = "[~\!@#\$%\^&\*\(\)_\+{}\":;'\[\]]"
 
-            if len(password) <8 or len(password) > 20:
+            if len(password) <6 or len(password) > 20:
                raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')
 
-            if password != confirm_password:
-               raise ValidationError('La contraseña debe coincidir.')
 
             if not any(x.isalpha() for x in password):
                 raise ValidationError('La contraseña debe contener al menos una letra.')
@@ -42,79 +42,36 @@ class UserSignupSerializer(serializers.ModelSerializer):
             if not any(x in special_characters for x in password):
                 raise ValidationError('La contraseña debe contener al menos un caracter especial.')
 
-            try:
-             validators.validate_password(password=password, user=user)
-         
-            except exceptions.ValidationError as e:
-             errors['password'] = list(e.messages)
-         
-            if errors:
-             raise serializers.ValidationError(errors)
+            return data
         
-            return super(UserSignupSerializer, self).validate(data)
+    def create(self,validated_data):
+        user=User.objects.create_user(**validated_data)
+        user.save()
+        return user
+    
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=555)
+
+    class Meta:
+        model = User
+        fields = ['token']
 
 #login
 class LoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(max_length=50)
-    password=serializers.CharField(max_length=20, write_only=True)
-    tokens = serializers.SerializerMethodField()
-    
-    def get_tokens(self, obj):
-        
-        try:
-            user = UserModel.objects.get(email=obj['email'])
-            #user = UserModel.objects.get(password=obj['password'])
-          
-            
-            return {
-            'refresh': user.tokens()['refresh'],
-            'access': user.tokens()['access']
-            }
-           
-        except UserModel.DoesNotExist:
-          raise AuthenticationFailed(
-                'Vuelva a intentarlo porfavor'
-            )  
-
+    password=serializers.CharField(max_length=100)
     
     class Meta:
-        model = UserModel
-        fields = ['email', 'password',  'tokens']
-
-    def validate(self, attrs):   
-        
-        email = attrs.get('email', '')
-        password = attrs.get('password', '')
-        
-        if email is None:
-            raise AuthenticationFailed(
-                'Se requiere el email para el login'
-            )
-        if password is None:
-            raise AuthenticationFailed(
-                'Se necesita una contraseña'
-            )
-            #Aquí me marca el error
-        user = auth.authenticate(email=email, password=password)
-        
-        if user is None:
-            raise AuthenticationFailed(
-                'No se encuetra el usuario'
-            )
-        
-        if not user.is_active:
-            raise AuthenticationFailed(
-                'Su cuenta esta desactivada'
-            )
+        model=User
+        fields=[
+            'email',
+            'password'
+        ]
+    
+    
         
         
         
-        return {
-        
-        'email':user.email,
-        'tokens':user.tokens
-        }
-        return super().validate(attrs)
         
        
 

@@ -9,9 +9,12 @@ from rest_framework import permissions
 
 # Create your models here.
 
-class AccountAPIView(APIView):
+class InicioAPIView(APIView):
     
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        return Response('BANK ACCOUNT.', status=status.HTTP_200_OK)
+        return Response('Inicio', status=status.HTTP_200_OK)
+
+
+        

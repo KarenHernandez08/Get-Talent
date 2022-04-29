@@ -184,7 +184,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ]
 }
-AUTH_USER_MODEL = 'users.UserModel'
+AUTH_USER_MODEL = 'users.User'
 
 #datos para envio de correo
 EMAIL_USE_TLS=True
