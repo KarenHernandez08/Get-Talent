@@ -1,8 +1,8 @@
 from django.db import models
 from unicodedata import name
-import enum
-from enum import Enum, unique
-@unique
+# from enum import Enum, unique
+# @unique
+# import enum
 
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
