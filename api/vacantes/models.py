@@ -1,21 +1,8 @@
-import enum
-from unicodedata import name
 from django.db import models
+from unicodedata import name
+import enum
 from enum import Enum, unique
 @unique
-
-# Create your models here.
-class ModalidadList(Enum): #List
-    PRESENCIAL = 'presencial'
-    VIRTUAL = 'virtual'
-    HIBRIDO = 'híbrido'
-
-    #ModalidadList.PRESENCIAL.value)
-
-class TipoTrabajoList(Enum): #List
-    TIEMPOCOMPLETO = 1
-    MEDIOTIEMPO = 2
-    PROYECTO = 3 
 
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
@@ -24,7 +11,6 @@ class AreasModel(models.Model):
 
     class Meta:
         db_table = 'Áreas de Interes'
-
 
 class RolesModel(models.Model):
     rol_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
@@ -112,9 +98,9 @@ class VacantesModel(models.Model):
     localidad = models.CharField(max_length=25, choices=Estados_Lista.choices)
 
     #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
-    #class Meta:
-        #db_table = 'Vacantes'
-    
+    class Meta:
+        db_table = 'Vacantes'
+
     def __str__(self):
         return self.is_active
 
