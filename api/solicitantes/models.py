@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator 
+from users.models import User
 
 # Create your models here.
 class InfoPesonalModel(models.Model):
@@ -10,7 +11,7 @@ class InfoPesonalModel(models.Model):
     date_birth = models.DateField (default="2018-06-29", null = True, blank = False) #Checar 2018-06-29
     age = models.PositiveSmallIntegerField(default=29, validators=[MinValueValidator(16), MaxValueValidator(100)])
     additional_mail = models.CharField(max_length=30) ####CHECAR !!!!! 
-    #user_id =    #FALTAAAA
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
 
     # Propongo que sea un email adicional, pero el default sea el otro que ya dieron... 
     ## o simplemente eliminar ese campo 
@@ -33,15 +34,3 @@ class InfoPesonalModel(models.Model):
     def __str__(self): 
         return self.name
 
-
-# Create your models here.
-class PruebaO():
-    name = models.CharField(max_length=30)
-    date_birth = models.DateField (default="2018-06-29", null = True, blank = False) #Checar 2018-06-29
-    age = models.PositiveSmallIntegerField(default=29, validators=[MinValueValidator(16), MaxValueValidator(100)])
-    additional_mail = models.CharField(max_length=30) ####CHECAR !!!!! 
-
-
-
-hola = PruebaO (name='Angela') 
-print(PruebaO(name = 'Angela'))

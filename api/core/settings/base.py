@@ -123,6 +123,18 @@ DATABASES = {
     }
 }
 
+# Heroku Postgres
+# <database_type>://<username>:<password>@<hostname>:<database_port>/<database_name>
+
+if config('DATABASE_URL', default=''):
+    from urllib.parse import urlparse
+    url_parsed = urlparse(config('DATABASE_URL', default=''))
+    DATABASES['default']['NAME'] = url_parsed.path[1:]
+    DATABASES['default']['USER'] = url_parsed.username
+    DATABASES['default']['PASSWORD'] = url_parsed.password
+    DATABASES['default']['HOST'] = url_parsed.hostname
+    DATABASES['default']['PORT'] = url_parsed.port
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
