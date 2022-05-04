@@ -14,6 +14,7 @@ class AreasModel(models.Model):
 
 class RolesModel(models.Model):
     rol_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
+    date_birth = models.DateField(auto_now=True)
     rol = models.CharField ( max_length=150)
 
     class Meta:
