@@ -1,6 +1,5 @@
 
 from django.core import exceptions
-#import django.contrib.auth.password_validation as validators
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from users.models import User
@@ -21,7 +20,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
     def validate(self, data):
             password = data.get('password')
         
-            special_characters = "[~\!@#\$%\^&\*\(\)_\+{}\":;'\[\]]"
+            special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
 
             if len(password) <6 or len(password) > 20:
                raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')

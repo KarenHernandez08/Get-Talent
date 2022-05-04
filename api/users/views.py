@@ -70,7 +70,7 @@ class VerifyEmail(APIView):
         token=request.GET.get('token')
         try:
             #intenta decodificar el token 
-            payload=jwt.decode(token,settings.SECRET_KEY) 
+            payload=jwt.decode(token,settings.SECRET_KEY, algorithms='HS256') 
             #despues de decodificar obtendremos los datos por el id del usuario
             user=User.objects.get(id=payload['user_id'])
             
@@ -106,6 +106,7 @@ class LoginAPIView(APIView):
   
     def post(self, request):
         try:
+            
             serializer=LoginSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             email=serializer.data['email']
