@@ -7,17 +7,17 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, name, email, password=None, **kwargs):
+    def create_user(self, email, password=None, **kwargs):
         
-        user = self.model(name=name, email=self.normalize_email(email),**kwargs)
+        user = self.model(email=self.normalize_email(email),**kwargs)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, name, email, password=None, **kwargs):
+    def create_superuser(self, email, password=None, **kwargs):
         
 
-        user=self.model(name=name, email=self.normalize_email(email),**kwargs)
+        user=self.model(email=self.normalize_email(email),**kwargs)
         user.set_password(password)
         user.is_superuser = True
         user.is_staff=True
@@ -26,7 +26,6 @@ class UserManager(BaseUserManager):
     
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(max_length=150)
     email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
@@ -40,17 +39,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     
     USERNAME_FIELD= "email"
-    REQUIRED_FIELDS=["name"]
+    
     
     objects = UserManager()
     
     def __str__(self):
         return self.email
     
-#login  
-"""    def tokens(self):
-        refresh=RefreshToken.for_user(self)
-        return{
-            'refresh':str(refresh),
-            'access':str(refresh.access_token)
-        }"""

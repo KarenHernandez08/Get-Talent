@@ -106,6 +106,7 @@ class LoginAPIView(APIView):
   
     def post(self, request):
         try:
+            
             serializer=LoginSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             email=serializer.data['email']
