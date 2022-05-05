@@ -1,8 +1,8 @@
 from django.db import models
-from unicodedata import name
 from django.core.validators import MaxValueValidator, MinValueValidator 
-#from users.models import User
+#from unicodedata import name
 
+# Create your models here.
 # Create your models here.
 class InfoPesonalModel(models.Model):
     name = models.CharField(max_length=30)
@@ -34,4 +34,3 @@ class InfoPesonalModel(models.Model):
 
     def __str__(self): 
         return self.name
-
