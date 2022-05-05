@@ -1,8 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator 
-#from unicodedata import name
+from unicodedata import name
 
-# Create your models here.
 # Create your models here.
 class InfoPesonalModel(models.Model):
     name = models.CharField(max_length=30)
@@ -10,7 +9,7 @@ class InfoPesonalModel(models.Model):
     paternal_lastname = models.CharField(max_length=30)
     maternal_lastname = models.CharField(max_length=30)
     date_birth = models.DateField (default="2018-06-29", null = True, blank = False) #Checar 2018-06-29
-    age = models.PositiveSmallIntegerField(default=29, validators=[MinValueValidator(16), MaxValueValidator(100)])
+    age = models.PositiveSmallIntegerField(validators=[MinValueValidator(16), MaxValueValidator(100)])
     additional_mail = models.CharField(max_length=30) ####CHECAR !!!!! 
     #user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
 
