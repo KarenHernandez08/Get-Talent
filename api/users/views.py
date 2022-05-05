@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.conf import settings #importamos la configuracion para usar el SECRET KEY
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los tokens
@@ -13,14 +13,23 @@ import jwt
 from users.models import User
 from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer
 from .utils import Util #importamos nuestra clase y metodo de enviar email
+from django.http import HttpResponsePermanentRedirect
+import os
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .renderers import UserRenderer
 
 
 
+class CustomRedirect(HttpResponsePermanentRedirect):
 
+    allowed_schemes = [os.environ.get('APP_SCHEME'), 'http', 'https']
 
 # Create your views here.
-class UserSignupView(APIView):
+class UserSignupView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
+    renderer_classes = (UserRenderer,)
+    serializer_class = UserSignupSerializer
     def post(self, request):
         try:
             data =request.data
@@ -61,9 +70,13 @@ class UserSignupView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 #Verificar Email y activacion de cuenta
-class VerifyEmail(APIView):
+class VerifyEmail(generics.GenericAPIView):
     serializer_class = EmailVerificationSerializer
     permission_classes = [permissions.AllowAny]
+    token_param_config = openapi.Parameter(
+        'token', in_=openapi.IN_QUERY, description='Description', type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[token_param_config])
     #funcion para obtener el token
     def get(self, request):
         #Aqui obtenemos el token con el get
@@ -100,9 +113,11 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }        
 #Login
-class LoginAPIView(APIView):
+class LoginAPIView(generics.GenericAPIView):
     
     permission_classes = [permissions.AllowAny]
+    serializer_class = LoginSerializer
+  
   
     def post(self, request):
         try:
