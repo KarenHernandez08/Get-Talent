@@ -115,6 +115,8 @@ PG_PASSWD = config('POSTGRES_PASSWORD', default='')
 PG_HOST = config('POSTGRES_HOST', default='127.0.0.1')
 PG_PORT = config('POSTGRES_PORT', cast=int, default=5432)
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -125,6 +127,19 @@ DATABASES = {
         'PORT': PG_PORT,
     }
 }
+
+# Heroku Postgres
+# <database_type>://<username>:<password>@<hostname>:<database_port>/<database_name>
+
+if config('DATABASE_URL', default=''):
+    from urllib.parse import urlparse
+    url_parsed = urlparse(config('DATABASE_URL', default=''))
+    DATABASES['default']['NAME'] = url_parsed.path[1:]
+    DATABASES['default']['USER'] = url_parsed.username
+    DATABASES['default']['PASSWORD'] = url_parsed.password
+    DATABASES['default']['HOST'] = url_parsed.hostname
+    DATABASES['default']['PORT'] =url_parsed.port
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
