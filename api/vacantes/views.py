@@ -13,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los
 
 from .renderers import VacantesRenderer
 
-from vacantes.serializer import  AreasSerializer, RolesSerializer, VacantesSerializer , PreguntasSerializer
+from vacantes.serializer import  AreasSerializer, PreguntasVacantesSerializer, RolesSerializer, VacantesSerializer , PreguntasSerializer
 from vacantes.models import VacantesModel , PreguntasModel, RolesModel, AreasModel
 
 
@@ -62,16 +62,13 @@ class SoloRolesRegistroView(generics.GenericAPIView):
 class VacantesRegistroView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     renderer_classes = (VacantesRenderer,)
-    serializer_class = PreguntasSerializer, VacantesSerializer
+    queryset = PreguntasModel.objects.all() 
+    serializer_class = PreguntasVacantesSerializer
     def post(self, request):
-        serializers_preguntas = PreguntasSerializer(data=request.data)
-        print(serializers_preguntas)
-        serializers_preguntas.is_valid(raise_exception=True)
-        serializers_preguntas.save()
-
-        serializers_vacantes = VacantesSerializer(data=request.data)
-        print(serializers_vacantes)
-        serializers_vacantes.is_valid(raise_exception=True)
-        serializers_vacantes.save()
+        serializers_preguntas_vacantes = PreguntasVacantesSerializer(data=request.data)
+        print(serializers_preguntas_vacantes)
+        serializers_preguntas_vacantes.is_valid(raise_exception=True)
+        serializers_preguntas_vacantes.save()
         
         return Response(status=status.HTTP_201_CREATED)
+

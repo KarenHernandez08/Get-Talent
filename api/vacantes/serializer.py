@@ -18,7 +18,18 @@ class PreguntasSerializer (serializers.ModelSerializer):
     
     def validate(self, attr):
         return attr
+
+
     
+class PreguntasVacantesSerializer(serializers.ModelSerializer):
+    vacantes = PreguntasSerializer(read_only=True)
+    class Meta:
+        model = VacantesModel
+        fields = '__all__'
+    
+    def validate(self, attr):
+        return attr
+
 
 class RolesSerializer (serializers.ModelSerializer):
     class Meta:
