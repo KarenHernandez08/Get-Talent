@@ -112,7 +112,7 @@ class PreguntasModel(models.Model):
     pregunta1 = models.CharField(max_length=150)
     pregunta2 = models.CharField(max_length=150)
     pregunta3 = models.CharField(max_length=150)
-    vacante_id= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
+    owner= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
 
     status= models.BooleanField(default=False) #¿Qué es? 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha creación')

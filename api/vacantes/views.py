@@ -61,16 +61,25 @@ class SoloRolesRegistroView(generics.GenericAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-class VacantesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    queryset = PreguntasModel.objects.all() 
-    serializer_class = PreguntasVacantesSerializer
-    def post(self, request):
+class VacantesRegistroView(APIView,):
+     
+     def post(self, request):
         serializers_preguntas_vacantes = PreguntasVacantesSerializer(data=request.data)
         print(serializers_preguntas_vacantes)
         serializers_preguntas_vacantes.is_valid(raise_exception=True)
         serializers_preguntas_vacantes.save()
         
         return Response(status=status.HTTP_201_CREATED)
+
+# class VacantesRegistroView(generics.GenericAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (VacantesRenderer,)
+#     queryset = PreguntasModel.objects.all() 
+#     serializer_class = PreguntasVacantesSerializer
+#     def post(self, request):
+#         serializers_preguntas_vacantes = PreguntasVacantesSerializer(data=request.data)
+#         print(serializers_preguntas_vacantes)
+#         serializers_preguntas_vacantes.is_valid(raise_exception=True)
+#         serializers_preguntas_vacantes.save()
+        
+#         return Response(status=status.HTTP_201_CREATED)
