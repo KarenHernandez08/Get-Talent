@@ -23,7 +23,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
 
     def post(self, request):#Crear y guardar información
         serializer = InfoEmpleadorSerializers(data=request.data)
-        serializer.is_valid(raise_excepetion=True)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)#Respuesta para sabe si esta bien
 
