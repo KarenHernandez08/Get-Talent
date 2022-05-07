@@ -1,4 +1,5 @@
 
+from django.forms import ValidationError
 from django.shortcuts import render 
 from django.contrib.sites.shortcuts import get_current_site #para poder opbtener el dominio
 from django.urls import reverse
@@ -130,7 +131,28 @@ class LoginAPIView(APIView):
                 'msg':'Usuario no encontrado,vuelva a intentarlo'
             }
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-          
+
+        
+            
+    '''# Login múmero de intentos 
+        user = User.objects.get(email=email)
+        while user.intentos < 3:
+            while User.objects.filter(password=password):
+                user.intentos ==0
+                user.save()
+            while not User.objects.filter(password=password):
+                user.intentos += 1
+                user.save()
+                raise ValidationError({'msg': 'Contraseña incorrecta'})
+           
+        else:
+            user.is_active = False
+            user.save()
+            raise ValidationError({'msg': 'Tu contraseña ha sido bloqueada. '})'''
+        
+
+
+
            
            
             
