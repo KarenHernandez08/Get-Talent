@@ -16,17 +16,20 @@ from .renderers import VacantesRenderer
 from vacantes.serializer import  AreasSerializer, PreguntasVacantesSerializer, RolesSerializer, VacantesSerializer , PreguntasSerializer
 from vacantes.models import VacantesModel , PreguntasModel, RolesModel, AreasModel
 
+#Define tus vistas aquí
 
-# Create your views here.
 class SoloVacantesRegistroView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     renderer_classes = (VacantesRenderer,)
     serializer_class = VacantesSerializer
+
     def post(self, request):
         serializer = VacantesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 
 class SoloPreguntasRegistroView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -71,4 +74,3 @@ class VacantesRegistroView(generics.GenericAPIView):
         serializers_preguntas_vacantes.save()
         
         return Response(status=status.HTTP_201_CREATED)
-

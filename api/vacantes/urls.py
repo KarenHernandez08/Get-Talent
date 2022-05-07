@@ -8,6 +8,7 @@ urlpatterns = [
     ##La linea se cambiará cuando se tenga ya el registro de los usuarios
 
     #DE PRUEBA Y CONTROL
+    #path('/user_company/id'),
     path('solo/vacantes/', SoloVacantesRegistroView.as_view()),
     path('solo/roles/', SoloRolesRegistroView.as_view()),
     path('solo/areas/', SoloAreasRegistroView.as_view()),

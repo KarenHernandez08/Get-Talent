@@ -1,9 +1,11 @@
 from django.db import models
 from unicodedata import name
+from users.models import User
+
 # from enum import Enum, unique
 # @unique
 # import enum
-
+# CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
     status = models.BooleanField(default=False)
@@ -36,7 +38,7 @@ class RolAreasModel(models.Model):
 
 class VacantesModel(models.Model):
     vacante_id= models.BigAutoField(auto_created=True, primary_key=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     descripcion = models.TextField ( max_length=500)
@@ -45,7 +47,7 @@ class VacantesModel(models.Model):
     vacante_video = models.CharField ( max_length=150)
     sueldo = models.DecimalField ( max_digits=30 , decimal_places=2) 
     
-    ##empleador_id = models.ForeignKey(users, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
+    ##empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
     area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True)     #tabla externa
     roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True)   #tabla externa
 
