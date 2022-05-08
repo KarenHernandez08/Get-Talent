@@ -26,51 +26,26 @@ class PreguntasSerializer (serializers.ModelSerializer):
 
 
 class PreguntasVacantesSerializer (serializers.ModelSerializer):
-    PreguntasModel = PreguntasSerializer(many=True)
-    #VacantesModel = VacantesSerializer(many=True)
-    # pregunta1 = serializers.CharField(max_length=150)
-    # pregunta2 = serializers.CharField(max_length=150)
-    # pregunta3 = serializers.CharField(max_length=150)
+    preguntasmodel = PreguntasSerializer(many=True)
+    #vacante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=PreguntasModel.objects.all())
 
     class Meta:
         model = VacantesModel
-        fields = ['localidad','modalidad','tipo_trabajo','descripcion','PreguntasModel']
+        fields = '__all__'
+        #fields = ['localidad','modalidad','tipo_trabajo','descripcion','preguntasmodel','vacante_id']
     
-    # def create(self, validated_data):
-    #     preguntas_data = validated_data.pop('PreguntasModel')
-    #     vacantes = VacantesModel.objects.create(**validated_data)
-    #     PreguntasModel.objects.create(vacantes=vacantes, **preguntas_data)
-    #     return vacantes
-
-# class PreguntasVacantesSerializer(serializers.ModelSerializer):
-#     owner = VacantesSerializer(read_only=True)
-#     vacantes_ids = serializers.PrimaryKeyRelatedField (write_only=True,
-#     queryset=VacantesModel.objects.all(), source='owner')
-#     class Meta:
-#         model = PreguntasModel
-#         fields = ('preguntas_id','pregunta1','pregunta2','pregunta3','owner','vacantes_ids')
-
-#     # def to_representation(self, instance):
-#         # return{
-#         #     'vacante_id':instance.vacante_id,
-#         #     'pregunta1': instance.pregunta1,
-#         #     'pregunta2': instance.pregunta2,
-#         #     'pregunta3': instance.pregunta3,
-#         #     'descripcio':instance.VacantesModel.descripcion,
-#         #     'requisitos':instance.VacantesModel.requisitos,
-#         # }
-#         # return super().to_representation(
-#         #     instance.vacante_id,
-#         #     instance.pregunta1,
-#         #     instance.pregunta2,
-#         #     instance.pregunta3,
-#         #     instance.VacantesModel.descripcion,
-#         #     instance.VacantesModel.requisitos,
-#         # )
+    def create(self, validated_data):
+        #Obtengo el contenido de orden_details
+        preguntasmodel_data = validated_data.pop('preguntasmodel')
+        #creamos el nuevo registro de la vacante
+        nueva_vacante = VacantesModel.objects.create(**validated_data)
+        
+        #En un ciclo recorremos el preguntasmodel y creamos el nuevo registro
+        for preguntasmodel in preguntasmodel_data:
+            PreguntasModel.objects.create(**preguntasmodel, vacante_id=nueva_vacante)
+        return nueva_vacante
 
 
-#     def validate(self, attr):
-#         return attr
 
 
 class RolesSerializer (serializers.ModelSerializer):

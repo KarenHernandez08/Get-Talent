@@ -3,14 +3,15 @@ from wsgiref.util import request_uri
 from django.shortcuts import render 
 from django.contrib.sites.shortcuts import get_current_site #para poder opbtener el dominio
 from django.urls import reverse
-from django.conf import settings #importamos la configuracion para usar el SECRET KEY
-from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
-from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
-from rest_framework.permissions import AllowAny
+
+#from django.conf import settings #importamos la configuracion para usar el SECRET KEY
+#from django.contrib.auth import authenticate
+#from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
+#from rest_framework.permissions import AllowAny
 
 from .renderers import VacantesRenderer
 
@@ -29,7 +30,6 @@ class SoloVacantesRegistroView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 
 class SoloPreguntasRegistroView(generics.GenericAPIView):
@@ -62,26 +62,16 @@ class SoloRolesRegistroView(generics.GenericAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class VacantesRegistroView(APIView):
-    permission_classes = (AllowAny, )
-    
+class VacantesRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    queryset = PreguntasModel.objects.all() 
+    serializer_class = PreguntasVacantesSerializer
     def post(self, request):
-        serializers_preguntas_vacantes = PreguntasVacantesSerializer(data=request.data)
-        print(serializers_preguntas_vacantes)
-        serializers_preguntas_vacantes.is_valid(raise_exception=True)
-        serializers_preguntas_vacantes.save()
-        
+        serializers = PreguntasVacantesSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        print("si valide")
+        serializers.save()
+        print(serializers)
         return Response(status=status.HTTP_201_CREATED)
 
-# class VacantesRegistroView(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = (VacantesRenderer,)
-#     queryset = PreguntasModel.objects.all() 
-#     serializer_class = PreguntasVacantesSerializer
-#     def post(self, request):
-#         serializers_preguntas_vacantes = PreguntasVacantesSerializer(data=request.data)
-#         print(serializers_preguntas_vacantes)
-#         serializers_preguntas_vacantes.is_valid(raise_exception=True)
-#         serializers_preguntas_vacantes.save()
-        
-#         return Response(status=status.HTTP_201_CREATED)
