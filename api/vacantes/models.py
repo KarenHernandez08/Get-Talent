@@ -45,7 +45,7 @@ class VacantesModel(models.Model):
     requisitos = models.TextField ( max_length=300)
     localidad = models.CharField ( default = 'No aplica' ,max_length=30)
     vacante_video = models.CharField ( max_length=150)
-    sueldo = models.DecimalField ( max_digits=30 , decimal_places=2) 
+    sueldo = models.DecimalField (default="0.0",max_digits=30 , decimal_places=2) 
     
     ##empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
     area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True)     #tabla externa
@@ -100,8 +100,8 @@ class VacantesModel(models.Model):
     localidad = models.CharField(max_length=25, choices=Estados_Lista.choices)
 
     #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
-    class Meta:
-        db_table = 'Vacantes'
+    # class Meta:
+    #     db_table = 'Vacantes'
 
     def __str__(self):
         return self.is_active
@@ -112,14 +112,14 @@ class PreguntasModel(models.Model):
     pregunta1 = models.CharField(max_length=150)
     pregunta2 = models.CharField(max_length=150)
     pregunta3 = models.CharField(max_length=150)
-    owner= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
+    vacante_id= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
 
-    status= models.BooleanField(default=False) #¿Qué es? 
+    #status= models.BooleanField(default=False) #¿Qué es? 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha creación')
     update_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        db_table = 'Preguntas para Vacantes'
+    # class Meta:
+    #     db_table = 'Preguntas para Vacantes'
 
 class VacantesAreasModel(models.Model):
     vacantesareas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)

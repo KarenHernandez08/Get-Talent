@@ -26,14 +26,21 @@ class PreguntasSerializer (serializers.ModelSerializer):
 
 
 class PreguntasVacantesSerializer (serializers.ModelSerializer):
-    vacantes = VacantesSerializer(many=True)
-    pregunta1 = serializers.CharField(max_length=150)
-    pregunta2 = serializers.CharField(max_length=150)
-    pregunta3 = serializers.CharField(max_length=150)
+    PreguntasModel = PreguntasSerializer(many=True)
+    #VacantesModel = VacantesSerializer(many=True)
+    # pregunta1 = serializers.CharField(max_length=150)
+    # pregunta2 = serializers.CharField(max_length=150)
+    # pregunta3 = serializers.CharField(max_length=150)
 
     class Meta:
-        model = PreguntasModel
-        fields = ['pregunta1','pregunta2','pregunta3','vacantes']
+        model = VacantesModel
+        fields = ['localidad','modalidad','tipo_trabajo','descripcion','PreguntasModel']
+    
+    # def create(self, validated_data):
+    #     preguntas_data = validated_data.pop('PreguntasModel')
+    #     vacantes = VacantesModel.objects.create(**validated_data)
+    #     PreguntasModel.objects.create(vacantes=vacantes, **preguntas_data)
+    #     return vacantes
 
 # class PreguntasVacantesSerializer(serializers.ModelSerializer):
 #     owner = VacantesSerializer(read_only=True)

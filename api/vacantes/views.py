@@ -10,6 +10,7 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
+from rest_framework.permissions import AllowAny
 
 from .renderers import VacantesRenderer
 
