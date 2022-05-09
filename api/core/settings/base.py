@@ -64,6 +64,8 @@ INSTALLED_APPS += [
     # Local apps:
         'users',
         'vacantes',
+        'solicitantes',
+        'infopersonal',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +172,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+#DATE_FORMAT = ['%d-%m-%Y'] #'%d/%m/%Y'
+#DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
 
 
 # Static files (CSS, JavaScript, Images)
