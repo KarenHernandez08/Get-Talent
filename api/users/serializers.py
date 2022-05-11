@@ -1,5 +1,3 @@
-
-from django.core import exceptions
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from users.models import User
@@ -66,7 +64,12 @@ class LoginSerializer(serializers.ModelSerializer):
             'email',
             'password'
         ]
+class VerifySerializer(serializers.ModelSerializer):
+    email=serializers.EmailField(max_length=50)
     
+    class Meta:
+        model=User
+        fields=['email']
     
         
         
