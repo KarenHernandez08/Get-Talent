@@ -23,5 +23,21 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
         serializer = InfoPersonalSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# Create your views here.
+class InfoPersonalRegistroView(generics.GenericAPIView): 
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (SolicitantesRenderer,)
+    serializer_class = InfoPersonalSerializer
+    def post(self, request):
+        serializer = InfoPersonalSerializer(data=request.data)
+        try:
+            if is_solicitante == True:
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
