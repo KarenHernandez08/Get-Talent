@@ -1,5 +1,5 @@
-from dataclasses import fields
 from rest_framework import serializers
+from dataclasses import fields
 from empleador.models import InfoEmpleadorModel
 
 class InfoEmpleadorSerializers(serializers.ModelSerializer):
