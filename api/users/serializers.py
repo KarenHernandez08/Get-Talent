@@ -65,6 +65,13 @@ class LoginSerializer(serializers.ModelSerializer):
             'password'
             
         ]
+class VerifySerializer(serializers.ModelSerializer):
+    email=serializers.EmailField(max_length=50)
+    
+    class Meta:
+        model=User
+        fields=['email']
+    
     
     
         
