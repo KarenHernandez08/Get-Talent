@@ -1,5 +1,11 @@
 from django.urls import path, include
-from vacantes.views import SoloAreasRegistroView, SoloPreguntasRegistroView, SoloRolesRegistroView, SoloVacantesRegistroView, VacantesRegistroView
+from vacantes.views import (
+    SoloPreguntasRegistroView, 
+    SoloAreasRegistroView,
+    SoloRolesRegistroView,  
+    VacantesRegistroView,
+)
+#SoloVacantesRegistroView,
 
 
 urlpatterns = [
@@ -9,7 +15,7 @@ urlpatterns = [
 
     #DE PRUEBA Y CONTROL
     #path('/user_company/id'),
-    path('solo/vacantes/', SoloVacantesRegistroView.as_view()),
+    #path('solo/vacantes/', SoloVacantesRegistroView.as_view()),
     path('solo/roles/', SoloRolesRegistroView.as_view()),
     path('solo/areas/', SoloAreasRegistroView.as_view()),
     path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  

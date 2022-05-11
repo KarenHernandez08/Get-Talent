@@ -62,6 +62,7 @@ INSTALLED_APPS += [
         'users',
         'vacantes',
         'solicitantes',
+        'empleador'
 ]
 
 MIDDLEWARE = [

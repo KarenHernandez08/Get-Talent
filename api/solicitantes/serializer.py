@@ -1,6 +1,8 @@
 from dataclasses import fields
 from rest_framework import serializers  
-from solicitantes.models import InfoPesonalModel
+from solicitantes.models import (
+    InfoPesonalModel,
+)
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
     class Meta:

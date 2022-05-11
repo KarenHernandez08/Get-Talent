@@ -12,7 +12,6 @@ from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
 
 from .renderers import SolicitantesRenderer
-
 from solicitantes.serializer import InfoPersonalSerializer
 
 # Create your views here.

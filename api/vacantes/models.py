@@ -5,6 +5,7 @@ from users.models import User
 # from enum import Enum, unique
 # @unique
 # import enum
+
 # CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
@@ -100,8 +101,8 @@ class VacantesModel(models.Model):
     localidad = models.CharField(max_length=25, choices=Estados_Lista.choices)
 
     #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
-    # class Meta:
-    #     db_table = 'Vacantes'
+    class Meta:
+        db_table = 'Vacantes'
 
     def __str__(self):
         return self.is_active
@@ -113,13 +114,12 @@ class PreguntasModel(models.Model):
     pregunta2 = models.CharField(max_length=150)
     pregunta3 = models.CharField(max_length=150)
     vacante_id= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
-
     #status= models.BooleanField(default=False) #¿Qué es? 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha creación')
     update_at = models.DateTimeField(auto_now=True)
 
-    # class Meta:
-    #     db_table = 'Preguntas para Vacantes'
+    class Meta:
+        db_table = 'Preguntas para Vacantes'
 
 class VacantesAreasModel(models.Model):
     vacantesareas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)

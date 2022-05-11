@@ -1,11 +1,11 @@
-from dataclasses import fields
 from rest_framework import serializers  
+from dataclasses import fields
 from vacantes.models import (
-    AreasModel, 
     PreguntasModel, 
+    VacantesModel,
     RolesModel, 
-    VacantesModel  
-)  
+    AreasModel
+)
 
 class VacantesSerializer (serializers.ModelSerializer):
     class Meta:
@@ -15,7 +15,6 @@ class VacantesSerializer (serializers.ModelSerializer):
     def validate(self, attr):
         return attr
     
-
 class PreguntasSerializer (serializers.ModelSerializer):
     class Meta:
         model = PreguntasModel

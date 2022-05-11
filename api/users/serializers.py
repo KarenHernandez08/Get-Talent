@@ -1,3 +1,4 @@
+from email.policy import default
 from django.core import exceptions
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -55,12 +56,14 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(max_length=50)
     password=serializers.CharField(max_length=100)
+    intentos=serializers.IntegerField(default=0)
     
     class Meta:
         model=User
         fields=[
             'email',
             'password'
+            #'intentos'
         ]
     
     
