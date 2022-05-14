@@ -36,13 +36,10 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
     queryset = InfoPesonalModel.objects.all() 
     serializer_class = InfoPersonalSerializer
     def post(self, request, usuario_id):
-        usuario_id = User.objects.get(id=usuario_id)
-        #es_empleador = User.objects.get(is_empleador=es_empleador)
-        #print(es_empleador)
+        usuario_instance = User.objects.get(id=usuario_id)
+        es_empleador = usuario_instance.is_empleador
         try:
             data =request.data
-            ij_empleador = data.get('is_empleador')
-            print(ij_empleador)
             serializer = InfoPersonalSerializer(data=data)
             if es_empleador == True:
                 return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)

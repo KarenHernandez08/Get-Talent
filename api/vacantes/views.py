@@ -5,11 +5,6 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 
-#from django.contrib.sites.shortcuts import get_current_site #para poder opbtener el dominio
-#from django.conf import settings #importamos la configuracion para usar el SECRET KEY
-#from django.contrib.auth import authenticate
-#from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
-#from rest_framework.permissions import AllowAny
 from users.models import User
 from vacantes.renderers import VacantesRenderer
 from vacantes.serializer import  (
@@ -73,10 +68,6 @@ class VacantesRegistroView(generics.GenericAPIView):
 class VacantesRegistroView(generics.GenericAPIView): 
     permission_classes = [permissions.AllowAny]
     renderer_classes = (VacantesRenderer,)
-    # queryset = User.objects.all() 
-    # print(queryset)
-    hola = User.objects.filter(is_empleador__contains=True)
-    print(hola)
     serializer_class = PreguntasVacantesSerializer
     def post(self, request, usuario_id):
          usuario_instance = User.objects.get(id=usuario_id)
