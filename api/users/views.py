@@ -190,7 +190,7 @@ class Verificar(generics.GenericAPIView):
                 #aqui invocamos el metodo y mandamos la data para utils.py
                 Util.send_email(data) 
                 #en este caso que todo este correcto enviara un mensaje de exito 
-                return Response('Activado correctamente', status=status.HTTP_201_CREATED)
+                return Response('Revise su correo', status=status.HTTP_201_CREATED)
             if user.intentos ==3:
                 return Response('Tu cuenta esta bloqueada, por favor cambia tu contraseña', status=status.HTTP_400_BAD_REQUEST)
             if user.is_active==True:
