@@ -79,11 +79,8 @@ class VacantesRegistroView(generics.GenericAPIView):
     print(hola)
     serializer_class = PreguntasVacantesSerializer
     def post(self, request, usuario_id):
-         usuario_id = User.objects.get(id=usuario_id)
-         print(usuario_id)
-         sample_instance = User.objects.get(id=2)
-         es_empleador = sample_instance.is_empleador
-         print(es_empleador)
+         usuario_instance = User.objects.get(id=usuario_id)
+         es_empleador = usuario_instance.is_empleador
          try:
              data =request.data
              serializer = PreguntasVacantesSerializer(data=request.data)
