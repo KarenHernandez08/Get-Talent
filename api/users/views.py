@@ -164,7 +164,8 @@ class LoginAPIView(generics.GenericAPIView):
             user.is_active = False
             user.save()
             raise ValidationError({'msg': 'Tu contraseña ha sido bloqueada. '})'''
-    class Verificar(generics.GenericAPIView):
+
+class Verificar(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = VerifySerializer
     def post(self, request):
@@ -198,13 +199,11 @@ class LoginAPIView(generics.GenericAPIView):
                 return Response('Tu cuenta esta bloqueada, por favor cambia tu contraseña', status=status.HTTP_400_BAD_REQUEST)
             if user.is_active==True:
                 return Response("Esta cuenta ya esta activa", status=status.HTTP_400_BAD_REQUEST)
-            
-    
         except:
             return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
     
         
-
+   
 
 
            

@@ -1,5 +1,6 @@
 from rest_framework import serializers  
 from dataclasses import fields
+from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
     VacantesModel,
@@ -26,12 +27,14 @@ class PreguntasSerializer (serializers.ModelSerializer):
 
 class PreguntasVacantesSerializer (serializers.ModelSerializer):
     preguntasmodel = PreguntasSerializer(many=True)
+    es_empleador = IsEmpleadorSerializer (read_only=True)
     #vacante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=PreguntasModel.objects.all())
 
     class Meta:
         model = VacantesModel
         fields = '__all__'
-        #fields = ['localidad','modalidad','tipo_trabajo','descripcion','preguntasmodel','vacante_id']
+        fields = ['localidad','modalidad','tipo_trabajo','descripcion','preguntasmodel','es_empleador']
+        #DUDAS CON EL ES EMPLEADOR TENGO QUE REVISARLOO
     
     def create(self, validated_data):
         #Obtengo el contenido de orden_details

@@ -9,35 +9,49 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
-from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los 
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from solicitantes.models import InfoPesonalModel #para poder crear los 
 
 from .renderers import SolicitantesRenderer
+from users.models import User
 from solicitantes.serializer import InfoPersonalSerializer
 
 # Create your views here.
+# class InfoPersonalRegistroView(generics.GenericAPIView): 
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (SolicitantesRenderer,)
+#     serializer_class = InfoPersonalSerializer
+#     def post(self, request):
+#         serializer = InfoPersonalSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+#####
 class InfoPersonalRegistroView(generics.GenericAPIView): 
     permission_classes = [permissions.AllowAny]
     renderer_classes = (SolicitantesRenderer,)
+    queryset = InfoPesonalModel.objects.all() 
     serializer_class = InfoPersonalSerializer
-    def post(self, request):
-        serializer = InfoPersonalSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-# Create your views here.
-class InfoPersonalRegistroView(generics.GenericAPIView): 
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (SolicitantesRenderer,)
-    serializer_class = InfoPersonalSerializer
-    def post(self, request):
-        serializer = InfoPersonalSerializer(data=request.data)
+    def post(self, request, usuario_id):
+        usuario_id = User.objects.get(id=usuario_id)
+        #es_empleador = User.objects.get(is_empleador=es_empleador)
+        #print(es_empleador)
         try:
-            if is_solicitante == True:
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+            data =request.data
+            ij_empleador = data.get('is_empleador')
+            print(ij_empleador)
+            serializer = InfoPersonalSerializer(data=data)
+            if es_empleador == True:
+                return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)
+            elif es_empleador == False:
+                return Response('Autorización de Solicitante exitosa', status=status.HTTP_200_OK)
+            serializer = InfoPersonalSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response('Información de Usuario Registrada', status=status.HTTP_201_CREATED)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

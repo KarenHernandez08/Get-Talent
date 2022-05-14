@@ -74,8 +74,13 @@ class VerifySerializer(serializers.ModelSerializer):
     
     
     
-        
-        
+class IsEmpleadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_empleador')
+    def validate(self, attr):
+        return attr
+    
         
         
        

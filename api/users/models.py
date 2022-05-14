@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
     
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
     email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
