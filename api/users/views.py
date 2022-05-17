@@ -121,7 +121,7 @@ class LoginAPIView(generics.GenericAPIView):
   
   
     def post(self, request):
-        try:
+        #try:
             
             serializer=LoginSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -141,11 +141,11 @@ class LoginAPIView(generics.GenericAPIView):
                 return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
             
             return Response(data, status=status.HTTP_200_OK)
-        except:
-            data = {
-                'msg':'Usuario no encontrado,vuelva a intentarlo'
-            }
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        #except:
+            #data = {
+                #'msg':'Usuario no encontrado,vuelva a intentarlo'
+            #}
+            #return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         
             
