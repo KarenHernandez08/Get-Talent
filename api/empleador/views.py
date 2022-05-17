@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
-from yaml import serialize
+#from yaml import serialize
 
 from users.models import User
 from empleador.serializer import InfoEmpleadorSerializers 
@@ -29,7 +29,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)  #valido la información
             serializer.save()                 # si todo va bien lo guardo
             return Response('Información de Vacante Registrada', status=status.HTTP_201_CREATED)
-         except:
+        except:
              # si no es valida ya dará información expecifica del error de la información
              return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
 
