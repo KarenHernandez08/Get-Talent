@@ -65,6 +65,9 @@ INSTALLED_APPS += [
         'users',
         'vacantes',
         'infopersonal',
+        'solicitantes',
+        'empleador',
+        'home',
 ]
 
 MIDDLEWARE = [
@@ -188,7 +191,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Simplified static file serving for Python web apps
 # https://whitenoise.evans.io/en/stable/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 
 # Default primary key field type

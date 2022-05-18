@@ -1,4 +1,5 @@
 
+from django.forms import ValidationError
 from django.shortcuts import render 
 from django.contrib.sites.shortcuts import get_current_site #para poder opbtener el dominio
 from django.urls import reverse
@@ -11,7 +12,7 @@ from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los tokens
 import jwt
 from users.models import User
-from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer
+from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer, VerifySerializer
 from .utils import Util #importamos nuestra clase y metodo de enviar email
 from django.http import HttpResponsePermanentRedirect
 import os
@@ -145,7 +146,66 @@ class LoginAPIView(generics.GenericAPIView):
                 'msg':'Usuario no encontrado,vuelva a intentarlo'
             }
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-          
+
+        
+            
+    '''Login múmero de intentos 
+        user = User.objects.get(email=email)
+        while user.intentos < 3:
+            while User.objects.filter(password=password):
+                user.intentos ==0
+                user.save()
+            while not User.objects.filter(password=password):
+                user.intentos += 1
+                user.save()
+                raise ValidationError({'msg': 'Contraseña incorrecta'})
+           
+        else:
+            user.is_active = False
+            user.save()
+            raise ValidationError({'msg': 'Tu contraseña ha sido bloqueada. '})'''
+
+class Verificar(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = VerifySerializer
+    def post(self, request):
+        try:
+            serializer = VerifySerializer(data=request.data)
+            serializer.is_valid(raise_exception=True) 
+            #token  
+            #esta variable solo obtiene el email de el usuario
+            user=User.objects.get(email=serializer.data['email'])
+            if user.is_active==False:
+                
+                #definimos el token
+                token=RefreshToken.for_user(user).access_token 
+                #aqui ya lo ponemos para obtener la respuesta del dominio
+                current_site=get_current_site(request).domain
+                #para que regrese el link de urls.py para verificar email
+                relative_link=reverse('email-verify')
+                # la absurl se refiere al link que al usuario le llegara, en este caso el dominio mas el token para validar al usuario
+                absurl='http://'+ current_site +relative_link+"?token="+ str(token) 
+                #el mensaje que le llegara en el correo mas la absurl
+                email_body='Hola, Selecciona el siguiente link para verificar tu correo.\n'+absurl 
+                #Data que vamos a enviar a Util
+                data={'email_body':email_body, 'to_email':user.email, 'email_subject': 'Verifica tu correo'}
+    
+
+                #aqui invocamos el metodo y mandamos la data para utils.py
+                Util.send_email(data) 
+                #en este caso que todo este correcto enviara un mensaje de exito 
+                return Response('Revise su correo', status=status.HTTP_201_CREATED)
+            if user.intentos ==3:
+                return Response('Tu cuenta esta bloqueada, por favor cambia tu contraseña', status=status.HTTP_400_BAD_REQUEST)
+            if user.is_active==True:
+                return Response("Esta cuenta ya esta activa", status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
+    
+        
+   
+
+
            
            
             
