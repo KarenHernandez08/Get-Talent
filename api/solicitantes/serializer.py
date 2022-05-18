@@ -3,6 +3,7 @@ from rest_framework import serializers
 from users.serializers import IsEmpleadorSerializer
 from solicitantes.models import (
     InfoPesonalModel,
+    VideoSolicitanteModel,
 )
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
@@ -15,4 +16,9 @@ class InfoPersonalSerializer (serializers.ModelSerializer):
             'paternal_lastname','maternal_lastname',
             'age','additional_mail',
             'date_birth','gender','marital_status']
-    
+
+class VideoSolicitanteSerializer (serializers.ModelSerializer):
+    class Meta: 
+        model = VideoSolicitanteModel
+        fields = '__all__'
+        
