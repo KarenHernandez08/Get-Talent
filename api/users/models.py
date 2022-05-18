@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserManager(BaseUserManager):
@@ -15,7 +14,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **kwargs):
-        
 
         user=self.model(email=self.normalize_email(email),**kwargs)
         user.set_password(password)
@@ -35,9 +33,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     is_empleador = models.BooleanField(default=False)
+    intentos = models.IntegerField(default=0)
     
-    
-    
+
     USERNAME_FIELD= "email"
     
     
@@ -46,3 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
+
+
+   
