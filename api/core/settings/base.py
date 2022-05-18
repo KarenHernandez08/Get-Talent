@@ -64,7 +64,6 @@ INSTALLED_APPS += [
     # Local apps:
         'users',
         'vacantes',
-        'solicitantes',
         'infopersonal',
 ]
 

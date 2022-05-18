@@ -12,6 +12,7 @@ class InfoPesonalModel(models.Model):
     age = models.PositiveSmallIntegerField(validators=[MinValueValidator(16), MaxValueValidator(100)])
     additional_mail = models.CharField(max_length=30) ####CHECAR !!!!! 
     #user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
+    #video = models.URLField(max_length=200 , unique=True)
 
     # Propongo que sea un email adicional, pero el default sea el otro que ya dieron... 
     ## o simplemente eliminar ese campo 
@@ -33,3 +34,10 @@ class InfoPesonalModel(models.Model):
 
     def __str__(self): 
         return self.name
+
+
+class VideoSolicitanteModel(models.Model):
+    video = models.URLField(max_length=200 , unique=True)
+
+    def __str__(self):
+        return self.video 

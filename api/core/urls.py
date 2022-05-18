@@ -41,6 +41,5 @@ urlpatterns = [
     path('', include('users.urls'),),
     path('home/', include('home.urls'),),
     path('', include('vacantes.urls'),),
-    path('', include('solicitantes.urls'),),
     path('', include('infopersonal.urls'),),
 ]
