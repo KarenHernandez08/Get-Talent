@@ -121,25 +121,39 @@ class LoginAPIView(generics.GenericAPIView):
   
   
     def post(self, request):
+        serializer=LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
         try:
-            
-            serializer=LoginSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
             email=serializer.data['email']
             password=serializer.data['password']
             user=authenticate(username=email, password=password)
+            usuario_instance = User.objects.get(email=serializer.data['email']) #traigo mi usuario
+            if usuario_instance.is_active == False:
+                return Response('El usuario no esta activo', status=status.HTTP_401_UNAUTHORIZED)
+            if usuario_instance.is_verified == False:
+                return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
+            
+            if user == None:
+                N_intentos = usuario_instance.intentos
+                print(N_intentos)
+                if N_intentos < 3:
+                    usuario_instance.intentos = N_intentos +1 
+                    usuario_instance.save()
+
+                if N_intentos > 4: 
+                    usuario_instance.is_active = False
+                    usuario_instance.save()
+                    return Response ('Cuenta bloqueada, vuelve a activarla', status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+                return Response('Credenciales invalidades', status=status.HTTP_401_UNAUTHORIZED)
+            
+            usuario_instance.intentos = 0
             tokens = get_tokens_for_user(user)
             data = {
                 'msg':'Exitosamente logueado',
                 'tokens':tokens
             }
-            if user is None:
-                return Response('Credenciales invalidades', status=status.HTTP_401_UNAUTHORIZED)
-            if user.is_active is None:
-                return Response('El usuario no esta activo', status=status.HTTP_401_UNAUTHORIZED)
-            if user.is_verified is None:
-                return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
-            
             return Response(data, status=status.HTTP_200_OK)
         except:
             data = {
@@ -157,7 +171,6 @@ class LoginAPIView(generics.GenericAPIView):
                 user.save()
             while not User.objects.filter(password=password):
                 user.intentos += 1
-                user.save()
                 raise ValidationError({'msg': 'Contraseña incorrecta'})
            
         else:
