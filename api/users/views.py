@@ -129,10 +129,14 @@ class LoginAPIView(generics.GenericAPIView):
             password=serializer.data['password']
             user=authenticate(username=email, password=password)
             usuario_instance = User.objects.get(email=serializer.data['email']) #traigo mi usuario
+            if usuario_instance.intentos==3:
+                return Response('Cuenta Bloqueada, restablezca su contraseña', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_active == False:
                 return Response('El usuario no esta activo', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_verified == False:
                 return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
+            
+                
             
             if user == None:
                 N_intentos = usuario_instance.intentos
@@ -141,43 +145,28 @@ class LoginAPIView(generics.GenericAPIView):
                     usuario_instance.intentos = N_intentos +1 
                     usuario_instance.save()
 
-                if N_intentos > 4: 
+                if N_intentos == 3: 
                     usuario_instance.is_active = False
                     usuario_instance.save()
                     return Response ('Cuenta bloqueada, vuelve a activarla', status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-                return Response('Credenciales invalidades', status=status.HTTP_401_UNAUTHORIZED)
-            
-            usuario_instance.intentos = 0
-            tokens = get_tokens_for_user(user)
-            data = {
-                'msg':'Exitosamente logueado',
-                'tokens':tokens
-            }
-            return Response(data, status=status.HTTP_200_OK)
+                return Response('Contraseña incorrecta, vuelva a intentarlo', status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                usuario_instance.intentos = 0
+                usuario_instance.save()
+                tokens = get_tokens_for_user(user)
+                    
+                return Response({
+                        'msg':'Exitosamente logueado',
+                        'tokens':tokens
+                    }, status=status.HTTP_200_OK)
         except:
-            data = {
-                'msg':'Usuario no encontrado,vuelva a intentarlo'
-            }
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
-
-        
             
-    '''Login múmero de intentos 
-        user = User.objects.get(email=email)
-        while user.intentos < 3:
-            while User.objects.filter(password=password):
-                user.intentos ==0
-                user.save()
-            while not User.objects.filter(password=password):
-                user.intentos += 1
-                raise ValidationError({'msg': 'Contraseña incorrecta'})
-           
-        else:
-            user.is_active = False
-            user.save()
-            raise ValidationError({'msg': 'Tu contraseña ha sido bloqueada. '})'''
+            return Response({
+                'msg':'Usuario no encontrado,vuelva a intentarlo'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
+#verificar email 
 class Verificar(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = VerifySerializer
@@ -188,7 +177,7 @@ class Verificar(generics.GenericAPIView):
             #token  
             #esta variable solo obtiene el email de el usuario
             user=User.objects.get(email=serializer.data['email'])
-            if user.is_active==False:
+            if user.is_verified  ==False:
                 
                 #definimos el token
                 token=RefreshToken.for_user(user).access_token 
@@ -208,10 +197,10 @@ class Verificar(generics.GenericAPIView):
                 Util.send_email(data) 
                 #en este caso que todo este correcto enviara un mensaje de exito 
                 return Response('Revise su correo', status=status.HTTP_201_CREATED)
-            if user.intentos ==3:
-                return Response('Tu cuenta esta bloqueada, por favor cambia tu contraseña', status=status.HTTP_400_BAD_REQUEST)
-            if user.is_active==True:
-                return Response("Esta cuenta ya esta activa", status=status.HTTP_400_BAD_REQUEST)
+            if  user.intentos == 3:
+                return Response("Esta cuenta esta bloqueada", status=status.HTTP_400_BAD_REQUEST)
+            if user.is_verified == True:
+                return Response("Esta cuenta ya esta verificada", status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
     
