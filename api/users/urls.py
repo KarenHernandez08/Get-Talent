@@ -15,7 +15,6 @@ from users.views import SetNewPasswordAPIView
 
 urlpatterns = [
     path('signup/', UserSignupView.as_view(), name="signup"),
-    #path('registers/', UserListView.as_view()),
     path('email-verify/', VerifyEmail.as_view(), name="email-verify"), #se le coloca nombre porque es la liga que va a regresar
     path('login/', LoginAPIView.as_view(), name="login"),
     path('verify/', Verificar.as_view(), name="verificar"),

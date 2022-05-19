@@ -1,9 +1,9 @@
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from users.models import User   
 
 
@@ -76,12 +76,23 @@ class VerifySerializer(serializers.ModelSerializer):
         fields=['email']
         
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField(min_length=2)
+    email=serializers.EmailField(max_length=50)
 
-    
 
     class Meta:
         fields = ['email']
+        
+    def validate(self, attrs):
+        try:
+            email=attrs.get('email', '')
+            if User.objects.filter(email=email).exist():
+                user=User.objects.get(email=email)
+                uidb64=urlsafe_base64_decode(user.id)
+                token=PasswordResetTokenGenerator().make_token(user)
+            return attrs
+        except expression as identifier:
+            pass
+        return super().validate(attrs)
 
 
 class SetNewPasswordSerializer(serializers.Serializer):
