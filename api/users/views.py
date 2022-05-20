@@ -131,10 +131,14 @@ class LoginAPIView(generics.GenericAPIView):
             password=serializer.data['password']
             user=authenticate(username=email, password=password)
             usuario_instance = User.objects.get(email=serializer.data['email']) #traigo mi usuario
+            if usuario_instance.intentos==3:
+                return Response('Cuenta Bloqueada, restablezca su contraseña', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_active == False:
                 return Response('El usuario no esta activo', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_verified == False:
                 return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
+            
+                
             
             if user == None:
                 N_intentos = usuario_instance.intentos
@@ -143,7 +147,7 @@ class LoginAPIView(generics.GenericAPIView):
                     usuario_instance.intentos = N_intentos +1 
                     usuario_instance.save()
 
-                if N_intentos >= 3: 
+                if N_intentos == 3: 
                     usuario_instance.is_active = False
                     usuario_instance.save()
                     return Response ('Cuenta bloqueada, vuelve a activarla', status=status.HTTP_503_SERVICE_UNAVAILABLE)
@@ -164,7 +168,7 @@ class LoginAPIView(generics.GenericAPIView):
                 'msg':'Usuario no encontrado,vuelva a intentarlo'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-
+#verificar email 
 class Verificar(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = VerifySerializer
