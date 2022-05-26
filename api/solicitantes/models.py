@@ -37,7 +37,7 @@ class InfoPesonalModel(models.Model):
         return self.name
         
 class VideoSolicitanteModel(models.Model):
-    video = models.URLField(max_length=200 , unique=True)
+    video = models.URLField(max_length=2000 , unique=True)
 
     def __str__(self):
         return self.video   
