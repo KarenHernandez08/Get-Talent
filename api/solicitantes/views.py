@@ -50,9 +50,21 @@ class VideoSolicitanteView(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
     renderer_classes = (SolicitantesRenderer,)
     serializer_class = VideoSolicitanteSerializer
-    def post(self, request):
-
-        serializer = VideoSolicitanteSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save() 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def post(self, request, usuario_id):
+        usuario_instance = User.objects.get(id=usuario_id)
+        es_empleador = usuario_instance.is_empleador
+        try:
+            data =request.data
+            serializer = InfoPersonalSerializer(data=data)
+            if es_empleador == True:
+                return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)
+            elif es_empleador == False:
+                return Response('Autorización de Solicitante exitosa. Video Guardado', status=status.HTTP_200_OK)
+            serializer = VideoSolicitanteSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
