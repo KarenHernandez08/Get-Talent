@@ -55,4 +55,4 @@ class VideoSolicitanteView(generics.GenericAPIView):
         serializer = VideoSolicitanteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save() 
-        return Response( 'Link de video guardado', serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
