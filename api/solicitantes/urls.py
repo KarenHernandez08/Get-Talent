@@ -9,5 +9,5 @@ urlpatterns = [
     path('videosolicitante/', VideoSolicitanteView.as_view()),
     #path('videosolicitante/<int:usuario_id>/', VideoSolicitanteView.as_view()),
     ##La linea se cambiará cuando se tenga ya el registro de los usuarios
-    path('users/videosolicitante', VideoSolicitanteView.as_view()),
+    path('users/<int:usuario_id>/videosolicitante', VideoSolicitanteView.as_view()),
 ] 

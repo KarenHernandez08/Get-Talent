@@ -38,6 +38,7 @@ class InfoPesonalModel(models.Model):
         
 class VideoSolicitanteModel(models.Model):
     video = models.URLField(max_length=2000 , unique=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
 
     def __str__(self):
         return self.video   
