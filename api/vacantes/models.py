@@ -8,7 +8,9 @@ from users.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator 
 #from unicodedata import name
 
+# CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 # Create your models here.
+<<<<<<< HEAD
 # Create your models here.
 class InfoPesonalModel(models.Model):
     name = models.CharField(max_length=30)
@@ -44,6 +46,8 @@ class InfoPesonalModel(models.Model):
 #########################
 
 # CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
+=======
+>>>>>>> 9cc5259f9633a8ead5bede9f27dbad7703f97839
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
     status = models.BooleanField(default=False)
