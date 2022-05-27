@@ -6,12 +6,10 @@ from django.urls import reverse
 from django.conf import settings #importamos la configuracion para usar el SECRET KEY
 from django.contrib.auth import authenticate
 
-from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
+
 from .renderers import SolicitantesRenderer
 from users.models import User
 
