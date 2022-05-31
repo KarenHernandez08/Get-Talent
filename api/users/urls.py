@@ -4,10 +4,9 @@ from users.views import UserSignupView
 from users.views import VerifyEmail
 from users.views import LoginAPIView
 from users.views import Verificar
-from users.views import RequestPasswordResetEmailView
-from users.views import PasswordTokenCheckAPI
-from users.views import SetNewPasswordView
-
+from users.views import ChangePasswordView
+from users.views import PasswordResetEmailView
+from users.views import PasswordResetView
 
 
 
@@ -23,10 +22,11 @@ urlpatterns = [
      
      path('verify/', Verificar.as_view(), name="verificar"),
      
-     path('request-reset-email/', RequestPasswordResetEmailView.as_view(), name='request-reset-email'),  
-        
-     path('password-reset/<uidb64>/<token>/', PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),    
+     path('change-password/', ChangePasswordView.as_view(), name='request-reset-email'),  
+     
+     path('recovery/password-email/', PasswordResetEmailView.as_view(), name='recovery-password-email'),
+     
+     path('reset-password/<uid>/<token>/', PasswordResetView.as_view(), name='reset-password'),
 
-     path('password-reset-complete/', SetNewPasswordView.as_view(), name='password-reset-complete'),
 
 ]
