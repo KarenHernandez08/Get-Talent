@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_yasg',
+
+    
 ]
 
 INSTALLED_APPS += [
@@ -57,6 +59,8 @@ INSTALLED_APPS += [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
+   
+
 
     # Local apps:
         'users',
@@ -172,6 +176,11 @@ USE_I18N = True
 USE_TZ = True
 
 
+#DATE_FORMAT = ['%d-%m-%Y'] #'%d/%m/%Y'
+#DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -220,8 +229,8 @@ EMAIL_HOST_PASSWORD="unospedillos"
 EMAIL_USE_TLS=True
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER= config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER= config('EMAIL_HOST_USER', default='valentis.gettalent@gmail.com')
+EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD', default='unospedillos')
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=25),
