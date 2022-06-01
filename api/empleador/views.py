@@ -24,11 +24,10 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
             if es_empleador == False:    # Si el usuario No es empleador 
                  return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
             elif es_empleador == True:  # Si el usuario Es empleador
-                 return Response('Autorización de Empleador exitosa', status=status.HTTP_200_OK)
-            serializer = InfoEmpleadorSerializers(data=request.data)
-            serializer.is_valid(raise_exception=True)  #valido la información
+                 serializer = InfoEmpleadorSerializers(data=request.data)
+                 serializer.is_valid(raise_exception=True)  #valido la información
             serializer.save()                 # si todo va bien lo guardo
-            return Response('Información de Vacante Registrada', status=status.HTTP_201_CREATED)
+            return Response('Autorización de Empleador Exitosa. Información de Compañia Registrada', status=status.HTTP_201_CREATED)
         except:
              # si no es valida ya dará información expecifica del error de la información
              return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
