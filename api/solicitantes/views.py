@@ -59,11 +59,10 @@ class VideoSolicitanteView(generics.GenericAPIView):
             if es_empleador == True:
                 return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)
             elif es_empleador == False:
-                return Response('Autorización de Solicitante exitosa. Video Guardado', status=status.HTTP_200_OK)
-            serializer = VideoSolicitanteSerializer(data=request.data)
+                 serializer = VideoSolicitanteSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response('Autorización de Solicitante exitosa. Video Guardado', status=status.HTTP_201_CREATED)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
