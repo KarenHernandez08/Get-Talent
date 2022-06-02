@@ -52,17 +52,17 @@ class SoloRolesRegistroView(generics.GenericAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class VacantesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    queryset = PreguntasModel.objects.all() 
-    serializer_class = PreguntasVacantesSerializer
-    def post(self, request):
-        serializers = PreguntasVacantesSerializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        print(serializers)
-        return Response(status=status.HTTP_201_CREATED)
+# class VacantesRegistroView(generics.GenericAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (VacantesRenderer,)
+#     queryset = PreguntasModel.objects.all() 
+#     serializer_class = PreguntasVacantesSerializer
+#     def post(self, request):
+#         serializers = PreguntasVacantesSerializer(data=request.data)
+#         serializers.is_valid(raise_exception=True)
+#         serializers.save()
+#         print(serializers)
+#         return Response(status=status.HTTP_201_CREATED)
 
 
 class VacantesRegistroView(generics.GenericAPIView): 
@@ -86,13 +86,13 @@ class VacantesRegistroView(generics.GenericAPIView):
              return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class SoloVacantesRegistroView(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = (VacantesRenderer,)
-#     serializer_class = VacantesSerializer
+class SoloVacantesRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    serializer_class = VacantesSerializer
 
-#     def post(self, request):
-#         serializer = VacantesSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def post(self, request):
+        serializer = VacantesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
