@@ -80,37 +80,37 @@ class VerifySerializer(serializers.ModelSerializer):
         fields=['email']
         
 class ChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+    new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     
     class Meta:
-        fields = ['password']
+        fields = ['old_password','new_password']
 
-    def validate(self, data):
-        password = data.get('password')
+    def validate(self, data ):
+        new_password = data.get('new_password')
         user = self.context.get('user')
         special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
 
-        if len(password) <6 or len(password) > 20:
+        if len(new_password) <6 or len(new_password) > 20:
             raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')
 
-        if not any(x.isalpha() for x in password):
+        if not any(x.isalpha() for x in new_password):
             raise ValidationError('La contraseña debe contener al menos una letra.')
          
-        if not any(x.isupper() for x in password):
+        if not any(x.isupper() for x in new_password):
             raise ValidationError('La contraseña debe contener al menos una letra Mayúscula.')
 
-        if not any(x.islower() for x in password):
+        if not any(x.islower() for x in new_password):
             raise ValidationError('La contraseña debe contener al menos una letra minúscula.')
         
-        if not any(x.isdigit() for x in password):
+        if not any(x.isdigit() for x in new_password):
             raise ValidationError('La contraseña debe de contener al menos un dígito del [0-9].')
           
-        if not any(x in special_characters for x in password):
+        if not any(x in special_characters for x in new_password):
             raise ValidationError('La contraseña debe contener al menos un caracter especial.')
-        user.set_password(password)
+        
+        user.set_password(new_password)
         user.save()
         return data
-
 
 # Envio de email para recuperar contraseña
 class PasswordResetEmailSerializer(serializers.Serializer):
@@ -122,25 +122,26 @@ class PasswordResetEmailSerializer(serializers.Serializer):
         email = attrs.get('email')
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email = email)
+            print(user)
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            print('Encoded UID', uid)
+            print('UID', uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            print('Password Reset Token', token)
+            print('Token', token)
             current_site=get_current_site(request).domain
             relative_link=reverse('reset-password')
             link ='http://localhost:8000/reset-password/'+ uid+ '/'+token
-            print('Password Reset Link', link)
+            print(' Link', link)
             # Send EMail
-            body = 'Click Following Link to Reset Your Password '+link
+            body = 'Click para cambiar contraseña '+link
             data = {
-                'subject':'Reset Your Password',
+                'subject':'Cambiar contraseña',
                 'body':body,
                 'to_email':user.email
             }
             Util.send_email(data)
             return attrs
         else:
-            raise serializers.ValidationError('You are not a Registered User')
+            raise serializers.ValidationError('El usuario no esta registrado')
 
 class PasswordResetSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
@@ -155,17 +156,17 @@ class PasswordResetSerializer(serializers.Serializer):
             uid = self.context.get('uid')
             token = self.context.get('token')
             if password != password2:
-                raise ValidationError("Password and Confirm Password doesn't match")
+                raise ValidationError("Las contraseñas no coinciden")
             id = smart_str(urlsafe_base64_decode(uid))
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
-                raise ValidationError('Token is not Valid or Expired')
+                raise ValidationError('El token no es valido o a expirado')
             user.set_password(password)
             user.save()
             return attrs
         except DjangoUnicodeDecodeError as identifier:
             PasswordResetTokenGenerator().check_token(user, token)
-            raise serializers.ValidationError('Token is not Valid or Expired')
+            raise serializers.ValidationError('El token no es valido o a expirado')
             
         
     

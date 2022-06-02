@@ -214,10 +214,12 @@ class ChangePasswordView(generics.GenericAPIView):
     serializer_class= ChangePasswordSerializer
     
     def post(self, request, format=None):
-        try:
-            password=request.data.get('password')
+        #try:
+            new_password=request.data.get('new_password')
             confirmPassword=request.data.get('confirmPassword')
-            if password != confirmPassword:
+            
+                
+            if new_password != confirmPassword:
                 return Response('Las contraseñas no coinciden', status=status.HTTP_400_BAD_REQUEST)
             
             serializer = ChangePasswordSerializer(data=request.data, context={'user':request.user})
@@ -225,8 +227,8 @@ class ChangePasswordView(generics.GenericAPIView):
             
             return Response('Password cambiada correctamente', status=status.HTTP_200_OK)
 
-        except:
-            return Response('La acción no puede ejecurtarse en este momento')
+        #except:
+         #   return Response('La acción no puede ejecurtarse en este momento')
 
 # Envio de email para recuperar contraseña
 class PasswordResetEmailView(generics.GenericAPIView):
@@ -244,7 +246,7 @@ class PasswordResetView(generics.GenericAPIView):
     def post(self, request, uid, token, format=None):
         serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
         serializer.is_valid(raise_exception=True)
-        return Response({'Nueva Password guardada con exito'}, status=status.HTTP_200_OK)
+        return Response({'Nueva contraseña guardada con exito'}, status=status.HTTP_200_OK)
     
     
      
