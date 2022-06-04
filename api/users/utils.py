@@ -1,6 +1,5 @@
 from django.core.mail import EmailMessage
-
-
+import os
 class Util: # el envio del email y es un metodo estatico
     @staticmethod
     def send_email(data):
@@ -9,9 +8,8 @@ class Util: # el envio del email y es un metodo estatico
         
         email.send()
         
-        '''
-        email_subject: asunto
-        email_body: lo que se le va a enviar
-        to: el correo al que se le va a enviar
-        '''
+        
+
+
+    
         

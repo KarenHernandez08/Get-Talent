@@ -3,9 +3,6 @@ from django.contrib.sites.shortcuts import get_current_site #para poder opbtener
 from django.urls import reverse
 from django.conf import settings #importamos la configuracion para usar el SECRET KEY
 from django.contrib.auth import authenticate
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import smart_str, force_str,  smart_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.http import HttpResponsePermanentRedirect
 
 from rest_framework import status, generics
@@ -173,7 +170,7 @@ class Verificar(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = VerifySerializer
     def post(self, request):
-        try:
+        #try:
             serializer = VerifySerializer(data=request.data)
             serializer.is_valid(raise_exception=True) 
             #token  
@@ -197,15 +194,17 @@ class Verificar(generics.GenericAPIView):
 
                 #aqui invocamos el metodo y mandamos la data para utils.py
                 Util.send_email(data) 
-                #en este caso que todo este correcto enviara un mensaje de exito 
+                
             if  user.intentos == 3:
                 return Response("Esta cuenta esta bloqueada", status=status.HTTP_400_BAD_REQUEST)
             if user.is_verified == True:
                 return Response("Esta cuenta ya esta verificada", status=status.HTTP_400_BAD_REQUEST)
             
+            return Response("Revise su correo para verificar su email", status=status.HTTP_200_OK)
+            
     
-        except:
-            return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
+        #except:
+         #   return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
 
 # Cambiar Contraseña
 class ChangePasswordView(generics.GenericAPIView):
@@ -232,6 +231,7 @@ class ChangePasswordView(generics.GenericAPIView):
 
 # Envio de email para recuperar contraseña
 class PasswordResetEmailView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
     renderer_classes = [UserRenderer]
     serializer_class=PasswordResetEmailSerializer
     def post(self, request, format=None):
@@ -241,9 +241,15 @@ class PasswordResetEmailView(generics.GenericAPIView):
     
 
 class PasswordResetView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
     renderer_classes = [UserRenderer]
     serializer_class=PasswordResetSerializer
     def post(self, request, uid, token, format=None):
+        new_password=request.data.get('new_password')
+        confirmPassword=request.data.get('confirmPassword')
+                 
+        if new_password != confirmPassword:
+            return Response('Las contraseñas no coinciden', status=status.HTTP_400_BAD_REQUEST)
         serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
         serializer.is_valid(raise_exception=True)
         return Response({'Nueva contraseña guardada con exito'}, status=status.HTTP_200_OK)

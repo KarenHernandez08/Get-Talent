@@ -22,7 +22,7 @@ urlpatterns = [
      
      path('verify/', Verificar.as_view(), name="verificar"),
      
-     path('change-password/', ChangePasswordView.as_view(), name='request-reset-email'),  
+     path('change-password/', ChangePasswordView.as_view(), name='change-password'),  
      
      path('recovery/password-email/', PasswordResetEmailView.as_view(), name='recovery-password-email'),
      
