@@ -33,11 +33,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     is_empleador = models.BooleanField(default=False)
-    intentos=models.IntegerField(default=0)
+    intentos = models.IntegerField(default=0)
     
-    
-    
-    
+
     USERNAME_FIELD= "email"
     
     
@@ -46,9 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-    def tokens(self):
-            refresh = RefreshToken.for_user(self)
-            return {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token)
-            }
+
+
+   
