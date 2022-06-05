@@ -1,24 +1,25 @@
 
-from django.forms import ValidationError
-from django.shortcuts import render 
 from django.contrib.sites.shortcuts import get_current_site #para poder opbtener el dominio
 from django.urls import reverse
 from django.conf import settings #importamos la configuracion para usar el SECRET KEY
 from django.contrib.auth import authenticate
-from rest_framework.views import APIView
+from django.http import HttpResponsePermanentRedirect
+
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los tokens
-import jwt
+from rest_framework.permissions import IsAuthenticated
+
 from users.models import User
-from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer, VerifySerializer
+from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer, VerifySerializer, ChangePasswordSerializer, PasswordResetEmailSerializer, PasswordResetSerializer
 from .utils import Util #importamos nuestra clase y metodo de enviar email
-from django.http import HttpResponsePermanentRedirect
-import os
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .renderers import UserRenderer
+
+import jwt
+import os
 
 
 
@@ -44,7 +45,6 @@ class UserSignupView(generics.GenericAPIView):
             serializer.save()
             user_data=serializer.data  
         
- 
             #token  
             #esta variable solo obtiene el email de el usuario
             user=User.objects.get(email=user_data['email'])
@@ -68,7 +68,7 @@ class UserSignupView(generics.GenericAPIView):
             return Response('Usuario creado', status=status.HTTP_201_CREATED)
         
         except:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+           return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 #Verificar Email y activacion de cuenta
 class VerifyEmail(generics.GenericAPIView):
@@ -113,6 +113,7 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }        
+    
 #Login
 class LoginAPIView(generics.GenericAPIView):
     
@@ -135,9 +136,7 @@ class LoginAPIView(generics.GenericAPIView):
                 return Response('El usuario no esta activo', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_verified == False:
                 return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
-            
-                
-            
+
             if user == None:
                 N_intentos = usuario_instance.intentos
                 print(N_intentos)
@@ -165,13 +164,13 @@ class LoginAPIView(generics.GenericAPIView):
             return Response({
                 'msg':'Usuario no encontrado,vuelva a intentarlo'
             }, status=status.HTTP_400_BAD_REQUEST)
-
+            
 #verificar email 
 class Verificar(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = VerifySerializer
     def post(self, request):
-        try:
+        #try:
             serializer = VerifySerializer(data=request.data)
             serializer.is_valid(raise_exception=True) 
             #token  
@@ -195,20 +194,70 @@ class Verificar(generics.GenericAPIView):
 
                 #aqui invocamos el metodo y mandamos la data para utils.py
                 Util.send_email(data) 
-                #en este caso que todo este correcto enviara un mensaje de exito 
-                return Response('Revise su correo', status=status.HTTP_201_CREATED)
+                
             if  user.intentos == 3:
                 return Response("Esta cuenta esta bloqueada", status=status.HTTP_400_BAD_REQUEST)
             if user.is_verified == True:
                 return Response("Esta cuenta ya esta verificada", status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
-    
-        
-   
-
-
-           
-           
             
-           
+            return Response("Revise su correo para verificar su email", status=status.HTTP_200_OK)
+            
+    
+        #except:
+         #   return Response("No hay una cuenta registraada con ese email", status=status.HTTP_400_BAD_REQUEST)
+
+# Cambiar Contraseña
+class ChangePasswordView(generics.GenericAPIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+    serializer_class= ChangePasswordSerializer
+    
+    def post(self, request, format=None):
+        #try:
+            new_password=request.data.get('new_password')
+            confirmPassword=request.data.get('confirmPassword')
+            
+                
+            if new_password != confirmPassword:
+                return Response('Las contraseñas no coinciden', status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = ChangePasswordSerializer(data=request.data, context={'user':request.user})
+            serializer.is_valid(raise_exception=True)
+            
+            return Response('Password cambiada correctamente', status=status.HTTP_200_OK)
+
+        #except:
+         #   return Response('La acción no puede ejecurtarse en este momento')
+
+# Envio de email para recuperar contraseña
+class PasswordResetEmailView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = [UserRenderer]
+    serializer_class=PasswordResetEmailSerializer
+    def post(self, request, format=None):
+        serializer = PasswordResetEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response('Revise su correo por favor ', status=status.HTTP_200_OK)
+    
+
+class PasswordResetView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = [UserRenderer]
+    serializer_class=PasswordResetSerializer
+    def post(self, request, uid, token, format=None):
+        new_password=request.data.get('new_password')
+        confirmPassword=request.data.get('confirmPassword')
+                 
+        if new_password != confirmPassword:
+            return Response('Las contraseñas no coinciden', status=status.HTTP_400_BAD_REQUEST)
+        serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
+        serializer.is_valid(raise_exception=True)
+        return Response({'Nueva contraseña guardada con exito'}, status=status.HTTP_200_OK)
+    
+    
+     
+     
+     
+     
+
+
