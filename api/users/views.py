@@ -130,6 +130,7 @@ class LoginAPIView(generics.GenericAPIView):
             password=serializer.data['password']
             user=authenticate(username=email, password=password)
             usuario_instance = User.objects.get(email=serializer.data['email']) #traigo mi usuario
+            empleador=usuario_instance.is_empleador
             if usuario_instance.intentos==3:
                 return Response('Cuenta Bloqueada, restablezca su contraseña', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_active == False:
@@ -144,7 +145,7 @@ class LoginAPIView(generics.GenericAPIView):
                     usuario_instance.intentos = N_intentos +1 
                     usuario_instance.save()
 
-                if N_intentos == 3: 
+                if usuario_instance.intentos == 3: 
                     usuario_instance.is_active = False
                     usuario_instance.save()
                     return Response ('Cuenta bloqueada, vuelve a activarla', status=status.HTTP_503_SERVICE_UNAVAILABLE)
@@ -157,7 +158,8 @@ class LoginAPIView(generics.GenericAPIView):
                     
                 return Response({
                         'msg':'Exitosamente logueado',
-                        'tokens':tokens
+                        'tokens':tokens,
+                        'is_empleador':empleador
                     }, status=status.HTTP_200_OK)
         except:
             
@@ -252,7 +254,7 @@ class PasswordResetView(generics.GenericAPIView):
             return Response('Las contraseñas no coinciden', status=status.HTTP_400_BAD_REQUEST)
         serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
         serializer.is_valid(raise_exception=True)
-        return Response({'Nueva contraseña guardada con exito'}, status=status.HTTP_200_OK)
+        return Response('Nueva contraseña guardada con exito', status=status.HTTP_200_OK)
     
     
      

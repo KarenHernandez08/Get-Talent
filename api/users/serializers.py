@@ -122,15 +122,10 @@ class PasswordResetEmailSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
-        print(email)
         if User.objects.filter(email=email).exists():
-            print(User.objects.filter(email=email).exists())
             user = User.objects.get(email = email)
-            print(user)
             uid = urlsafe_base64_encode(smart_bytes(user.id))
-            print('UID', uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            print('Token', token)
             link ='http://localhost:8000/reset-password/'+ uid+ '/'+token + '/'
             print(' Link', link)
             # Send EMail
@@ -160,19 +155,15 @@ class PasswordResetSerializer(serializers.Serializer):
             new_password = data.get('new_password')
             special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
             uid = self.context.get('uid')
-            print(uid)
             token = self.context.get('token')
-            print(token)
             id = smart_str(urlsafe_base64_decode(uid))
-            print(id)
             user = User.objects.get(id=id)
-            print(user)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise ValidationError('El token no es valido o a expirado')
             
 
             if len(new_password) <6 or len(new_password) > 20:
-                raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')
+                raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud.')
 
             if not any(x.isalpha() for x in new_password):
                 raise ValidationError('La contraseña debe contener al menos una letra.')
@@ -190,10 +181,10 @@ class PasswordResetSerializer(serializers.Serializer):
                 raise ValidationError('La contraseña debe contener al menos un caracter especial.')
         
             user.set_password(new_password)
-            print(new_password)
             user.intentos=0
+            user.is_active=True
             user.save()
             return data
         except DjangoUnicodeDecodeError as identifier:
             PasswordResetTokenGenerator().check_token(user, token)
-            raise serializers.ValidationError('El token no es valido o a expirado')
+            raise ValidationError('El token no es valido o a expirado')
