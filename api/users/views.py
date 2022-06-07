@@ -129,6 +129,7 @@ class LoginAPIView(generics.GenericAPIView):
             password=serializer.data['password']
             user=authenticate(username=email, password=password)
             usuario_instance = User.objects.get(email=serializer.data['email']) #traigo mi usuario
+            empleador=usuario_instance.is_empleador
             if usuario_instance.intentos==3:
                 return Response('Cuenta Bloqueada, restablezca su contraseña', status=status.HTTP_401_UNAUTHORIZED)
             if usuario_instance.is_active == False:
@@ -158,7 +159,8 @@ class LoginAPIView(generics.GenericAPIView):
                     
                 return Response({
                         'msg':'Exitosamente logueado',
-                        'tokens':tokens
+                        'tokens':tokens,
+                        'is_empleador':empleador
                     }, status=status.HTTP_200_OK)
         except:
             

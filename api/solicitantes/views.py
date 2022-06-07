@@ -41,11 +41,10 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
             if es_empleador == True:
                 return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)
             elif es_empleador == False:
-                return Response('Autorización de Solicitante exitosa', status=status.HTTP_200_OK)
-            serializer = InfoPersonalSerializer(data=data)
+                serializer = InfoPersonalSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response('Información de Usuario Registrada', status=status.HTTP_201_CREATED)
+            return Response(' Autorización de Solicitante Exitosa. Información de Usuario Registrada', status=status.HTTP_201_CREATED)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -84,8 +83,7 @@ class InfoAcademicaView(generics.GenericAPIView):
             if es_empleador == True:
                 return Response('Eres Empleador. No tienes autorización.', status=status.HTTP_401_UNAUTHORIZED)
             elif es_empleador == False:
-                return Response('Autorización de Solicitante exitosa.', status=status.HTTP_200_OK)
-            serializer = InfoAcademicaSerializer(data=data)
+                serializer = InfoAcademicaSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response('Datos guardados correctamente', status=status.HTTP_201_CREATED)
