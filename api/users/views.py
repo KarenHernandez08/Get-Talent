@@ -115,15 +115,15 @@ def get_tokens_for_user(user):
     }        
 #Login
 class LoginAPIView(generics.GenericAPIView):
-    
+
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
-  
-  
+
+
     def post(self, request):
         serializer=LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         try:
             email=serializer.data['email']
             password=serializer.data['password']
@@ -137,8 +137,6 @@ class LoginAPIView(generics.GenericAPIView):
             if usuario_instance.is_verified == False:
                 return Response('El usuario no esta verificado', status=status.HTTP_401_UNAUTHORIZED)
             
-                
-            
             if user == None:
                 N_intentos = usuario_instance.intentos
                 print(N_intentos)
@@ -146,7 +144,7 @@ class LoginAPIView(generics.GenericAPIView):
                     usuario_instance.intentos = N_intentos +1 
                     usuario_instance.save()
 
-                if N_intentos == 3: 
+                if usuario_instance.intentos == 3: 
                     usuario_instance.is_active = False
                     usuario_instance.save()
                     return Response ('Cuenta bloqueada, vuelve a activarla', status=status.HTTP_503_SERVICE_UNAVAILABLE)
@@ -156,14 +154,14 @@ class LoginAPIView(generics.GenericAPIView):
                 usuario_instance.intentos = 0
                 usuario_instance.save()
                 tokens = get_tokens_for_user(user)
-                    
+
                 return Response({
                         'msg':'Exitosamente logueado',
                         'tokens':tokens,
                         'is_empleador':empleador
                     }, status=status.HTTP_200_OK)
         except:
-            
+
             return Response({
                 'msg':'Usuario no encontrado,vuelva a intentarlo'
             }, status=status.HTTP_400_BAD_REQUEST)
