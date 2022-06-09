@@ -82,14 +82,18 @@ class VerifySerializer(serializers.ModelSerializer):
         
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
-    
+    confirmPassword=serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     class Meta:
-        fields = ['old_password','new_password']
-
+        fields = ['new_password', 'confirmPassword']
+        
     def validate(self, data ):
         new_password = data.get('new_password')
+        confirmPassword=data.get('confirmPassword')
         user = self.context.get('user')
         special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
+        
+        if new_password != confirmPassword:
+                raise ValidationError('Las contraseñas no coiciden')
 
         if len(new_password) <6 or len(new_password) > 20:
             raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')
@@ -147,12 +151,14 @@ class PasswordResetEmailSerializer(serializers.Serializer):
 
 class PasswordResetSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+    confirmPassword=serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     class Meta:
-        fields = ['new_password']
+        fields = ['new_password', 'confirmPassword']
 
     def validate(self, data):
         try:
             new_password = data.get('new_password')
+            confirmPassword=data.get('confirmPassword')
             special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
             uid = self.context.get('uid')
             token = self.context.get('token')
@@ -161,6 +167,8 @@ class PasswordResetSerializer(serializers.Serializer):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise ValidationError('El token no es valido o a expirado')
             
+            if new_password != confirmPassword:
+                raise ValidationError('Las contraseñas no coiciden')
 
             if len(new_password) <6 or len(new_password) > 20:
                 raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud.')
