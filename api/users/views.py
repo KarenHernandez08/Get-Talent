@@ -249,7 +249,7 @@ class PasswordResetView(generics.GenericAPIView):
             
             serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
             serializer.is_valid(raise_exception=True)
-            return Response('Nueva contraseña guardada con exito', status=status.HTTP_200_OK)
+            return Response('Nueva contraseña guardada con exito', status=status.HTTP_201_CREATED)
         except:
             return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
     
