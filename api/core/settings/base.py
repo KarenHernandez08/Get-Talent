@@ -225,8 +225,8 @@ AUTH_USER_MODEL = 'users.User'
 EMAIL_USE_TLS=True
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER= config('EMAIL_HOST_USER', default='valentis.gettalent@gmail.com')
-EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD', default='unospedillos')
+EMAIL_HOST_USER= config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD', default='')
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=25),
