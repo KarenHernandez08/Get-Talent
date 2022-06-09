@@ -1,8 +1,8 @@
 from dataclasses import fields
-from rest_framework import serializers  
+from rest_framework import serializers
 from users.serializers import IsEmpleadorSerializer
 from solicitantes.models import (
-    InfoPesonalModel, VideoSolicitanteModel
+    InfoPesonalModel, VideoSolicitanteModel, InfoAcademicaModel
 )
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
@@ -22,3 +22,12 @@ class VideoSolicitanteSerializer (serializers.ModelSerializer):
         model = VideoSolicitanteModel
         fields = '__all__'
         
+
+class InfoAcademicaSerializer (serializers.ModelSerializer):
+    es_empleador =IsEmpleadorSerializer(read_only=True)
+    class Meta:
+        model = InfoAcademicaModel
+        fields = [
+           'es_empleador', 'name', 'institucion',
+           'fecha_inicio', 'fecha_fin','estatus_academico',
+           'nivel_escolar' ]

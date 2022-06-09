@@ -42,3 +42,35 @@ class VideoSolicitanteModel(models.Model):
 
     def __str__(self):
         return self.video   
+
+
+class InfoAcademicaModel(models.Model): 
+    name = models.CharField(max_length=30)
+    institucion = models.CharField(max_length=100)
+    fecha_inicio = models.DateField(default="0000-00-00", null = True, blank = False)
+    fecha_fin = models.DateField(default="0000-00-00", null = True, blank = False)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True )
+
+    class Nivel_List(models.Choices):
+        CARRERA_TECNICA= "Carrera Técnica"
+        UNIVERSIDAD = "Universidad"
+        MAESTRIA = "Maestría"
+        DOCTORADO = "Doctorado"
+        CURSO = "Curso"
+        CERTIFICACIÓN = "Certificación"
+        OTRO = "Otro"
+        SINESPECIFICAR = "sin especificar"
+    nivel_escolar = models.CharField(max_length=20, choices=Nivel_List.choices, default='sin especificar')
+
+    class Estatus_List(models.Choices):
+        FINALIZADO = "Finalizado"
+        EN_CURSO = "En curso"
+        TRUNCO = "Trunco"
+        OTRO = "Otro"
+        SINESPECIFICAR = "sin especificar"
+    estatus_academico = models.CharField(max_length=20, choices=Estatus_List.choices, default='sin especificar')
+
+   
+    def __str__(self): 
+     return self.name
+
