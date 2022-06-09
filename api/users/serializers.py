@@ -196,3 +196,11 @@ class PasswordResetSerializer(serializers.Serializer):
         except DjangoUnicodeDecodeError as identifier:
             PasswordResetTokenGenerator().check_token(user, token)
             raise ValidationError('El token no es valido o a expirado')
+        
+class IsEmpleadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_empleador',)
+    def validate(self, attr):
+        return attr
+    
