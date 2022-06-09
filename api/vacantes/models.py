@@ -1,3 +1,4 @@
+from doctest import debug
 from django.db import models
 from unicodedata import name
 # from enum import Enum, unique
@@ -46,8 +47,8 @@ class VacantesModel(models.Model):
     sueldo = models.DecimalField ( max_digits=30 , decimal_places=2) 
     
     ##empleador_id = models.ForeignKey(users, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
-    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True)     #tabla externa
-    roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True)   #tabla externa
+    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True, default=1)     #tabla externa
+    roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True, default=1)   #tabla externa
 
     class Modalidad_Lista(models.Choices):
         TIEMPO_COMPLETO = "Tiempo Completo"
