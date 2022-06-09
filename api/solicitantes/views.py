@@ -89,5 +89,3 @@ class InfoAcademicaView(generics.GenericAPIView):
             return Response('Datos guardados correctamente', status=status.HTTP_201_CREATED)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        
