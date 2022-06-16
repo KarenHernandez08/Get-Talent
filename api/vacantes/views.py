@@ -91,8 +91,11 @@ class SoloVacantesRegistroView(generics.GenericAPIView):
     renderer_classes = (VacantesRenderer,)
     serializer_class = VacantesSerializer
 
-    def post(self, request):
-        serializer = VacantesSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get(self, request, usuario_id):
+        vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
+        #author_obj = get_object_or_404(Author,id=author_id)
+        serializer = VacantesSerializer(vacante_obj)
+
+        # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
+        # serializer = VacantesSerializer(vacantes_instancia)
+        return Response(serializer.data, status=status.HTTP_200_OK)

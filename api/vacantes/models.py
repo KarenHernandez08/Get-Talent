@@ -1,9 +1,5 @@
-from doctest import debug
 from django.db import models
-from unicodedata import name
-# from enum import Enum, unique
-# @unique
-# import enum
+from users.models import User
 
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
@@ -46,7 +42,7 @@ class VacantesModel(models.Model):
     vacante_video = models.CharField ( max_length=150)
     sueldo = models.DecimalField ( max_digits=30 , decimal_places=2) 
     
-    ##empleador_id = models.ForeignKey(users, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
+    empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
     area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True, default=1)     #tabla externa
     roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True, default=1)   #tabla externa
 
@@ -98,9 +94,9 @@ class VacantesModel(models.Model):
         ZACATECAS = "Zacatecas"
     localidad = models.CharField(max_length=25, choices=Estados_Lista.choices)
 
-    #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
-    class Meta:
-        db_table = 'Vacantes'
+    # #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
+    # class Meta:
+    #     db_table = 'Vacantes'
 
     def __str__(self):
         return self.is_active
