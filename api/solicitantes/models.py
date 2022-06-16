@@ -56,6 +56,7 @@ class InfoAcademicaModel(models.Model):
         UNIVERSIDAD = "Universidad"
         MAESTRIA = "Maestría"
         DOCTORADO = "Doctorado"
+        DIPLOMADO = "Diplomado"
         CURSO = "Curso"
         CERTIFICACIÓN = "Certificación"
         OTRO = "Otro"
