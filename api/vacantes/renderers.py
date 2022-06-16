@@ -1,7 +1,6 @@
 from rest_framework import renderers
 import json
 
-
 class VacantesRenderer(renderers.JSONRenderer):
     charset = 'utf-8'
 

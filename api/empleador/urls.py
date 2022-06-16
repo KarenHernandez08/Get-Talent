@@ -5,4 +5,5 @@ from empleador.views import InfoEmpleadorPostView
 urlpatterns = [ 
     #path('user_company/', InfoEmpleadorPostView.as_view()),
     path('user_company/<int:usuario_id>/', InfoEmpleadorPostView.as_view()),
+    path('user_company/<int:usuario_id>/info_company/<int:info_id>/', InfoEmpleadorPostView.as_view())
 ]

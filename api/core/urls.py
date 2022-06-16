@@ -31,6 +31,7 @@ schema_view = get_schema_view(
       contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name="BSD License"),
    ),
+   url='https://gettalent-6.herokuapp.com/api/v1',
    public=True,
    permission_classes=[permissions.AllowAny],
 )
@@ -38,7 +39,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', include('home.urls'),),
 
 
     path('', include('users.urls'),),

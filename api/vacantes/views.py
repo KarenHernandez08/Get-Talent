@@ -52,17 +52,17 @@ class SoloRolesRegistroView(generics.GenericAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class VacantesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    queryset = PreguntasModel.objects.all() 
-    serializer_class = PreguntasVacantesSerializer
-    def post(self, request):
-        serializers = PreguntasVacantesSerializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        print(serializers)
-        return Response(status=status.HTTP_201_CREATED)
+# class VacantesRegistroView(generics.GenericAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (VacantesRenderer,)
+#     queryset = PreguntasModel.objects.all() 
+#     serializer_class = PreguntasVacantesSerializer
+#     def post(self, request):
+#         serializers = PreguntasVacantesSerializer(data=request.data)
+#         serializers.is_valid(raise_exception=True)
+#         serializers.save()
+#         print(serializers)
+#         return Response(status=status.HTTP_201_CREATED)
 
 
 class VacantesRegistroView(generics.GenericAPIView): 
@@ -78,22 +78,21 @@ class VacantesRegistroView(generics.GenericAPIView):
              if es_empleador == False:
                  return Response('No tienes autorización para crear una vacante', status=status.HTTP_401_UNAUTHORIZED)
              elif es_empleador == True:
-                 return Response('Autorización de Empleador exitosa', status=status.HTTP_200_OK)
-             serializer = PreguntasVacantesSerializer(data=data)
+                 serializer = PreguntasVacantesSerializer(data=data)
              serializer.is_valid(raise_exception=True)
              serializer.save()
-             return Response('Información de Vacante Registrada', status=status.HTTP_201_CREATED)
+             return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
          except:
              return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class SoloVacantesRegistroView(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = (VacantesRenderer,)
-#     serializer_class = VacantesSerializer
+class SoloVacantesRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    serializer_class = VacantesSerializer
 
-#     def post(self, request):
-#         serializer = VacantesSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def post(self, request):
+        serializer = VacantesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
