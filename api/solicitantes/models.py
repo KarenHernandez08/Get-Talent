@@ -10,9 +10,9 @@ class InfoPesonalModel(models.Model):
     middle_name = models.CharField(max_length=30)
     paternal_lastname = models.CharField(max_length=30)
     maternal_lastname = models.CharField(max_length=30)
-    date_birth = models.DateField (default="0000-00-00", null = True, blank = False) #Checar 2018-06-29
+    date_birth = models.DateField (blank = True) 
     age = models.PositiveSmallIntegerField(validators=[MinValueValidator(16), MaxValueValidator(100)])
-    additional_mail = models.EmailField(max_length=50, default='null',null=True) ####CHECAR !!!!! 
+    additional_mail = models.EmailField(max_length=50, default='null', blank = True) ####CHECAR !!!!! 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
     
     # Propongo que sea un email adicional, pero el default sea el otro que ya dieron... 
