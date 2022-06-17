@@ -70,20 +70,27 @@ class VacantesRegistroView(generics.GenericAPIView):
     renderer_classes = (VacantesRenderer,)
     serializer_class = PreguntasVacantesSerializer
     def post(self, request, usuario_id):
-         usuario_instance = User.objects.get(id=usuario_id)
-         es_empleador = usuario_instance.is_empleador
-         try:
-             data =request.data
-             serializer = PreguntasVacantesSerializer(data=request.data)
-             if es_empleador == False:
-                 return Response('No tienes autorización para crear una vacante', status=status.HTTP_401_UNAUTHORIZED)
-             elif es_empleador == True:
-                 serializer = PreguntasVacantesSerializer(data=data)
-             serializer.is_valid(raise_exception=True)
-             serializer.save()
-             return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
-         except:
-             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        usuario_instance = User.objects.get(id=usuario_id)
+        es_empleador = usuario_instance.is_empleador
+        try:
+            serializer = PreguntasVacantesSerializer(data=request.data)
+            if es_empleador == False:
+                return Response('No tienes autorización para crear una vacante', status=status.HTTP_401_UNAUTHORIZED)
+            elif es_empleador == True:
+                serializer = PreguntasVacantesSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, usuario_id):
+        vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
+        #author_obj = get_object_or_404(Author,id=author_id)
+        serializer = PreguntasVacantesSerializer(vacante_obj)
+
+        # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
+        # serializer = VacantesSerializer(vacantes_instancia)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SoloVacantesRegistroView(generics.GenericAPIView):

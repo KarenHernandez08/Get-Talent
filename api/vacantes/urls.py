@@ -3,11 +3,11 @@ from users.models import User
 from vacantes.views import (
     SoloPreguntasRegistroView, 
     SoloAreasRegistroView,
-    SoloRolesRegistroView,  
-    SoloVacantesRegistroView,
+    SoloRolesRegistroView,
+    SoloVacantesRegistroView, 
     VacantesRegistroView,
 )
-#SoloVacantesRegistroView,
+
 
 
 urlpatterns = [
@@ -16,7 +16,7 @@ urlpatterns = [
     ##La linea se cambiará cuando se tenga ya el registro de los usuarios
 
     #DE PRUEBA Y CONTROL
-    path('solo/vacantes/<int:usuario_id>/', SoloVacantesRegistroView.as_view()),
+    path('solo/vacantes/<int:usuario_id>/', VacantesRegistroView.as_view()),
     path('solo/roles/', SoloRolesRegistroView.as_view()),
     path('solo/areas/', SoloAreasRegistroView.as_view()),
     path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  
