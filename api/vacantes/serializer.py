@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers  
+from dataclasses import fields
 from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
@@ -45,7 +46,6 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
         for preguntasmodel in preguntasmodel_data:
             PreguntasModel.objects.create(**preguntasmodel, vacante_id=nueva_vacante)
         return nueva_vacante
-
 
 class RolesSerializer (serializers.ModelSerializer):
     class Meta:

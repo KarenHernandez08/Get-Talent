@@ -7,6 +7,40 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 # Create your models here.
+class InfoPesonalModel(models.Model):
+    name = models.CharField(max_length=30)
+    middle_name = models.CharField(max_length=30)
+    paternal_lastname = models.CharField(max_length=30)
+    maternal_lastname = models.CharField(max_length=30)
+    date_birth = models.DateField (default="2018-06-29", null = True, blank = False) #Checar 2018-06-29
+    #age = models.PositiveSmallIntegerField(default=29, validators=[MinValueValidator(16), MaxValueValidator(100)])
+    additional_mail = models.CharField(max_length=30) ####CHECAR !!!!! 
+    #user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
+
+    # Propongo que sea un email adicional, pero el default sea el otro que ya dieron... 
+    ## o simplemente eliminar ese campo 
+    # que sea un campo para actualizar email
+
+    class Gender_List(models.Choices):
+        FEMENINO = "femenino"
+        MASCULINO = "masculino"
+        OTRO = "otro"
+        SINESPECIFICAR = "sin especificar"
+    gender = models.CharField(max_length=20, choices=Gender_List.choices, default='sin especificar')
+
+    class Marital_List(models.Choices):
+        SOLTERO = "soltero"
+        CASADO = "casado"
+        OTRO = "otro"
+        SINESPECIFICAR = "sin especificar"
+    marital_status = models.CharField(max_length=20, choices=Marital_List.choices, default='sin especificar')
+
+    def __str__(self): 
+        return self.name
+
+#########################
+
+# CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
     status = models.BooleanField(default=False)
@@ -48,10 +82,10 @@ class VacantesModel(models.Model):
     localidad = models.CharField ( default = 'No aplica' ,max_length=30)
     vacante_video = models.CharField ( max_length=150)
     sueldo = models.DecimalField (default="0.0",max_digits=30 , decimal_places=2) 
-    empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
-    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True, default=1)   #tabla externa
-    roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True, default=1)   #tabla externa
-
+    
+    ##empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
+    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True)     #tabla externa
+    roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True)   #tabla externa
 
     class Modalidad_Lista(models.Choices):
         TIEMPO_COMPLETO = "Tiempo Completo"
