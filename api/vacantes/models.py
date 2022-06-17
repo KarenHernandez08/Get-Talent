@@ -1,6 +1,12 @@
 from django.db import models
+from unicodedata import name
 from users.models import User
 
+from django.core.validators import MaxValueValidator, MinValueValidator 
+#from unicodedata import name
+
+# CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
+# Create your models here.
 class AreasModel(models.Model):
     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
     status = models.BooleanField(default=False)
@@ -11,6 +17,7 @@ class AreasModel(models.Model):
 
 class RolesModel(models.Model):
     rol_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
+    date_birth = models.DateField(auto_now=True)
     rol = models.CharField ( max_length=150)
 
     class Meta:
@@ -33,18 +40,18 @@ class RolAreasModel(models.Model):
 
 class VacantesModel(models.Model):
     vacante_id= models.BigAutoField(auto_created=True, primary_key=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     descripcion = models.TextField ( max_length=500)
     requisitos = models.TextField ( max_length=300)
     localidad = models.CharField ( default = 'No aplica' ,max_length=30)
     vacante_video = models.CharField ( max_length=150)
-    sueldo = models.DecimalField ( max_digits=30 , decimal_places=2) 
-    
+    sueldo = models.DecimalField (default="0.0",max_digits=30 , decimal_places=2) 
     empleador_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
-    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True, default=1)     #tabla externa
+    area_id = models.ForeignKey (AreasModel, on_delete=models.CASCADE , null=True, default=1)   #tabla externa
     roles_id = models.ForeignKey (RolesModel, on_delete=models.CASCADE, null=True, default=1)   #tabla externa
+
 
     class Modalidad_Lista(models.Choices):
         TIEMPO_COMPLETO = "Tiempo Completo"
@@ -94,9 +101,9 @@ class VacantesModel(models.Model):
         ZACATECAS = "Zacatecas"
     localidad = models.CharField(max_length=25, choices=Estados_Lista.choices)
 
-    # #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
-    # class Meta:
-    #     db_table = 'Vacantes'
+    #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
+    class Meta:
+        db_table = 'Vacantes'
 
     def __str__(self):
         return self.is_active
@@ -108,8 +115,7 @@ class PreguntasModel(models.Model):
     pregunta2 = models.CharField(max_length=150)
     pregunta3 = models.CharField(max_length=150)
     vacante_id= models.ForeignKey(VacantesModel, on_delete=models.CASCADE,null=True)
-
-    status= models.BooleanField(default=False) #¿Qué es? 
+    #status= models.BooleanField(default=False) #¿Qué es? 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha creación')
     update_at = models.DateTimeField(auto_now=True)
 
