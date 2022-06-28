@@ -2,13 +2,9 @@ from django.urls import path, include
 from users.models import User
 from vacantes.views import (
     SoloPreguntasRegistroView, 
-    SoloAreasRegistroView,
-    SoloRolesRegistroView,
     SoloVacantesRegistroView, 
     VacantesRegistroView,
 )
-
-
 
 urlpatterns = [
     ##path('user_company/vacantes/', VacantesRegistroView.as_view()),
@@ -17,7 +13,5 @@ urlpatterns = [
 
     #DE PRUEBA Y CONTROL
     path('solo/vacantes/<int:usuario_id>/', VacantesRegistroView.as_view()),
-    path('solo/roles/', SoloRolesRegistroView.as_view()),
-    path('solo/areas/', SoloAreasRegistroView.as_view()),
     path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  
 ]

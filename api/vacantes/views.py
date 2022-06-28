@@ -10,15 +10,11 @@ from vacantes.renderers import VacantesRenderer
 from vacantes.serializer import  (
     PreguntasVacantesSerializer,
     PreguntasSerializer,
-    VacantesSerializer,
-    AreasSerializer,
-    RolesSerializer, 
+    VacantesSerializer
 )
 from vacantes.models import (
     PreguntasModel, 
-    VacantesModel,
-    RolesModel, 
-    AreasModel
+    VacantesModel
 )
 
 #Define tus vistas aquí
@@ -31,39 +27,6 @@ class SoloPreguntasRegistroView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class SoloAreasRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = AreasSerializer
-    def post(self, request):
-        serializer = AreasSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class SoloRolesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = RolesSerializer
-    def post(self, request):
-        serializer = RolesSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-# class VacantesRegistroView(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = (VacantesRenderer,)
-#     queryset = PreguntasModel.objects.all() 
-#     serializer_class = PreguntasVacantesSerializer
-#     def post(self, request):
-#         serializers = PreguntasVacantesSerializer(data=request.data)
-#         serializers.is_valid(raise_exception=True)
-#         serializers.save()
-#         print(serializers)
-#         return Response(status=status.HTTP_201_CREATED)
-
 
 class VacantesRegistroView(generics.GenericAPIView): 
     permission_classes = [permissions.AllowAny]
