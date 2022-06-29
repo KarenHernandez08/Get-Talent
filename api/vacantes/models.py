@@ -1,8 +1,6 @@
 from django.db import models
 from users.models import User
-from vacantes.choices import (TIPO_TRABAJO, MODALIDAD,
-                              AREAS,NIVEL_EXPERIENCIA,
-                              ESTADOS) 
+from vacantes.choices import (TIPO_TRABAJO, MODALIDAD, ESTADOS) 
 
 # CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
 class VacantesModel(models.Model):
@@ -16,11 +14,11 @@ class VacantesModel(models.Model):
     localidad = models.CharField ( default = 'No aplica' ,max_length=30)
     sueldo = models.DecimalField (default="0.0",max_digits=30 , decimal_places=2) 
     
-    tipo_trabajo = models.CharField(max_length=20, choices=TIPO_TRABAJO)
+    tipo_trabajo = models.CharField(max_length=30, choices=TIPO_TRABAJO)
     modalidad = models.CharField(max_length=20, choices=MODALIDAD)
     estado = models.CharField(max_length=25, choices=ESTADOS)
-    area = models.CharField(max_length=60, choices=AREAS)
-    experiencia = models.CharField(max_length=60, choices=NIVEL_EXPERIENCIA)
+    #area = models.CharField(max_length=60, choices=AREAS)
+    #experiencia = models.CharField(max_length=60, choices=NIVEL_EXPERIENCIA)
     vacante_video = models.CharField ( blank = True, max_length=150)
     #Esta sub clase me sirve para que Django nombre la tabla si no la tomara como la app y el modelo
     class Meta:
@@ -28,7 +26,6 @@ class VacantesModel(models.Model):
 
     def __str__(self):
         return self.is_active
-
 
 class PreguntasModel(models.Model):
     preguntas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)

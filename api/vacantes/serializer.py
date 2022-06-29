@@ -31,7 +31,7 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
     class Meta:
         model = VacantesModel
         fields = '__all__'
-        fields = ['localidad','modalidad','tipo_trabajo','descripcion','preguntasmodel','es_empleador']
+        fields = ['tipo_trabajo','descripcion','preguntasmodel','es_empleador']
         #DUDAS CON EL ES EMPLEADOR TENGO QUE REVISARLOO
     
     def create(self, validated_data):

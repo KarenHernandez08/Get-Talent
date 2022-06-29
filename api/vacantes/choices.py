@@ -1,14 +1,53 @@
 TIPO_TRABAJO = [
-( "TIEMPO_COMPLETO","Tiempo Completo"),
-("MEDIO_TIEMPO","Medio Tiempo"),
-("PROYECTO","Proyecto")
-]
-   
+( "Tiempo Completo","COMPLETO",),
+("Medio Tiempo","MEDIO"),
+("Proyecto","PROYECTO"),
+("Sin especificar", "SIN_ESPECIFICAR")
+]                            
+
 MODALIDAD = [
-    ("PRESENCIAL", "Presencial"),
-    ("VIRTUAL", "Virtual"),
-    ("HIBRIDO", "Hibrido")
+    ("Presencial", "PRESENCIAL",),
+    ("Virtual", "VIRTUAL"),
+    ("Hibrido","HIBRIDO"),
+    ("Sin especificar", "SIN_ESPECIFICAR")
 ]  
+
+ESTADOS = [
+    ("Aguascalientes","AGUASCALIENTES"),
+    ("Baja California","BAJA_CALIFORNIA"),
+    ("Baja California Sur","BAJA_CALIFORNIA_SUR"),
+    ("Campeche","CAMPECHE"),
+    ("Chiapas","CHIAPAS"),
+    ("Chihuahua","CHIHUAHUA"),
+    ("Ciudad de México","CD_MEX"),
+    ("Coahuila","COAHUILA"),
+    ("Colima","COLIMA"),
+    ("Durango","DURANGO"),
+    ("Guanajuato","GUANAJUATO"),
+    ("Guerrero","GUERRERO"),
+    ("Hidalgo","HIDALGO"),
+    ("Jalisco","JALISCO"),
+    ("Estado de México","EDO_MEX"),
+    ("Michoacán","MICHOACAN"),
+    ("Morelos","MORELOS"),
+    ("Nayarit","NAYARIT"),
+    ("Nuevo León","NUEVO_LEON"),
+    ("Oaxaca","OAXACA"),
+    ("Puebla","PUEBLA"),
+    ("Querétaro","QUERETARO"),
+    ("Quintana Roo","QUINTANA_ROO"),
+    ("San Luis Potosí","SAN_LUIS_POTOSI"),
+    ("Sinaloa","SINALOA"),
+    ("Sonora","SONORA"),
+    ("Tabasco","TABASCO"),
+    ("Tamaulipas","TAMAULIPAS"),
+    ("Tlaxcala","TLAXCALA"),
+    ("Veracruz","VERACRUZ"),
+    ("Yucatán","YUCATAN"),
+    ("Zacatecas","ZACATECAS")
+]
+    
+
 
 AREAS = [
     ("MARKETING","Marketing"),
@@ -30,96 +69,3 @@ NIVEL_EXPERIENCIA = [
     ("ALTO" ,"Mucha experiencia"),
     ("EXPERTO", "Cargos ejecutivos")
 ]
-
-ESTADOS = [
-    ("AGUASCALIENTES", "Aguascalientes"),
-    ("BAJA_CALIFORNIA", "Baja California"),
-    ("BAJA_CALIFORNIA_SUR", "Baja California Sur"),
-    ("CAMPECHE", "Campeche"),
-    ("CHIAPAS", "Chiapas"),
-    ("CHIHUAHUA", "Chihuahua"),
-    ("CD_MEX", "Ciudad de México"),
-    ("COAHUILA", "Coahuila"),
-    ("COLIMA", "Colima"),
-    ("DURANGO", "Durango"),
-    ("GUANAJUATO", "Guanajuato"),
-    ("GUERRERO", "Guerrero"),
-    ("HIDALGO", "Hidalgo"),
-    ("JALISCO", "Jalisco"),
-    ("EDO_MEX", "Estado de México"),
-    ("MICHOACAN", "Michoacán"),
-    ("MORELOS", "Morelos"),
-    ("NAYARIT", "Nayarit"),
-    ("NUEVO_LEON", "Nuevo León"),
-    ("OAXACA", "Oaxaca"),
-    ("PUEBLA", "Puebla"),
-    ("QUERETARO", "Querétaro"),
-    ("QUINTANA_ROO", "Quintana Roo"),
-    ("SAN_LUIS_POTOSI", "San Luis Potosí"),
-    ("SINALOA", "Sinaloa"),
-    ("SONORA", "Sonora"),
-    ("TABASCO", "Tabasco"),
-    ("TAMAULIPAS", "Tamaulipas"),
-    ("TLAXCALA", "Tlaxcala"),
-    ("VERACRUZ", "Veracruz"),
-    ("YUCATAN", "Yucatán"),
-    ("ZACATECAS", "Zacatecas")
-]
-    
-# class Modalidad_Lista(models.Choices):
-#     PRESENCIAL = "Presencial"
-#     VIRTUAL = "Virtual"
-#     HIBRIDO = "Hibrido"
-
-# class Areas_Lista(models.Choices):
-#     HUMANIDADES = "Humanidades"
-#     MARKETING ="Marketing"
-#     TECNOLOGIA = "Tecnología"
-#     VENTAS = "Ventas"
-#     CIENCIASEXACTAS = "Ciencias Exactas"
-#     INDUSTRIA = "Industria"
-#     DESARROLLO = "Desarrollo de Software"
-#     ANALISTA = "Analista de Datos"
-#     ADMINISTRACION = "Administración"
-
-# class NivelExperiencia_Lista(models.Choices):
-#     INEXPERTO = "Becario"
-#     PASANTE = "Pasante"
-#     POCA = "Poca Experiencia"
-#     MEDIO = "Experiencia Media"
-#     ALTO = "Mucha experiencia"
-#     EXPERTO = "Cargos ejecutivos"
-
-# class Estados_Lista(models.Choices):
-#         AGUASCALIENTES = "Aguascalientes"
-        # BAJA_CALIFORNIA = "Baja California"
-        # BAJA_CALIFORNIA_SUR = "Baja California Sur"
-        # CAMPECHE = "Campeche"
-        # CHIAPAS = "Chiapas"
-        # CHIHUAHUA = "Chihuahua"
-        # CD_MEX = "Ciudad de México"
-        # COAHUILA = "Coahuila"
-        # COLIMA = "Colima"
-        # DURANGO = "Durango"
-        # GUANAJUATO = "Guanajuato"
-        # GUERRERO = "Guerrero"
-        # HIDALGO = "Hidalgo"
-        # JALISCO = "Jalisco"
-        # EDO_MEX = "Estado de México"
-        # MICHOACAN = "Michoacán"
-        # MORELOS = "Morelos"
-        # NAYARIT = "Nayarit"
-        # NUEVO_LEON = "Nuevo León"
-        # OAXACA = "Oaxaca"
-        # PUEBLA = "Puebla"
-        # QUERETARO = "Querétaro"
-        # QUINTANA_ROO = "Quintana Roo"
-        # SAN_LUIS_POTOSI = "San Luis Potosí"
-        # SINALOA = "Sinaloa"
-        # SONORA = "Sonora"
-        # TABASCO = "Tabasco"
-        # TAMAULIPAS = "Tamaulipas"
-        # TLAXCALA = "Tlaxcala"
-        # VERACRUZ = "Veracruz"
-        # YUCATAN = "Yucatán"
-        # ZACATECAS = "Zacatecas"

@@ -41,10 +41,11 @@ class VacantesRegistroView(generics.GenericAPIView):
                 return Response('No tienes autorización para crear una vacante', status=status.HTTP_401_UNAUTHORIZED)
             elif es_empleador == True:
                 serializer = PreguntasVacantesSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
         except:
+            serializer.is_valid(raise_exception=True)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, usuario_id):
         vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
