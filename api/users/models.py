@@ -6,9 +6,9 @@ from django.contrib.auth.models import (
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password=None, **kwargs):
+    def create_user(self, email, password = None, **kwargs):
         
-        user = self.model(email=self.normalize_email(email),**kwargs)
+        user = self.model(email = self.normalize_email(email),**kwargs)
         user.set_password(password)
         user.save()
         return user
@@ -18,7 +18,9 @@ class UserManager(BaseUserManager):
         user=self.model(email=self.normalize_email(email),**kwargs)
         user.set_password(password)
         user.is_superuser = True
-        user.is_staff=True
+        user.is_staff = True
+        user.is_active = True
+        user.is_verified = True
         user.save()
         return user
     
