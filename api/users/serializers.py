@@ -10,7 +10,6 @@ from .utils import Util
 
 
 
-
 #Registro
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:

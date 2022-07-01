@@ -6,28 +6,20 @@ from solicitantes.models import (
 )
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
-    es_empleador = IsEmpleadorSerializer (read_only=True)
-    #vacante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=PreguntasModel.objects.all())
+    
     class Meta:
         model = InfoPesonalModel
-        fields = [
-            'es_empleador','name','middle_name',
-            'paternal_lastname','maternal_lastname',
-            'age','additional_mail',
-            'date_birth','gender','marital_status']
-    
+        fields = '__all__'
 
 class VideoSolicitanteSerializer (serializers.ModelSerializer):
+    
     class Meta: 
         model = VideoSolicitanteModel
         fields = '__all__'
         
 
 class InfoAcademicaSerializer (serializers.ModelSerializer):
-    es_empleador =IsEmpleadorSerializer(read_only=True)
+    
     class Meta:
         model = InfoAcademicaModel
-        fields = [
-           'es_empleador', 'name', 'institucion',
-           'fecha_inicio', 'fecha_fin','estatus_academico',
-           'nivel_escolar' ]
+        fields = '__all__'

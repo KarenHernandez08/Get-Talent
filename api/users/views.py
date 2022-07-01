@@ -32,7 +32,7 @@ class UserSignupView(generics.GenericAPIView):
     renderer_classes = (UserRenderer,)
     serializer_class = UserSignupSerializer
     def post(self, request):
-        try:
+        #try:
             data =request.data
             
             password=data.get('password')
@@ -66,8 +66,8 @@ class UserSignupView(generics.GenericAPIView):
             #en este caso que todo este correcto enviara un mensaje de exito 
             return Response('Usuario creado', status=status.HTTP_201_CREATED)
         
-        except:
-           return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        #except:
+        #   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 #Verificar Email y activacion de cuenta
 class VerifyEmail(generics.GenericAPIView):
