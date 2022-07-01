@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     update_at = models.DateTimeField(auto_now=True)
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
-    
+     
 
     USERNAME_FIELD= "email"
     

@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from dataclasses import fields
 from empleador.models import InfoEmpleadorModel
+from .models import *
 
 class InfoEmpleadorSerializers(serializers.ModelSerializer):
+    
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
@@ -12,4 +13,4 @@ class InfoEmpleadorSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = InfoEmpleadorModel
-        fields = '__all__'
+        fields =  ['name', 'description', 'logo']
