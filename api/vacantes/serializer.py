@@ -3,6 +3,8 @@ from dataclasses import fields
 from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
+    RolesModel,
+    AreasModel,
     VacantesModel
 )
 
@@ -21,7 +23,6 @@ class PreguntasSerializer (serializers.ModelSerializer):
     
     def validate(self, attr):
         return attr
-
 
 class PreguntasVacantesSerializer (serializers.ModelSerializer):
     preguntasmodel = PreguntasSerializer(many=True)
@@ -44,3 +45,18 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
         for preguntasmodel in preguntasmodel_data:
             PreguntasModel.objects.create(**preguntasmodel, vacante_id=nueva_vacante)
         return nueva_vacante
+
+
+class RolesSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = RolesModel
+        fields = '__all__'
+    def validate(self, attr):
+        return attr
+
+class AreasSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = AreasModel
+        fields = '__all__'
+    def validate(self, attr):
+        return attr

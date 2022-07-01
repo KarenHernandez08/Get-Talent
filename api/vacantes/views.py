@@ -10,6 +10,8 @@ from vacantes.renderers import VacantesRenderer
 from vacantes.serializer import  (
     PreguntasVacantesSerializer,
     PreguntasSerializer,
+    RolesSerializer,
+    AreasSerializer,
     VacantesSerializer
 )
 from vacantes.models import (
@@ -70,3 +72,23 @@ class SoloVacantesRegistroView(generics.GenericAPIView):
         # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
         # serializer = VacantesSerializer(vacantes_instancia)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class SoloAreasRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    serializer_class = AreasSerializer
+    def post(self, request):
+        serializer = AreasSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class SoloRolesRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    serializer_class = RolesSerializer
+    def post(self, request):
+        serializer = RolesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

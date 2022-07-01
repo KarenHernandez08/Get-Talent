@@ -18,10 +18,13 @@ class UserManager(BaseUserManager):
         user=self.model(email=self.normalize_email(email),**kwargs)
         user.set_password(password)
         user.is_superuser = True
-        user.is_staff=True
+        user.is_staff = True
+        user.is_active = True
+        user.is_verified = True
         user.save()
         return user
-    
+
+
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=50, unique=True)
