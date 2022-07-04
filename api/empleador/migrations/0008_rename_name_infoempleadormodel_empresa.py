@@ -3,6 +3,7 @@
 from django.db import migrations
 
 
+class Migration(migrations.Migration):
 
     dependencies = [
         ('empleador', '0007_alter_infoempleadormodel_user_id'),
