@@ -5,9 +5,9 @@ from solicitantes.views import (
 )
 
 urlpatterns = [
-    path('users/<int:usuario_id>/', InfoPersonalRegistroView.as_view()),
+    path('users/', InfoPersonalRegistroView.as_view()),
    
-    path('users/<int:usuario_id>/videosolicitante', VideoSolicitanteView.as_view()),
+    path('users/videosolicitante', VideoSolicitanteView.as_view()),
 
     path('users/<int:usuario_id>/infoacademica', InfoAcademicaView.as_view()),
 ] 

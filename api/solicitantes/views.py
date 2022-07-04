@@ -28,12 +28,12 @@ from solicitantes.serializer import (
 
 # Create your views here.
 class InfoPersonalRegistroView(generics.GenericAPIView): 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     queryset = InfoPesonalModel.objects.all() 
     serializer_class = InfoPersonalSerializer
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
+    def post(self, request):
+        usuario_instance = request.user 
         es_empleador = usuario_instance.is_empleador
         try:
             data =request.data
@@ -49,11 +49,11 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VideoSolicitanteView(generics.GenericAPIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes =[permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     serializer_class = VideoSolicitanteSerializer
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
+    def post(self, request):
+        usuario_instance = request.user
         es_empleador = usuario_instance.is_empleador
         try:
             data =request.data
