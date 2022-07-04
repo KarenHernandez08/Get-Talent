@@ -32,8 +32,14 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
     renderer_classes = (SolicitantesRenderer,)
     queryset = InfoPesonalModel.objects.all() 
     serializer_class = InfoPersonalSerializer
+<<<<<<< HEAD
     def post(self, request):
         usuario_instance = request.user 
+=======
+    
+    def post(self, request, usuario_id):
+        usuario_instance = User.objects.get(id=usuario_id)
+>>>>>>> origin/Karen
         es_empleador = usuario_instance.is_empleador
         try:
             data =request.data
@@ -44,17 +50,27 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
                 serializer = InfoPersonalSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            
             return Response(' Autorización de Solicitante Exitosa. Información de Usuario Registrada', status=status.HTTP_201_CREATED)
+        
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class VideoSolicitanteView(generics.GenericAPIView):
     permission_classes =[permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     serializer_class = VideoSolicitanteSerializer
+<<<<<<< HEAD
     def post(self, request):
         usuario_instance = request.user
+=======
+    
+    def post(self, request, usuario_id):
+        usuario_instance = User.objects.get(id=usuario_id)
+>>>>>>> origin/Karen
         es_empleador = usuario_instance.is_empleador
+        
         try:
             data =request.data
             serializer = InfoPersonalSerializer(data=data)
@@ -66,17 +82,26 @@ class VideoSolicitanteView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class InfoAcademicaView(generics.GenericAPIView): 
     permission_classes = [permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     queryset = InfoAcademicaModel.objects.all() 
     serializer_class = InfoAcademicaSerializer
+<<<<<<< HEAD
     def post(self, request):
         usuario_instance = request.user
+=======
+    
+    def post(self, request, usuario_id):
+        usuario_instance = User.objects.get(id=usuario_id)
+>>>>>>> origin/Karen
         es_empleador = usuario_instance.is_empleador
+        
         try:
             data =request.data
             serializer = InfoAcademicaSerializer(data=data)
@@ -87,7 +112,7 @@ class InfoAcademicaView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response('Datos guardados correctamente', status=status.HTTP_201_CREATED)
+        
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         
