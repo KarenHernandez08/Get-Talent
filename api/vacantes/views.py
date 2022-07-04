@@ -60,7 +60,15 @@ class VacantesRegistroView(generics.GenericAPIView):
 
 
 class SoloVacantesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny] #ISAuthenticate... para usaurios logeados 
+    # eso se guarda en el JWT ... funciones para guardar info del usuario y ese traer toda l ainfo del usuaruo logeado 
+
+    # tambien cambiamos en el rquest user.... borramos las llamadas al user id y se modifico las url... 
+
+    #al probarla hubo un error , lo que me devolvia el postman credenciales invalidas, porque no recibi el token de usuario 
+    #logeado  copiar el Token access 
+    # en vez de utilizar el body, ponerlo en el authorization y seleccionamos tokken y ponenmos el token access 
+    # 
     renderer_classes = (VacantesRenderer,)
     serializer_class = VacantesSerializer
 

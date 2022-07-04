@@ -47,25 +47,23 @@ ESTADOS = [
     ("Zacatecas","ZACATECAS")
 ]
     
-
-
 AREAS = [
-    ("MARKETING","Marketing"),
-    ("VENTAS","Ventas"),
-    ("HUMANIDADES","Humanidades"),
-    ("ADMINISTRACION","Administración"),
-    ("INDUSTRIA","Industria"),
-    ("ANALISTA","Analista de Datos"),
-    ("TECNOLOGIA","Tecnología"),
-    ("DESARROLLO","Desarrollo de Software"),
-    ("CIENCIASEXACTAS","Ciencias Exactas")
+    ("Marketing","Marketing"),
+    ("Ventas","Ventas"),
+    ("Humanidades","Humanidades"),
+    ("Administración","Administración"),
+    ("Industria","Industria"),
+    ("Analisis de Datos","Analista de Datos"),
+    ("Tecnología","Tecnología"),
+    ("Desarrollo de Software","Desarrollo de Software"),
+    ("Ciencias Exactas","Ciencias Exactas")
 ]
 
 NIVEL_EXPERIENCIA = [
-    ("INEXPERTO",  "Becario"),
-    ("PASANTE",  "Pasante"),
-    ("POCA", "Poca Experiencia"),
-    ("MEDIO", "Experiencia Media"),
-    ("ALTO" ,"Mucha experiencia"),
-    ("EXPERTO", "Cargos ejecutivos")
+    ("Becario",  "Inexperto"),
+    ("Primer Empleo",  "Sin experiencia Laboral"),
+    ("Poca Experiencia", "Poca"),
+    ("Experiencia Media", "Medio"),
+    ("Mucha experiencia" ,"Alto"),
+    ("Cargos ejecutivos", "Superior")
 ]
