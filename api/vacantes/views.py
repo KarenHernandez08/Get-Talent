@@ -66,11 +66,11 @@ class VacantesRegistroView(generics.GenericAPIView):
 
 
 class VacantesRegistroView(generics.GenericAPIView): 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     renderer_classes = (VacantesRenderer,)
     serializer_class = PreguntasVacantesSerializer
-    def post(self, request, usuario_id):
-         usuario_instance = User.objects.get(id=usuario_id)
+    def post(self, request):
+         usuario_instance = request.user
          es_empleador = usuario_instance.is_empleador
          try:
              data =request.data

@@ -12,12 +12,12 @@ from empleador.renderers import EmpleadorRenderer
 
 # Create your views here. crear Post historia 9
 class InfoEmpleadorPostView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]#para saber que permisos tiene y quien la pyede usar
+    permission_classes = [permissions.IsAuthenticated]#para saber que permisos tiene y quien la pyede usar
     renderer_classes = (EmpleadorRenderer,)#autodocumentar en el swagger
     serializer_class = InfoEmpleadorSerializers
 
-    def post(self, request, usuario_id):#Crear y guardar información, el usuario_id vendrá dado desde el endpoint
-        usuario_instance = User.objects.get(id=usuario_id) #Aca llamo del modelo User la información del usuario con el id dado
+    def post(self, request):#Crear y guardar información, el usuario_id vendrá dado desde el endpoint
+        usuario_instance = request.user
         es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
         try:
             serializer = InfoEmpleadorSerializers(data=request.data) #traigo la informacion del endpoint 
