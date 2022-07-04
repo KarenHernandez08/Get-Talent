@@ -18,6 +18,7 @@ from solicitantes.models import InfoAcademicaModel
 from solicitantes.models import VideoSolicitanteModel
 
 
+
 from .renderers import SolicitantesRenderer
 from users.models import User
 from solicitantes.serializer import (
