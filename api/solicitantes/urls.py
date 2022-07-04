@@ -9,5 +9,5 @@ urlpatterns = [
    
     path('users/videosolicitante', VideoSolicitanteView.as_view()),
 
-    path('users/<int:usuario_id>/infoacademica', InfoAcademicaView.as_view()),
+    path('users/infoacademica', InfoAcademicaView.as_view()),
 ] 
