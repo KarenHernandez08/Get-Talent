@@ -6,12 +6,14 @@ from solicitantes.models import (
 )
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
+    user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())
     
     class Meta:
         model = InfoPesonalModel
         fields = '__all__'
 
 class VideoSolicitanteSerializer (serializers.ModelSerializer):
+    user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())
     
     class Meta: 
         model = VideoSolicitanteModel
@@ -19,6 +21,7 @@ class VideoSolicitanteSerializer (serializers.ModelSerializer):
         
 
 class InfoAcademicaSerializer (serializers.ModelSerializer):
+    user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())
     
     class Meta:
         model = InfoAcademicaModel
