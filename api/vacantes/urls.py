@@ -12,6 +12,6 @@ urlpatterns = [
     ##La linea se cambiará cuando se tenga ya el registro de los usuarios
 
     #DE PRUEBA Y CONTROL
-    path('solo/vacantes/<int:usuario_id>/', VacantesRegistroView.as_view()),
+    path('solo/vacantes/', VacantesRegistroView.as_view()),
     path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  
 ]

@@ -29,11 +29,11 @@ class SoloPreguntasRegistroView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class VacantesRegistroView(generics.GenericAPIView): 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     renderer_classes = (VacantesRenderer,)
     serializer_class = PreguntasVacantesSerializer
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
+    def post(self, request):
+        usuario_instance = request.user
         es_empleador = usuario_instance.is_empleador
         try:
             serializer = PreguntasVacantesSerializer(data=request.data)
@@ -55,27 +55,6 @@ class VacantesRegistroView(generics.GenericAPIView):
         # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
         # serializer = VacantesSerializer(vacantes_instancia)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-class VacantesRegistroView(generics.GenericAPIView): 
-    permission_classes = [permissions.IsAuthenticated]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = PreguntasVacantesSerializer
-    def post(self, request):
-         usuario_instance = request.user
-         es_empleador = usuario_instance.is_empleador
-         try:
-             data =request.data
-             serializer = PreguntasVacantesSerializer(data=request.data)
-             if es_empleador == False:
-                 return Response('No tienes autorización para crear una vacante', status=status.HTTP_401_UNAUTHORIZED)
-             elif es_empleador == True:
-                 return Response('Autorización de Empleador exitosa', status=status.HTTP_200_OK)
-             serializer = PreguntasVacantesSerializer(data=data)
-             serializer.is_valid(raise_exception=True)
-             serializer.save()
-             return Response('Información de Vacante Registrada', status=status.HTTP_201_CREATED)
-         except:
-             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SoloVacantesRegistroView(generics.GenericAPIView):

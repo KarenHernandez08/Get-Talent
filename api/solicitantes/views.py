@@ -32,14 +32,9 @@ class InfoPersonalRegistroView(generics.GenericAPIView):
     renderer_classes = (SolicitantesRenderer,)
     queryset = InfoPesonalModel.objects.all() 
     serializer_class = InfoPersonalSerializer
-<<<<<<< HEAD
-    def post(self, request):
-        usuario_instance = request.user 
-=======
     
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
->>>>>>> origin/Karen
+    def post(self, request):
+        usuario_instance = request.user
         es_empleador = usuario_instance.is_empleador
         try:
             data =request.data
@@ -61,14 +56,9 @@ class VideoSolicitanteView(generics.GenericAPIView):
     permission_classes =[permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     serializer_class = VideoSolicitanteSerializer
-<<<<<<< HEAD
+    
     def post(self, request):
         usuario_instance = request.user
-=======
-    
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
->>>>>>> origin/Karen
         es_empleador = usuario_instance.is_empleador
         
         try:
@@ -92,14 +82,9 @@ class InfoAcademicaView(generics.GenericAPIView):
     renderer_classes = (SolicitantesRenderer,)
     queryset = InfoAcademicaModel.objects.all() 
     serializer_class = InfoAcademicaSerializer
-<<<<<<< HEAD
+    
     def post(self, request):
         usuario_instance = request.user
-=======
-    
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
->>>>>>> origin/Karen
         es_empleador = usuario_instance.is_empleador
         
         try:
