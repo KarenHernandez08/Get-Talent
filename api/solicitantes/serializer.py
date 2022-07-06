@@ -4,6 +4,9 @@ from users.serializers import IsEmpleadorSerializer
 from solicitantes.models import (
     InfoPesonalModel, VideoSolicitanteModel, InfoAcademicaModel
 )
+from .models import *
+from .serializer import * 
+
 
 class InfoPersonalSerializer (serializers.ModelSerializer):
     user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())
