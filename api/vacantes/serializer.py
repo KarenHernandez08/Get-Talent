@@ -1,5 +1,4 @@
 from rest_framework import serializers  
-from dataclasses import fields
 from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
