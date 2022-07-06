@@ -1,3 +1,4 @@
+from genericpath import exists
 from tracemalloc import get_object_traceback
 from django.shortcuts import get_object_or_404, render
 
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 
 #from yaml import serialize
-from .serializer import *
+from .models import *
 from users.models import User
 from empleador.models import InfoEmpleadorModel
 from empleador.serializer import InfoEmpleadorSerializers
@@ -22,23 +23,29 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
      def post(self, request ):#Crear y guardar información, el usuario_id vendrá dado desde el endpoint
           usuario_instance = request.user#Aca llamo del modelo User la información del usuario con el id dado
           print("usuario instance",usuario_instance)
+          id_user=usuario_instance.id
+          data = request.data
+          id_usuario =data.get('user_id')
+          print ('id', id_usuario)
+          
   
           es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
           print(es_empleador)
           serializer = InfoEmpleadorSerializers(data=request.data) #traigo la informacion del endpoint
           try:
-             
                if es_empleador == False:    # Si el usuario No es empleador 
                     return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
                elif es_empleador == True:
-                    # Si el usuario Es empleador
-                    serializer = InfoEmpleadorSerializers(data=request.data)
-                    serializer.is_valid(raise_exception=True)  #valido la información
-                              
-                    serializer.save()                 # si todo va bien lo guardo
-                    return Response('Autorización de Empleador Exitosa. Información de Compañia Registrada', status=status.HTTP_201_CREATED)
+                    if id_usuario == id_user:
+                         serializer = InfoEmpleadorSerializers(data=request.data)
+                         serializer.is_valid(raise_exception=True)  #valido la información
+                         serializer.save()                 # si todo va bien lo guardo
+                         return Response('Autorización de Empleador Exitosa. Información de Compañia Registrada', status=status.HTTP_201_CREATED)
+                    else:
+                         return Response('El usuario es incorrecto', status = status.HTTP_400_BAD_REQUEST)        
+                    
           except:
-               return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
+               return Response('Error', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
 
      def put(self, request, usuario_id, info_id):
           
@@ -52,16 +59,14 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
          return Response(serializer.data, status=status.HTTP_200_OK)
     
      def get(self,request):
-          user=request.user
-          
-          users=User.objects.filter(user=self.request.user)
+          users=request.user
           print(users)
+          obtener_id=users.id
+          print(id)
+          empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
+          serializer=InfoEmpleadorSerializers(empleador)
+          return Response(serializer.data)
           
-          
-          serializer= InfoEmpleadorModel(users, many=True)
-          return Response (serializer.data)
-     
-           
 
 
      #    try:

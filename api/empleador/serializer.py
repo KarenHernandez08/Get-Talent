@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from empleador.models import InfoEmpleadorModel
 from .models import *
-from .serializer import *
+from users.serializers import *
 
 
 class InfoEmpleadorSerializers(serializers.ModelSerializer):
@@ -18,7 +18,11 @@ class InfoEmpleadorSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = InfoEmpleadorModel
-        fields =  '__all__'
+        fields =  ['user_id', 'empresa', 'description', 'logo']
         
+        def to_representation (self, instance):
         
-        #vacante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=PreguntasModel.objects.all())
+            response= super().to_representation(instance)
+            response['user_id']=UserSignupSerializer(instance.user_id).data
+            return response 
+        
