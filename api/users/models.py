@@ -38,7 +38,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
      
-
     USERNAME_FIELD= "email"
     
     

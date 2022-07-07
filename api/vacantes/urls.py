@@ -3,8 +3,6 @@ from users.models import User
 from vacantes.views import (
     SoloPreguntasRegistroView, 
     SoloVacantesRegistroView, 
-    SoloAreasRegistroView,
-    SoloRolesRegistroView,  
     VacantesRegistroView,
 )
 urlpatterns = [

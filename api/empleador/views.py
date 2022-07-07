@@ -27,7 +27,6 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
           data = request.data
           id_usuario =data.get('user_id')
           print ('id', id_usuario)
-          
   
           es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
           print(es_empleador)
