@@ -48,6 +48,23 @@ NIVEL_EXPERIENCIA = [
     ("superior","Cargos Ejecutivos")
 ]
 
+NIVEL = [
+    ('CARRERA TECNICA', 'CARRERA TECNICA'),
+    ('UNIVERSIDAD', 'UNIVERSIDAD'),
+    ('MAESTRIA', 'MAESTRIA'),
+    ('DOCTORADO', 'DOCTORADO'),
+    ('DIPLOMADO', 'DIPLOMADO'),
+    ('CURSO', 'CURSO'),
+    ('CERTIFICACION', 'CERTIFICACION'),
+    ('OTRO', 'OTRO')
+]
+
+ESTATUS = [
+    ('FINALIZADO', 'FINALIZADO'),
+    ('EN CURSO', 'EN CURSO'),
+    ('TRUNCO', 'TRUNCO'),
+    ('OTRO', 'OTRO')
+]
 
 ESTADOS = [
     ("Aguascalientes","AGUASCALIENTES"),

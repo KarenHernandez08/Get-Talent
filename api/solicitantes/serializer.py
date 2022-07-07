@@ -2,7 +2,7 @@ from dataclasses import fields
 from rest_framework import serializers
 from users.serializers import IsEmpleadorSerializer
 from solicitantes.models import (
-    InfoPesonalModel, VideoSolicitanteModel, InfoAcademicaModel
+    InfoPesonalModel, VideoSolicitanteModel, InfoAcademicaModel, InteresModel
 )
 from .models import *
 from .serializer import * 
@@ -28,4 +28,11 @@ class InfoAcademicaSerializer (serializers.ModelSerializer):
     
     class Meta:
         model = InfoAcademicaModel
+        fields = '__all__'
+
+class InteresSerializer(serializers.ModelSerializer):
+    es_empleador = IsEmpleadorSerializer (read_only=True)
+
+    class Meta:
+        model = InteresModel
         fields = '__all__'
