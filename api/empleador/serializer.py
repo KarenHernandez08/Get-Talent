@@ -26,3 +26,5 @@ class InfoEmpleadorSerializers(serializers.ModelSerializer):
             response['user_id']=UserSignupSerializer(instance.user_id).data
             return response 
         
+
+    

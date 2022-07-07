@@ -1,3 +1,4 @@
+from random import choices
 from django.db import models
 from users.models import User
 from vacantes.choices import (TIPO_TRABAJO, MODALIDAD,

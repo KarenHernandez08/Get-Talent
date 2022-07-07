@@ -1,9 +1,10 @@
+from tkinter import CASCADE
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.db import models
-from unicodedata import name
+
+from django.forms import CharField
 from users.models import User
 from .choices import *
-
 
 # Create your models here.
 class InfoPesonalModel(models.Model):
@@ -41,3 +42,16 @@ class InfoAcademicaModel(models.Model):
     def __str__(self): 
      return self.name
 
+
+class InteresModel(models.Model):
+    
+    modalidad = models.CharField(max_length=30, choices=MODALIDAD)
+    tipo_trabajo = models.CharField(max_length=30, choices=TIPO_TRABAJO)
+    area_interes = models.CharField(max_length=100, choices=AREAS)
+    experiencia_interes = models.CharField(max_length=100, choices=NIVEL_EXPERIENCIA)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default= '')
+   
+    class Meta:
+        db_table = 'Intereses'  
+    def __int__(self): 
+        return self.user_id
