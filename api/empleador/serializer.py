@@ -7,7 +7,15 @@ class InfoEmpleadorSerializers(serializers.ModelSerializer):
     #name=serializers.CharField(max_length=50)
     #description=serializers.TextField(max_length=500)
     #logo=serializers.URLField(max_length=200)
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.logo = validated_data.get('logo', instance.logo)
+        instance.save()
+        return super().update(instance, validated_data)
 
     class Meta:
         model = InfoEmpleadorModel
-        fields = '__all__'
+        fields = ['name', 'description', 'logo']
+
+    

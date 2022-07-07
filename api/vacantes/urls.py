@@ -1,9 +1,8 @@
 from django.urls import path, include
 from users.models import User
 from vacantes.views import (
-    SoloPreguntasRegistroView, 
-    SoloAreasRegistroView,
-    SoloRolesRegistroView,  
+    #SoloPreguntasRegistroView,
+    SoloVacantesRegistroView, 
     VacantesRegistroView,
 )
 #SoloVacantesRegistroView,
@@ -15,8 +14,6 @@ urlpatterns = [
     ##La linea se cambiará cuando se tenga ya el registro de los usuarios
 
     #DE PRUEBA Y CONTROL
-    #path('solo/vacantes/', SoloVacantesRegistroView.as_view()),
-    path('solo/roles/', SoloRolesRegistroView.as_view()),
-    path('solo/areas/', SoloAreasRegistroView.as_view()),
-    path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  
+    path('solo/vacantes/', SoloVacantesRegistroView.as_view()),
+    #path('solo/preguntas/',  SoloPreguntasRegistroView.as_view()),  
 ]

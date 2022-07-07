@@ -217,13 +217,13 @@ AUTH_USER_MODEL = 'users.User'
 EMAIL_USE_TLS=True
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER= os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD= os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER= config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD', default='')
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=25),
     'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
-     'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 

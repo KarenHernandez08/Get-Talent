@@ -11,47 +11,15 @@ from vacantes.serializer import  (
     PreguntasVacantesSerializer,
     PreguntasSerializer,
     VacantesSerializer,
-    AreasSerializer,
-    RolesSerializer, 
+     
 )
 from vacantes.models import (
     PreguntasModel, 
     VacantesModel,
-    RolesModel, 
-    AreasModel
+    
 )
 
 #Define tus vistas aquí
-class SoloPreguntasRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = PreguntasSerializer
-    def post(self, request):
-        serializer = PreguntasSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class SoloAreasRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = AreasSerializer
-    def post(self, request):
-        serializer = AreasSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class SoloRolesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = RolesSerializer
-    def post(self, request):
-        serializer = RolesSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 class VacantesRegistroView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     renderer_classes = (VacantesRenderer,)
@@ -70,9 +38,9 @@ class VacantesRegistroView(generics.GenericAPIView):
     renderer_classes = (VacantesRenderer,)
     serializer_class = PreguntasVacantesSerializer
     def post(self, request, usuario_id):
-         usuario_instance = User.objects.get(id=usuario_id)
-         es_empleador = usuario_instance.is_empleador
-         try:
+        usuario_instance = User.objects.get(id=usuario_id)
+        es_empleador = usuario_instance.is_empleador
+        try:
              data =request.data
              serializer = PreguntasVacantesSerializer(data=request.data)
              if es_empleador == False:
@@ -83,17 +51,27 @@ class VacantesRegistroView(generics.GenericAPIView):
              serializer.is_valid(raise_exception=True)
              serializer.save()
              return Response('Información de Vacante Registrada', status=status.HTTP_201_CREATED)
-         except:
-             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, usuario_id):
+        vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
+        serializer = PreguntasVacantesSerializer(vacante_obj)
+
+        # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
+        # serializer = VacantesSerializer(vacantes_instancia)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# class SoloVacantesRegistroView(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = (VacantesRenderer,)
-#     serializer_class = VacantesSerializer
+class SoloVacantesRegistroView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = (VacantesRenderer,)
+    serializer_class = VacantesSerializer
 
-#     def post(self, request):
-#         serializer = VacantesSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get(self, request, usuario_id):
+        vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
+        serializer = PreguntasVacantesSerializer(vacante_obj)
+
+        # vacantes_instancia = get_object_or_404(VacantesModel,empleador_id=usuario_id)
+        # serializer = VacantesSerializer(vacantes_instancia)
+        return Response(serializer.data, status=status.HTTP_200_OK)

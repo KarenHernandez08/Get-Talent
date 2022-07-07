@@ -1,8 +1,17 @@
+from tkinter import CASCADE
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.db import models
-from unicodedata import name
-from users.models import User
 
+from django.forms import CharField
+from users.models import User
+from .choices import (
+    GENDER,
+    MARITAL, 
+    MODALIDAD, 
+    TIPO_TRABAJO,
+    AREAS,
+    NIVEL_EXPERIENCIA,
+)
 
 # Create your models here.
 class InfoPesonalModel(models.Model):
@@ -10,28 +19,52 @@ class InfoPesonalModel(models.Model):
     middle_name = models.CharField(max_length=30)
     paternal_lastname = models.CharField(max_length=30)
     maternal_lastname = models.CharField(max_length=30)
-    date_birth = models.DateField (default="0000-00-00", null = True, blank = False) #Checar 2018-06-29
+    date_birth = models.DateField (blank = True) #Checar 2018-06-29
     age = models.PositiveSmallIntegerField(validators=[MinValueValidator(16), MaxValueValidator(100)])
-    additional_mail = models.EmailField(max_length=50, default='null',null=True) ####CHECAR !!!!! 
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True) 
+    additional_mail = models.EmailField(max_length=50, default='null',null=True)####CHECAR !!!!! 
+    gender = models.CharField(max_length=20, choices=GENDER, default='sin especificar')
+    marital_status = models.CharField(max_length=20, choices=MARITAL, default='sin especificar') 
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, default='') 
+
+    class Meta:
+        db_table = 'Informacion Personal'
     
-    # Propongo que sea un email adicional, pero el default sea el otro que ya dieron... 
-    ## o simplemente eliminar ese campo 
-    # que sea un campo para actualizar email
-
-    class Gender_List(models.Choices):
-        FEMENINO = "femenino"
-        MASCULINO = "masculino"
-        OTRO = "otro"
-        SINESPECIFICAR = "sin especificar"
-    gender = models.CharField(max_length=20, choices=Gender_List.choices, default='sin especificar')
-
-    class Marital_List(models.Choices):
-        SOLTERO = "soltero"
-        CASADO = "casado"
-        OTRO = "otro"
-        SINESPECIFICAR = "sin especificar"
-    marital_status = models.CharField(max_length=20, choices=Marital_List.choices, default='sin especificar')
-
     def __str__(self): 
         return self.name
+    
+'''
+class AreaModel(models.Model):
+    nombre_area = models.CharField(max_length=150)
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'Areas'
+
+
+class RolModel(models.Model):
+    nombre_rol = models.CharField(max_length=150)
+    status = models.BooleanField(default=False)
+    area_rol = models.ForeignKey(AreaModel, on_delete=models.CASCADE, related_name='area_rol')
+    
+    class Meta:
+        db_table = 'Roles'
+'''
+
+class InteresModel(models.Model):
+    modalidad = models.CharField(max_length=30, choices=MODALIDAD)
+    tipo_trabajo = models.CharField(max_length=30, choices=TIPO_TRABAJO)
+    area_interes = models.CharField(max_length=100, choices=AREAS)
+    experiencia_interes = models.CharField(max_length=100, choices=NIVEL_EXPERIENCIA)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default= '')
+   
+
+    class Meta:
+        db_table = 'Intereses'  
+   
+    def __int__(self): 
+        return self.user_id
+
+
+
+
+    
