@@ -48,7 +48,10 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
                return Response('Error', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
 
      def put(self, request, usuario_id, info_id):
-          
+
+         data = request.data
+         usuario_id =data.get('user_id')
+         print ('id', usuario_id)
          usuario_instance = User.objects.get(id=usuario_id) #Aca llamo del modelo User la información del usuario con el id dado
          es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
          #infoempleador_instance = InfoEmpleadorModel.objects.get(id=info_id)

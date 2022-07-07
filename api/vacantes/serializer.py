@@ -2,8 +2,6 @@ from rest_framework import serializers
 from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
-    RolesModel,
-    AreasModel,
     VacantesModel
 )
 
@@ -46,16 +44,16 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
         return nueva_vacante
 
 
-class RolesSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = RolesModel
-        fields = '__all__'
-    def validate(self, attr):
-        return attr
+# class RolesSerializer (serializers.ModelSerializer):
+#     class Meta:
+#         model = RolesModel
+#         fields = '__all__'
+#     def validate(self, attr):
+#         return attr
 
-class AreasSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = AreasModel
-        fields = '__all__'
-    def validate(self, attr):
-        return attr
+# class AreasSerializer (serializers.ModelSerializer):
+#     class Meta:
+#         model = AreasModel
+#         fields = '__all__'
+#     def validate(self, attr):
+#         return attr

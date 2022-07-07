@@ -10,8 +10,6 @@ from vacantes.renderers import VacantesRenderer
 from vacantes.serializer import  (
     PreguntasVacantesSerializer,
     PreguntasSerializer,
-    RolesSerializer,
-    AreasSerializer,
     VacantesSerializer
 )
 from vacantes.models import (
@@ -49,7 +47,11 @@ class VacantesRegistroView(generics.GenericAPIView):
         except:
             serializer.is_valid(raise_exception=True)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def get(self, request, usuario_id):
+          
+    def get(self, request):
+        data = request.data
+        usuario_id =data.get('user_id')
+        print ('id', usuario_id)
         vacante_obj = VacantesModel.objects.filter(empleador_id=usuario_id).first()
         #author_obj = get_object_or_404(Author,id=author_id)
         serializer = PreguntasVacantesSerializer(vacante_obj)
@@ -62,9 +64,7 @@ class VacantesRegistroView(generics.GenericAPIView):
 class SoloVacantesRegistroView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny] #ISAuthenticate... para usaurios logeados 
     # eso se guarda en el JWT ... funciones para guardar info del usuario y ese traer toda l ainfo del usuaruo logeado 
-
     # tambien cambiamos en el rquest user.... borramos las llamadas al user id y se modifico las url... 
-
     #al probarla hubo un error , lo que me devolvia el postman credenciales invalidas, porque no recibi el token de usuario 
     #logeado  copiar el Token access 
     # en vez de utilizar el body, ponerlo en el authorization y seleccionamos tokken y ponenmos el token access 
@@ -81,22 +81,22 @@ class SoloVacantesRegistroView(generics.GenericAPIView):
         # serializer = VacantesSerializer(vacantes_instancia)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class SoloAreasRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = AreasSerializer
-    def post(self, request):
-        serializer = AreasSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+# class SoloAreasRegistroView(generics.GenericAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (VacantesRenderer,)
+#     serializer_class = AreasSerializer
+#     def post(self, request):
+#         serializer = AreasSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class SoloRolesRegistroView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = (VacantesRenderer,)
-    serializer_class = RolesSerializer
-    def post(self, request):
-        serializer = RolesSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+# class SoloRolesRegistroView(generics.GenericAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = (VacantesRenderer,)
+#     serializer_class = RolesSerializer
+#     def post(self, request):
+#         serializer = RolesSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
