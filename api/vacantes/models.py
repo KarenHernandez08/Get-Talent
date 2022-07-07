@@ -31,7 +31,7 @@ class VacantesModel(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') 
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,default='', verbose_name= 'Empresa') 
     descripcion = models.TextField ( max_length=500)
     requisitos = models.TextField ( max_length=300)
     localidad = models.CharField ( default = 'No aplica' ,max_length=30)

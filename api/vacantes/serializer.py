@@ -28,8 +28,9 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = VacantesModel
-        fields = '__all__'
-        fields = ['tipo_trabajo','descripcion','preguntasmodel','es_empleador']
+        #fields = '__all__'
+        #fields = ['tipo_trabajo','descripcion','preguntasmodel','es_empleador']
+        fields = ['tipo_trabajo','descripcion','preguntasmodel', 'es_empleador','sueldo', 'requisitos', 'localidad', 'modalidad', 'vacante_video', 'estado', 'area', 'experiencia', 'user_id']
         #DUDAS CON EL ES EMPLEADOR TENGO QUE REVISARLOO
     
     def create(self, validated_data):

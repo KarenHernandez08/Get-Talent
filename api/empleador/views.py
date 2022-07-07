@@ -44,7 +44,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
                          return Response('El usuario es incorrecto', status = status.HTTP_400_BAD_REQUEST)        
                     
           except:
-               return Response('Error', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
+               return Response('Ya existe este usuario', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
 
      def put(self, request, usuario_id, info_id):
 
