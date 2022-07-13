@@ -1,34 +1,14 @@
-from random import choices
+
 from django.db import models
 from users.models import User
 from vacantes.choices import (TIPO_TRABAJO, MODALIDAD,
                              NIVEL_EXPERIENCIA,ESTADOS, AREAS) 
 
-# CONTENDRA TODA LA INFORMACIÓN DE ESTA APLICACION QUE IRA A LA BD...
-# class AreasModel(models.Model):
-#     areas_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
-#     nombre_area = models.CharField ( max_length=150)
-
-#     def __str__(self):
-#         return self.nombre_area
-#     # class Meta:
-#     #     db_table = 'Áreas de Interes'
-
-# class RolesModel(models.Model):
-#     rol_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
-#     rol_name = models.CharField ( max_length=150)
-#     area_id = models.ManyToManyField(AreasModel)
-
-#     def __str__(self):
-#         return self.rol_name
-#     #Protect , no deja que un dato se elimine si este tiene un Area asignada
-
-#     # class Meta:
-#     #     db_table = 'Roles'
 
 class VacantesModel(models.Model):
     vacante_id= models.BigAutoField(auto_created=True, primary_key=True)
     is_active = models.BooleanField(default=True)
+    name = models.CharField(max_length = 150)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE,default='', verbose_name= 'Empresa') 

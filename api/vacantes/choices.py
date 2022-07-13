@@ -1,15 +1,15 @@
 TIPO_TRABAJO = [
-( "Tiempo Completo","COMPLETO",),
-("Medio Tiempo","MEDIO"),
-("Proyecto","PROYECTO"),
-("Sin especificar", "SIN_ESPECIFICAR")
+( "Tiempo Completo","Tiempo Completo",),
+("Medio Tiempo","Medio Tiempo"),
+("Proyecto","Proyecto"),
+("Sin especificar", "Sin especificar")
 ]                            
 
 MODALIDAD = [
-    ("Presencial", "PRESENCIAL",),
-    ("Virtual", "VIRTUAL"),
-    ("Hibrido","HIBRIDO"),
-    ("Sin especificar", "SIN_ESPECIFICAR")
+    ("Presencial", "Presencial",),
+    ("Virtual", "Virtual"),
+    ("Hibrido","Hibrido"),
+    ("Sin especificar", "Sin especificar")
 ]  
 
 ESTADOS = [
@@ -60,10 +60,10 @@ AREAS = [
 ]
 
 NIVEL_EXPERIENCIA = [
-    ("Becario",  "Inexperto"),
-    ("Primer Empleo",  "Sin experiencia Laboral"),
-    ("Poca Experiencia", "Poca"),
-    ("Experiencia Media", "Medio"),
-    ("Mucha experiencia" ,"Alto"),
-    ("Cargos ejecutivos", "Superior")
+    ("Becario",  "Becario"),
+    ("Primer Empleo",  "Primer Empleo"),
+    ("Poca Experiencia", "Poca Experiencia"),
+    ("Experiencia Media", "Experiencia Media"),
+    ("Mucha experiencia" ,"Mucha Experiencia"),
+    ("Cargos ejecutivos", "Cargos ejecutivos")
 ]

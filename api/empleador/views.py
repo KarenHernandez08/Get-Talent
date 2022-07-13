@@ -1,11 +1,21 @@
-from genericpath import exists
+
 from tracemalloc import get_object_traceback
 from django.shortcuts import get_object_or_404, render
+
 
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
+from solicitantes.models import InfoPesonalModel
+from postulaciones.serializers import PostulacionesSerializer
+from postulaciones.models import Postula
+from vacantes.serializer import PreguntasSerializer, VacantesSerializer
+
+from vacantes.models import PreguntasModel
+
+from vacantes.models import VacantesModel
+from vacantes.serializer import PreguntasVacantesSerializer
 
 #from yaml import serialize
 from .models import *
@@ -65,25 +75,59 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
           print(users)
           obtener_id=users.id
           print(id)
-          empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
-          serializer=InfoEmpleadorSerializers(empleador)
-          return Response(serializer.data)
+          es_empleador = users.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
+          print(es_empleador)
+          if es_empleador == False:    # Si el usuario No es empleador 
+               return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
+          elif es_empleador == True:
+               empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
+               vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
+               preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+               serializer=InfoEmpleadorSerializers(empleador)
+               serializer2 = VacantesSerializer(vacantes, many =True)
+               serializer3 = PreguntasSerializer(preguntas, many = True)
+               
+               areas={'preguntas': serializer3.data}
+               vacantes= {'Vacantes':serializer2.data}
+               unir=dict(**vacantes, **areas)
+               return Response({
+                    'Información de la empresa':serializer.data, 
+                    'Vacantes':serializer2.data,
+                    'Preguntas':serializer3.data
+                    })
+          
+class EmpleadorPostulacionesView(generics.GenericAPIView):
+     def get(self,request, vacante_id):
+          users=request.user
+          print(users)
+          obtener_id=users.id
+          print(obtener_id)
+          es_empleador = users.is_empleador 
+          print(es_empleador)
+          if es_empleador == False:    
+               return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+          elif es_empleador == True:
+               vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
+               preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+               postulacion= Postula.objects.filter(vacante_id = vacante_id)
+               
+               serializer = VacantesSerializer(vacantes, many =True)
+               serializer2 = PreguntasSerializer(preguntas, many = True)
+               serializer3 = PostulacionesSerializer(postulacion, many = True)
+               
+               
+               return Response({
+                    'Vacantes':serializer.data, 
+                    'Preguntas':serializer2.data,
+                    'Postulantes':serializer3.data,
+                    })
+               
+               
+              
+     
           
 
+          
 
-     #    try:
-     #        serializer = InfoEmpleadorSerializers(data=request.data) 
-     #        if es_empleador == False:    
-     #             return Response('No tienes autorización para editar Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
-     #        elif es_empleador == True:  
-     #             request.data
-     #             #infocompany_update = get_object_or_404(InfoEmpleadorModel, id=usuario_id)
-     #             info_company = InfoEmpleadorModel.objects.filter(id=info_id)
-     #             serializer = InfoEmpleadorSerializers(info_company, data=request.data)
-     #        serializer.is_valid(raise_exception=True)  
-     #        serializer.save()                 
-     #        return Response('Autorización de Empleador Exitosa. Información de Compañia Editada', status=status.HTTP_201_CREATED)
-     #    except:
-     #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
 
-#NOTAAAAAAAAAAA COMO GUARDO EL USUARIO ASOCIADO ? EL ID EN EL SERIALIZADOR O LA VISTA 

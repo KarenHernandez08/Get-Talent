@@ -2,14 +2,13 @@
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.db import models
 
-from django.forms import CharField
 from users.models import User
 from .choices import *
 
 # Create your models here.
 class InfoPesonalModel(models.Model):
     name = models.CharField(max_length = 30)
-    middle_name = models.CharField(max_length = 30)
+    middle_name = models.CharField(max_length = 30, default = '')
     paternal_lastname = models.CharField(max_length = 30)
     maternal_lastname = models.CharField(max_length = 30)
     date_birth = models.DateField (blank = True) 

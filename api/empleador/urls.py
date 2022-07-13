@@ -1,8 +1,13 @@
-from django.urls import path, include
+from django.urls import path
 
-from empleador.views import InfoEmpleadorPostView
+from empleador.views import (
+    InfoEmpleadorPostView,
+    EmpleadorPostulacionesView
+)
+
 
 urlpatterns = [ 
-    path('user_company/', InfoEmpleadorPostView.as_view()),
+    path('empresa/informacion/', InfoEmpleadorPostView.as_view()),
+    path('empresa/postulaciones/<int:vacante_id>/', EmpleadorPostulacionesView.as_view())
     
 ]

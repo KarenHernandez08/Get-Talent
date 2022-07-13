@@ -13,6 +13,7 @@ from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 from solicitantes.models import InfoPesonalModel
 from solicitantes.models import InfoAcademicaModel
 from solicitantes.models import VideoSolicitanteModel
@@ -102,17 +103,17 @@ class InfoAcademicaView(generics.GenericAPIView):
         
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 
 class InteresView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     renderer_classes = (SolicitantesRenderer,)
     queryset = InteresModel.objects.all()
     serializer_class = InteresSerializer
 
-    def post(self, request, usuario_id):
-        usuario_instance = User.objects.get(id=usuario_id)
+    def post(self, request):
+        usuario_instance = request.user
         es_empleador = usuario_instance.is_empleador
+        
         try:
             data = request.data
             serializer = InteresSerializer(data=data)
@@ -122,8 +123,34 @@ class InteresView(generics.GenericAPIView):
                 serializer = InteresSerializer(data=data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                return Response("Informacion de Intereses registrada.", status=status.HTTP_201_CREATED)
-        
+                return Response("Informacion de Intereses registrada.", status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
+class InformacionView (generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    renderer_classes = (SolicitantesRenderer,)
+    queryset = InfoAcademicaModel.objects.all()
+    
+    def get(self,request):
+          users=request.user
+          print(users)
+          obtener_id=users.id
+          print(id)
+          informacion_personal = InfoPesonalModel.objects.get(user_id = obtener_id)
+          informacion_academica = InfoAcademicaModel.objects.filter (user_id = obtener_id).order_by('user_id')
+          video_solicitante = VideoSolicitanteModel.objects.get (user_id = obtener_id)
+          intereses = InteresModel.objects.get (user_id = obtener_id)
+          
+          serializer = InfoPersonalSerializer(informacion_personal)
+          serializer2 = InfoAcademicaSerializer(informacion_academica,  many = True)
+          serializer3 = VideoSolicitanteSerializer(video_solicitante)
+          serializer4 = InteresSerializer (intereses)
+          return Response({
+              'Información Personal':serializer.data, 
+              'Información Academica':serializer2.data,
+              'Video': serializer3.data,
+              'Intereses': serializer4.data})
+    
