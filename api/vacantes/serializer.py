@@ -2,15 +2,14 @@ from rest_framework import serializers
 from users.serializers import IsEmpleadorSerializer
 from vacantes.models import (
     PreguntasModel, 
-    VacantesModel,
-    RolesModel, 
-    AreasModel
+    VacantesModel
 )
 
 class VacantesSerializer (serializers.ModelSerializer):
     class Meta:
         model = VacantesModel
-        fields = '__all__'
+        fields = ['vacante_id', 'is_active', 'name', 'descripcion', 'requisitos','localidad', 'sueldo', 'tipo_trabajo',
+                  'modalidad', 'estado', 'area', 'experiencia', 'user_id']
     
     def validate(self, attr):
         return attr
@@ -18,22 +17,20 @@ class VacantesSerializer (serializers.ModelSerializer):
 class PreguntasSerializer (serializers.ModelSerializer):
     class Meta:
         model = PreguntasModel
-        fields = '__all__'
+        fields = ['pregunta1', 'pregunta2', 'pregunta3', 'vacante_id']
     
     def validate(self, attr):
         return attr
 
-
 class PreguntasVacantesSerializer (serializers.ModelSerializer):
     preguntasmodel = PreguntasSerializer(many=True)
-    es_empleador = IsEmpleadorSerializer (read_only=True)
     #vacante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=PreguntasModel.objects.all())
 
     class Meta:
         model = VacantesModel
-        fields = '__all__'
-        fields = ['localidad','modalidad','tipo_trabajo','descripcion','preguntasmodel','es_empleador']
-        #DUDAS CON EL ES EMPLEADOR TENGO QUE REVISARLOO
+        
+        fields = ['name','tipo_trabajo','descripcion','preguntasmodel','sueldo', 'requisitos', 'localidad', 'modalidad', 'vacante_video', 'estado', 'area', 'experiencia', 'user_id']
+        
     
     def create(self, validated_data):
         #Obtengo el contenido de orden_details
@@ -46,19 +43,3 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
             PreguntasModel.objects.create(**preguntasmodel, vacante_id=nueva_vacante)
         return nueva_vacante
 
-
-
-
-class RolesSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = RolesModel
-        fields = '__all__'
-    def validate(self, attr):
-        return attr
-
-class AreasSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = AreasModel
-        fields = '__all__'
-    def validate(self, attr):
-        return attr

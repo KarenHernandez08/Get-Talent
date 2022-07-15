@@ -66,6 +66,7 @@ INSTALLED_APPS += [
         'vacantes',
         'solicitantes',
         'empleador',
+        'postulaciones',
 ]
 
 MIDDLEWARE = [
@@ -230,7 +231,7 @@ EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD', default='')
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=25),
     'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
-     'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 

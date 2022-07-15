@@ -10,7 +10,6 @@ from .utils import Util
 
 
 
-
 #Registro
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -130,7 +129,7 @@ class PasswordResetEmailSerializer(serializers.Serializer):
             user = User.objects.get(email = email)
             uid = urlsafe_base64_encode(smart_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
-            link ='http://localhost:8000/reset-password/'+ uid+ '/'+token + '/'
+            link ='https://gettalent-6.herokuapp.com/reset-password/'+ uid+ '/'+token + '/'
             print(' Link', link)
             # Send EMail
             body = 'Hola, solicitaste el cambio de tu contraseña, solo dale click aquí '+ link

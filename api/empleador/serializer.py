@@ -1,21 +1,30 @@
+
 from rest_framework import serializers
-from dataclasses import fields
 from empleador.models import InfoEmpleadorModel
+from .models import *
+from users.serializers import *
+
 
 class InfoEmpleadorSerializers(serializers.ModelSerializer):
-    #empleador_id = serializers.ForeignKey(User, on_delete=models.CASCADE,null=True, verbose_name= 'Empresa') #cambiar a user_id o lo que se decida
-    #name=serializers.CharField(max_length=50)
-    #description=serializers.TextField(max_length=500)
-    #logo=serializers.URLField(max_length=200)
-
+    user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())
+    
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
+        instance.empresa = validated_data.get('empresa', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.logo = validated_data.get('logo', instance.logo)
         instance.save()
         return instance
-        #return super().update(instance, validated_data)
-
+        
+    
     class Meta:
         model = InfoEmpleadorModel
-        fields = '__all__'
+        fields =  ['user_id', 'empresa', 'description', 'logo']
+        
+        def to_representation (self, instance):
+        
+            response= super().to_representation(instance)
+            response['user_id']=UserSignupSerializer(instance.user_id).data
+            return response 
+        
+
+    
