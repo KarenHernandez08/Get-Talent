@@ -1,4 +1,5 @@
 #nativos
+import datetime
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -37,6 +38,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     update_at = models.DateTimeField(auto_now=True)
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
+    codigo_acceso = models.IntegerField(default=0)
+    created_acceso = models.DateTimeField(auto_now_add=True)
+    expirated_acceso = created_acceso + datetime.timedelta(minutes=5)
      
     USERNAME_FIELD= "email"
     

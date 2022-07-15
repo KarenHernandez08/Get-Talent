@@ -4,10 +4,9 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
+import random
 from users.models import User   
 from .utils import Util
-
 
 
 #Registro
@@ -115,7 +114,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(new_password)
         user.save()
         return data
-
+#######################################
 # Envio de email para recuperar contraseña
 class PasswordResetEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255)
@@ -127,12 +126,10 @@ class PasswordResetEmailSerializer(serializers.Serializer):
         email = attrs.get('email')
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email = email)
-            uid = urlsafe_base64_encode(smart_bytes(user.id))
-            token = PasswordResetTokenGenerator().make_token(user)
-            link ='https://gettalent-6.herokuapp.com/reset-password/'+ uid+ '/'+token + '/'
-            print(' Link', link)
+            codigo_acceso = random.randint(1000, 9999) 
+            print(' Link', codigo_acceso)
             # Send EMail
-            body = 'Hola, solicitaste el cambio de tu contraseña, solo dale click aquí '+ link
+            body = 'Hola, solicitaste el cambio de tu contraseña, ingresa código de acceso: '+ codigo_acceso
             data = {
                 'email_subject':'Instrucciones para cambiar contraseña',
                 'email_body':body,
@@ -149,19 +146,39 @@ class PasswordResetEmailSerializer(serializers.Serializer):
     
 
 class PasswordResetSerializer(serializers.Serializer):
-    new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     confirmPassword=serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     class Meta:
-        fields = ['new_password', 'confirmPassword']
-
-    def validate(self, data):
+        model = User
+        fields = ['email','codigo_acceso','password','created_acceso','expirated_acceso']
+        extra_kwargs={
+            'email':{
+                'write_only':True
+            },
+            'codigo_acceso':{
+                'write_only':True
+            }
+        }
+    def validate(self, attrs, data):
+        email = attrs.get('email')
+        codigo_acceso = attrs.get('codigo_acceso')
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email = email)
+            
+            if 
+     def post(self, request):
+        data= request.data
+        usuario_instance = request.user
+        empresa= usuario_instance.id
+        print(empresa)
+        id_usuario =data.get('user_id')
+        print ('id', id_usuario)
+        es_empleador = usuario_instance.is_empleador
+        try:
         try:
             new_password = data.get('new_password')
             confirmPassword=data.get('confirmPassword')
             special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
-            uid = self.context.get('uid')
-            token = self.context.get('token')
-            id = smart_str(urlsafe_base64_decode(uid))
+    
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise ValidationError('El token no es valido o a expirado')
