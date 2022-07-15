@@ -8,6 +8,8 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from solicitantes.models import InfoPesonalModel
+from solicitantes.serializer import InfoPersonalSerializer
+
 from postulaciones.serializers import PostulacionesSerializer
 from postulaciones.models import Postula
 from vacantes.serializer import PreguntasSerializer, VacantesSerializer
@@ -97,6 +99,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
                     })
           
 class EmpleadorPostulacionesView(generics.GenericAPIView):
+     permission_classes = [permissions.IsAuthenticated]
      def get(self,request, vacante_id):
           users=request.user
           print(users)
@@ -110,24 +113,26 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
                preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
                postulacion= Postula.objects.filter(vacante_id = vacante_id)
+               post = Postula.objects.filter(vacante_id = vacante_id).first()
+               
+               
+               solicitante = InfoPesonalModel.objects.filter(user_id= post.user_id)
+               #solicitante = InfoPesonalModel.objects.all().get('post.user_id').filter(user_id= post.user_id)
+               
                
                serializer = VacantesSerializer(vacantes, many =True)
                serializer2 = PreguntasSerializer(preguntas, many = True)
                serializer3 = PostulacionesSerializer(postulacion, many = True)
+               serializer4 = InfoPersonalSerializer(solicitante, many =True)
                
                
                return Response({
-                    'Vacantes':serializer.data, 
+                    'Vacante':serializer.data, 
                     'Preguntas':serializer2.data,
                     'Postulantes':serializer3.data,
+                    'user':serializer4.data
+                    
                     })
                
                
-              
-     
-          
-
-          
-
-  
 

@@ -13,6 +13,7 @@ class InfoPersonalSerializer (serializers.ModelSerializer):
     class Meta:
         model = InfoPesonalModel
         fields = '__all__'
+ 
 
 class VideoSolicitanteSerializer (serializers.ModelSerializer):
     user_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all())

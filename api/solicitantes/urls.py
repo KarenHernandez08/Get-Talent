@@ -1,8 +1,12 @@
 from django.urls import path, include
-from .views import *
+
 from solicitantes.views import (
-    InfoPersonalRegistroView, VideoSolicitanteView, InfoAcademicaView,
-      InteresView,
+    InfoPersonalRegistroView, 
+    VideoSolicitanteView, 
+    InfoAcademicaView,
+    InteresView,
+    InformacionView,
+    SolicitantesPostulacionesView
 )
 
 urlpatterns = [
@@ -15,5 +19,7 @@ urlpatterns = [
     path('users/interes/', InteresView.as_view()),
     
     path('users/informacion/', InformacionView.as_view()),
+    
+    path('users/postulaciones/', SolicitantesPostulacionesView.as_view())
 ] 
     

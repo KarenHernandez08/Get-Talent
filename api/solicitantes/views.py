@@ -10,8 +10,11 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
+
+from vacantes.serializer import VacantesSerializer
+
+from postulaciones.models import Postula
+from postulaciones.serializers import PostulacionesSerializer
 
 
 from solicitantes.models import InfoPesonalModel
@@ -135,10 +138,10 @@ class InformacionView (generics.GenericAPIView):
     queryset = InfoAcademicaModel.objects.all()
     
     def get(self,request):
-          users=request.user
+          users = request.user
           print(users)
           obtener_id=users.id
-          print(id)
+          
           informacion_personal = InfoPesonalModel.objects.get(user_id = obtener_id)
           informacion_academica = InfoAcademicaModel.objects.filter (user_id = obtener_id).order_by('user_id')
           video_solicitante = VideoSolicitanteModel.objects.get (user_id = obtener_id)
@@ -153,4 +156,25 @@ class InformacionView (generics.GenericAPIView):
               'Información Academica':serializer2.data,
               'Video': serializer3.data,
               'Intereses': serializer4.data})
+          
+          
+class SolicitantesPostulacionesView (generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        users = request.user
+        obtener_id= users.id
+        
+        postulaciones = Postula.objects.filter(user_id = obtener_id)
+        
+        
+        #vacante = Postula.objects.filter(vacante_id = post.vacante_id)
+        
+        serializer = PostulacionesSerializer(postulaciones, many=True)
+        #serializer2 = VacantesSerializer(vacante, many =True)
+        
+        return Response({
+            'video':serializer.data,
+            
+            })
     

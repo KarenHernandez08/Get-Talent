@@ -10,4 +10,4 @@ class PostulacionesSerializer (serializers.ModelSerializer):
     
     class Meta:
         model = Postula
-        fields = '__all__'
+        fields = ['video', 'user_id', 'vacante_id']
