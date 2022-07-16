@@ -133,10 +133,11 @@ class PasswordResetEmailSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
+        
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email = email)
             codigo_acceso = random.randint(1000, 9999) 
-            print(' Link', codigo_acceso)
+            print('codigo acceso', codigo_acceso)
             #GUARDAR CODIGO DE ACCESO EN MODELO
             # Send EMail
             body = 'Hola, solicitaste el cambio de tu contraseña, ingresa código de acceso: ' + codigo_acceso
@@ -215,11 +216,17 @@ class PasswordResetSerializer(serializers.Serializer):
                         user.is_active=True
                         user.save()
                         return data
+                    except:
+                    
+                        pass
                 else: 
+
                     pass #codigo de acceso de recuperación expirado
-            elif: 
+            else: 
+
                 pass # codigo de acceso de recuperación No válido
         else : 
+
             pass #respuesta no exite el usuario.
         
             

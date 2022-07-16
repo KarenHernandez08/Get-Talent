@@ -234,6 +234,7 @@ class PasswordResetEmailView(generics.GenericAPIView):
     def post(self, request, format=None):
         try:
             serializer = PasswordResetEmailSerializer(data=request.data)
+        
             serializer.is_valid(raise_exception=True)
             return Response('Revise su correo por favor ', status=status.HTTP_200_OK)
         
