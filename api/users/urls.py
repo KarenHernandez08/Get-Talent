@@ -26,7 +26,7 @@ urlpatterns = [
      
      path('recovery/password-email/', PasswordResetEmailView.as_view(), name='recovery-password-email'),
      
-     path('reset-password/<uid>/<token>/', PasswordResetView.as_view(), name='reset-password'),
+     path('reset-password/', PasswordResetView.as_view(), name='reset-password'),
 
 
 ]

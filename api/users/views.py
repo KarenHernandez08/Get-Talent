@@ -241,15 +241,15 @@ class PasswordResetEmailView(generics.GenericAPIView):
         except:
             return Response('El usuario no existe, coloque un correo valido', status=status.HTTP_400_BAD_REQUEST)
     
-
+###########################
 class PasswordResetView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     renderer_classes = [UserRenderer]
     serializer_class=PasswordResetSerializer
-    def post(self, request, uid, token, format=None):
+    def post(self, request):
         try:
-            
-            serializer = PasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
+        
+            serializer = PasswordResetSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             return Response('Nueva contraseña guardada con exito', status=status.HTTP_201_CREATED)
         except:

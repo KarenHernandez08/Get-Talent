@@ -38,8 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
     codigo_acceso = models.IntegerField(default=0)
-    created_acceso = models.DateTimeField(auto_now_add=True)
-     
+    created_acceso = models.CharField(max_length=200)
     USERNAME_FIELD= "email"
     
     
