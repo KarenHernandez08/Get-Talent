@@ -190,12 +190,10 @@ class PasswordResetSerializer(serializers.Serializer):
             time_expiracion = timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=5, hours=0, weeks=0)
             actual_time = datetime.now()
             
-            
             if codigo_acceso == acceso_front: 
                 if actual_time-creado_time > time_expiracion:
-                    print("Expiro el tiempo genera otro token")
+                    raise ValidationError('Expiro el tiempo genera otro token')
                 elif actual_time-creado_time < time_expiracion:
-                    print("Todo bien, continua")
                     if new_password != confirmPassword:
                             raise ValidationError('Las contraseñas no coiciden')
 
@@ -218,20 +216,14 @@ class PasswordResetSerializer(serializers.Serializer):
                         raise ValidationError('La contraseña debe contener al menos un caracter especial.')
                     print(user.password)
                     user.set_password(new_password)
+                    user.created_acceso(0) #Reiniciamos codigo de acceso
                     user.save()
-                    print("si salve la información")
-                    print(user.password)
                     return data
-        #     else: 
-        #         print("Codigo invalido de token")
+            else: 
+                raise ValidationError('Codigo invalido')
            
-        #     if user.is_verified== False:
-        #         raise serializers.ValidationError('Necesita verificar su email antes')
-                  
-           
-            
-        # else:
-        #     raise serializers.ValidationError('El usuario no esta registrado')
+            if user.is_verified== False:
+                raise serializers.ValidationError('Necesita verificar su email antes')
+        else:
+            raise serializers.ValidationError('El usuario no esta registrado')
         
-
-     
