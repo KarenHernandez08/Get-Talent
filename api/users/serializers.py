@@ -175,11 +175,11 @@ class PasswordResetSerializer(serializers.Serializer):
         model=User
         fields = ['email_front','acceso_front','new_password', 'confirmPassword']
 
-    def validate(self, attrs):
-        email_front = attrs.get('email_front')
-        acceso_front = attrs.get('acceso_front')
-        new_password = attrs.get('new_password')
-        confirmPassword = attrs.get('confirmPassword')
+    def validate(self, data):
+        email_front = data.get('email_front')
+        acceso_front = data.get('acceso_front')
+        new_password = data.get('new_password')
+        confirmPassword = data.get('confirmPassword')
         special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
         
         if User.objects.filter(email=email_front).exists():
@@ -189,7 +189,7 @@ class PasswordResetSerializer(serializers.Serializer):
             creado_time = datetime.strptime(creado, '%Y-%m-%d %H:%M:%S.%f')
             time_expiracion = timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=5, hours=0, weeks=0)
             actual_time = datetime.now()
-            resta = actual_time-creado_time
+            
             
             if codigo_acceso == acceso_front: 
                 if actual_time-creado_time > time_expiracion:
@@ -216,21 +216,22 @@ class PasswordResetSerializer(serializers.Serializer):
                     
                     if not any(x in special_characters for x in new_password):
                         raise ValidationError('La contraseña debe contener al menos un caracter especial.')
-                    
+                    print(user.password)
                     user.set_password(new_password)
                     user.save()
                     print("si salve la información")
-                    return attrs
-            else: 
-                print("Codigo invalido de token")
+                    print(user.password)
+                    return data
+        #     else: 
+        #         print("Codigo invalido de token")
            
-            if user.is_verified== False:
-                raise serializers.ValidationError('Necesita verificar su email antes')
+        #     if user.is_verified== False:
+        #         raise serializers.ValidationError('Necesita verificar su email antes')
                   
-            return attrs
+           
             
-        else:
-            raise serializers.ValidationError('El usuario no esta registrado')
+        # else:
+        #     raise serializers.ValidationError('El usuario no esta registrado')
         
 
      
