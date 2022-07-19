@@ -1,4 +1,5 @@
 #nativos
+import datetime
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -37,7 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     update_at = models.DateTimeField(auto_now=True)
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
-     
+    codigo_acceso = models.IntegerField(default=0)
+    created_acceso = models.CharField(max_length=200)
     USERNAME_FIELD= "email"
     
     
@@ -45,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.email
+        
     
 
 

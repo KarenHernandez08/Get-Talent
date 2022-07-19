@@ -7,6 +7,7 @@ from users.views import Verificar
 from users.views import ChangePasswordView
 from users.views import PasswordResetEmailView
 from users.views import PasswordResetView
+from users.views import CodigoView
 
 
 
@@ -26,7 +27,9 @@ urlpatterns = [
      
      path('recovery/password-email/', PasswordResetEmailView.as_view(), name='recovery-password-email'),
      
-     path('reset-password/<uid>/<token>/', PasswordResetView.as_view(), name='reset-password'),
+     path('reset-password/', PasswordResetView.as_view(), name='reset-password'),
+
+     path('recovery/codigo-acceso/', CodigoView.as_view()),
 
 
 ]

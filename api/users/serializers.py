@@ -4,10 +4,12 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
+import random
+import datetime
+from datetime import timedelta
+from datetime import datetime
 from users.models import User   
 from .utils import Util
-
 
 
 #Registro
@@ -116,6 +118,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.save()
         return data
 
+class IsEmpleadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_empleador',)
+    def validate(self, attr):
+        return attr
+    
+#######################################
 # Envio de email para recuperar contraseña
 class PasswordResetEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255)
@@ -125,20 +135,26 @@ class PasswordResetEmailSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
+        
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email = email)
-            uid = urlsafe_base64_encode(smart_bytes(user.id))
-            token = PasswordResetTokenGenerator().make_token(user)
-            link ='https://gettalent-6.herokuapp.com/reset-password/'+ uid+ '/'+token + '/'
-            print(' Link', link)
+            codigo_acceso = random.randint(1000, 9999) 
+            link = str(codigo_acceso)
+            print('codigo acceso', link)
+            #GUARDAR CODIGO ACCESO MODELO
             # Send EMail
-            body = 'Hola, solicitaste el cambio de tu contraseña, solo dale click aquí '+ link
+            body = 'Hola, tu código de acceso para cambiar la contraseña es: '+ link
             data = {
                 'email_subject':'Instrucciones para cambiar contraseña',
                 'email_body':body,
                 'to_email':user.email
             }
             Util.send_email(data)
+            # Cambio de un registro modificando los campos llamando a save() a continuación.
+            user.codigo_acceso = codigo_acceso
+            creado=datetime.now()
+            user.created_acceso= str(creado)
+            user.save()
             if user.is_verified== False:
                 raise serializers.ValidationError('Necesita verificar su email antes')
                   
@@ -146,60 +162,101 @@ class PasswordResetEmailSerializer(serializers.Serializer):
             
         else:
             raise serializers.ValidationError('El usuario no esta registrado')
-    
 
+###############################################################
 class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    acceso_front=serializers.IntegerField()
     new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     confirmPassword=serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+    
     class Meta:
-        fields = ['new_password', 'confirmPassword']
+        model=User
+        fields = ['email','acceso_front','new_password', 'confirmPassword']
 
     def validate(self, data):
-        try:
-            new_password = data.get('new_password')
-            confirmPassword=data.get('confirmPassword')
-            special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
-            uid = self.context.get('uid')
-            token = self.context.get('token')
-            id = smart_str(urlsafe_base64_decode(uid))
-            user = User.objects.get(id=id)
-            if not PasswordResetTokenGenerator().check_token(user, token):
-                raise ValidationError('El token no es valido o a expirado')
-            
-            if new_password != confirmPassword:
-                raise ValidationError('Las contraseñas no coiciden')
-
-            if len(new_password) <6 or len(new_password) > 20:
-                raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud.')
-
-            if not any(x.isalpha() for x in new_password):
-                raise ValidationError('La contraseña debe contener al menos una letra.')
-            
-            if not any(x.isupper() for x in new_password):
-                raise ValidationError('La contraseña debe contener al menos una letra Mayúscula.')
-
-            if not any(x.islower() for x in new_password):
-                raise ValidationError('La contraseña debe contener al menos una letra minúscula.')
-            
-            if not any(x.isdigit() for x in new_password):
-                raise ValidationError('La contraseña debe de contener al menos un dígito del [0-9].')
-            
-            if not any(x in special_characters for x in new_password):
-                raise ValidationError('La contraseña debe contener al menos un caracter especial.')
+        email_front = data.get('email')
+        acceso_front = data.get('acceso_front')
+        new_password = data.get('new_password')
+        confirmPassword = data.get('confirmPassword')
+        special_characters = "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?¿"
         
-            user.set_password(new_password)
-            user.intentos=0
-            user.is_active=True
-            user.save()
-            return data
-        except DjangoUnicodeDecodeError as identifier:
-            PasswordResetTokenGenerator().check_token(user, token)
-            raise ValidationError('El token no es valido o a expirado')
-        
-class IsEmpleadorSerializer(serializers.ModelSerializer):
+        if User.objects.filter(email=email_front).exists():
+            user = User.objects.get(email = email_front)
+            codigo_acceso = user.codigo_acceso
+            creado = user.created_acceso
+            creado_time = datetime.strptime(creado, '%Y-%m-%d %H:%M:%S.%f')
+            time_expiracion = timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=5, hours=0, weeks=0)
+            actual_time = datetime.now()
+            
+            if codigo_acceso == acceso_front: 
+                if actual_time-creado_time > time_expiracion:
+                    raise ValidationError('Expiro el tiempo genera otro token')
+                elif actual_time-creado_time < time_expiracion:
+                    if new_password != confirmPassword:
+                            raise ValidationError('Las contraseñas no coiciden')
+
+                    if len(new_password) <6 or len(new_password) > 20:
+                        raise ValidationError('La contraseña debe tener mínimo 6 y no más de 20 de caracteres de longitud. ')
+
+                    if not any(x.isalpha() for x in new_password):
+                        raise ValidationError('La contraseña debe contener al menos una letra.')
+                    
+                    if not any(x.isupper() for x in new_password):
+                        raise ValidationError('La contraseña debe contener al menos una letra Mayúscula.')
+
+                    if not any(x.islower() for x in new_password):
+                        raise ValidationError('La contraseña debe contener al menos una letra minúscula.')
+                    
+                    if not any(x.isdigit() for x in new_password):
+                        raise ValidationError('La contraseña debe de contener al menos un dígito del [0-9].')
+                    
+                    if not any(x in special_characters for x in new_password):
+                        raise ValidationError('La contraseña debe contener al menos un caracter especial.')
+                    
+                    user.set_password(new_password)
+                    #user.created_acceso(0) #Reiniciamos codigo de acceso
+                    user.save()
+                    
+                    return data
+                    
+            else: 
+                print("Codigo invalido")
+                #raise ValidationError('Codigo invalido')
+           
+            if user.is_verified== False:
+                raise serializers.ValidationError('Necesita verificar su email antes')
+        else:
+            raise serializers.ValidationError('El usuario no esta registrado')
+
+class CodigoSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    acceso_front=serializers.IntegerField()
+
     class Meta:
-        model = User
-        fields = ('is_empleador',)
-    def validate(self, attr):
-        return attr
-    
+        model=User
+        fields = ['email','acceso_front']
+
+    def validate(self, data):
+        email_front = data.get('email')
+        acceso_front = data.get('acceso_front')
+        
+        if User.objects.filter(email=email_front).exists():
+            user = User.objects.get(email = email_front)
+            codigo_acceso = user.codigo_acceso
+            creado = user.created_acceso
+            creado_time = datetime.strptime(creado, '%Y-%m-%d %H:%M:%S.%f')
+            time_expiracion = timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=9, hours=0, weeks=0)
+            actual_time = datetime.now()
+            
+            if codigo_acceso == acceso_front: 
+                if actual_time-creado_time > time_expiracion:
+                    raise ValidationError('Expiro el tiempo genera otro token')
+                elif actual_time-creado_time < time_expiracion:
+                    print("Todo bien :D")
+                    return data
+            else: 
+                raise ValidationError('Codigo invalido')
+           
+           
+     
