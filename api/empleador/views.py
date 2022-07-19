@@ -74,29 +74,43 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
     
      def get(self,request):
           users=request.user
-          print(users)
+          
           obtener_id=users.id
-          print(id)
+          
           es_empleador = users.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
-          print(es_empleador)
-          if es_empleador == False:    # Si el usuario No es empleador 
-               return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
-          elif es_empleador == True:
-               empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
-               vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
-               preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
-               serializer=InfoEmpleadorSerializers(empleador)
-               serializer2 = VacantesSerializer(vacantes, many =True)
-               serializer3 = PreguntasSerializer(preguntas, many = True)
-               
-               areas={'preguntas': serializer3.data}
-               vacantes= {'Vacantes':serializer2.data}
-               unir=dict(**vacantes, **areas)
+          
+          empleador=bool(InfoEmpleadorModel.objects.get(user_id=obtener_id))
+          print(empleador)
+          try:
+               if es_empleador == False:    # Si el usuario No es empleador 
+                    return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+               elif es_empleador == True:
+                    if empleador == True:
+                         
+                         empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
+                         vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
+                         preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+                         serializer=InfoEmpleadorSerializers(empleador)
+                         serializer2 = VacantesSerializer(vacantes, many =True)
+                         serializer3 = PreguntasSerializer(preguntas, many = True)
+                              
+                         areas={'preguntas': serializer3.data}
+                         vacantes= {'Vacantes':serializer2.data}
+                         unir=dict(**vacantes, **areas)
+                         return Response({
+                              'Información de la empresa':serializer.data, 
+                              'Vacantes':serializer2.data,
+                              'Preguntas':serializer3.data
+                              })
+          except:
                return Response({
-                    'Información de la empresa':serializer.data, 
-                    'Vacantes':serializer2.data,
-                    'Preguntas':serializer3.data
-                    })
+                              'Información de la empresa':serializer.data, 
+                              'Vacantes':'Aun no coloca vacantes',
+                              
+                              })
+                         
+          
+               
           
 class EmpleadorPostulacionesView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]
@@ -107,32 +121,47 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
           print(obtener_id)
           es_empleador = users.is_empleador 
           print(es_empleador)
+          postulacion= bool(Postula.objects.filter(vacante_id = vacante_id))
+          vacantes= bool(VacantesModel.objects.filter (user_id = obtener_id, vacante_id = vacante_id))
+          print(vacantes)
+          print (postulacion)
+          #try:
           if es_empleador == False:    
-               return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+                    return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
           elif es_empleador == True:
-               vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
-               preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
-               postulacion= Postula.objects.filter(vacante_id = vacante_id)
-               post = Postula.objects.filter(vacante_id = vacante_id).first()
-               
-               
-               solicitante = InfoPesonalModel.objects.filter(user_id= post.user_id)
-               #solicitante = InfoPesonalModel.objects.all().get('post.user_id').filter(user_id= post.user_id)
-               
-               
-               serializer = VacantesSerializer(vacantes, many =True)
-               serializer2 = PreguntasSerializer(preguntas, many = True)
-               serializer3 = PostulacionesSerializer(postulacion, many = True)
-               serializer4 = InfoPersonalSerializer(solicitante, many =True)
-               
-               
+               if postulacion ==True:
+                    if vacantes == True:
+                         vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
+                         preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+                         postulacion= Postula.objects.filter(vacante_id = vacante_id)
+                         
+                         post = Postula.objects.filter(vacante_id = vacante_id)
+                         
+                         #solicitantes = InfoPesonalModel.objects.all().filter(name= post.user_id)
+                         #print(solicitantes)
+                              
+                         #solicitante = InfoPesonalModel.objects.filter(pk= post.user_id).order_by('user_id')
+                         solicitante = InfoPesonalModel.objects.all().get('user_id'). split(user_id =postulacion.user_id).order_by('user_id')
+                              
+                         serializer = VacantesSerializer(vacantes, many =True)
+                         serializer2 = PreguntasSerializer(preguntas, many = True)
+                         serializer3 = PostulacionesSerializer(postulacion, many = True)
+                         serializer4 = InfoPersonalSerializer(solicitante, many =True)   
+                         
+                             
+               else:
+                    return Response('Aun nadie se postula a la vacante')
+                    
+                    
                return Response({
                     'Vacante':serializer.data, 
                     'Preguntas':serializer2.data,
-                    'Postulantes':serializer3.data,
-                    'user':serializer4.data
-                    
+                    'Solicitantes que se postularon':serializer4.data,
+                    'videos':serializer3.data 
                     })
+          #except:
+               #return Response('No le corresponde la vacante')
+                    
                
                
 
