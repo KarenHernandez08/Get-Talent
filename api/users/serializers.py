@@ -162,21 +162,20 @@ class PasswordResetEmailSerializer(serializers.Serializer):
             
         else:
             raise serializers.ValidationError('El usuario no esta registrado')
-    
-###############################################################
+
 ###############################################################
 class PasswordResetSerializer(serializers.Serializer):
-    email_front = serializers.EmailField(max_length=255)
+    email = serializers.EmailField(max_length=255)
     acceso_front=serializers.IntegerField()
     new_password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     confirmPassword=serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
     
     class Meta:
         model=User
-        fields = ['email_front','acceso_front','new_password', 'confirmPassword']
+        fields = ['email','acceso_front','new_password', 'confirmPassword']
 
     def validate(self, data):
-        email_front = data.get('email_front')
+        email_front = data.get('email')
         acceso_front = data.get('acceso_front')
         new_password = data.get('new_password')
         confirmPassword = data.get('confirmPassword')
@@ -214,16 +213,50 @@ class PasswordResetSerializer(serializers.Serializer):
                     
                     if not any(x in special_characters for x in new_password):
                         raise ValidationError('La contraseña debe contener al menos un caracter especial.')
-                    print(user.password)
+                    
                     user.set_password(new_password)
-                    user.created_acceso(0) #Reiniciamos codigo de acceso
+                    #user.created_acceso(0) #Reiniciamos codigo de acceso
                     user.save()
+                    
                     return data
+                    
             else: 
-                raise ValidationError('Codigo invalido')
+                print("Codigo invalido")
+                #raise ValidationError('Codigo invalido')
            
             if user.is_verified== False:
                 raise serializers.ValidationError('Necesita verificar su email antes')
         else:
             raise serializers.ValidationError('El usuario no esta registrado')
+
+class CodigoSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    acceso_front=serializers.IntegerField()
+
+    class Meta:
+        model=User
+        fields = ['email','acceso_front']
+
+    def validate(self, data):
+        email_front = data.get('email')
+        acceso_front = data.get('acceso_front')
         
+        if User.objects.filter(email=email_front).exists():
+            user = User.objects.get(email = email_front)
+            codigo_acceso = user.codigo_acceso
+            creado = user.created_acceso
+            creado_time = datetime.strptime(creado, '%Y-%m-%d %H:%M:%S.%f')
+            time_expiracion = timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=9, hours=0, weeks=0)
+            actual_time = datetime.now()
+            
+            if codigo_acceso == acceso_front: 
+                if actual_time-creado_time > time_expiracion:
+                    raise ValidationError('Expiro el tiempo genera otro token')
+                elif actual_time-creado_time < time_expiracion:
+                    print("Todo bien :D")
+                    return data
+            else: 
+                raise ValidationError('Codigo invalido')
+           
+           
+     

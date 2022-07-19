@@ -11,7 +11,9 @@ from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los t
 from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
-from users.serializers import LoginSerializer, UserSignupSerializer, EmailVerificationSerializer, VerifySerializer, ChangePasswordSerializer, PasswordResetEmailSerializer, PasswordResetSerializer
+from users.serializers import (CodigoSerializer, LoginSerializer, UserSignupSerializer, 
+                             EmailVerificationSerializer, VerifySerializer,PasswordResetEmailSerializer,
+                              PasswordResetSerializer, ChangePasswordSerializer,CodigoSerializer)
 from .utils import Util #importamos nuestra clase y metodo de enviar email
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -249,9 +251,23 @@ class PasswordResetView(generics.GenericAPIView):
     def post(self, request):
         try:
             serializer = PasswordResetSerializer(data=request.data)
+            print("ENTRANDO A LA VALIDACION")
             serializer.is_valid(raise_exception=True)
+            print("PASE LA VALIDACION")
             #serializer.save()
             return Response('Nueva contraseña guardada con exito', status=status.HTTP_201_CREATED)
+        except:
+            return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
+    
+class CodigoView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = [UserRenderer]
+    serializer_class=CodigoSerializer
+    def post(self, request):
+        try:
+            serializer = CodigoSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            return Response('Codigo de Acceso exitoso', status=status.HTTP_201_CREATED)
         except:
             return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
     
