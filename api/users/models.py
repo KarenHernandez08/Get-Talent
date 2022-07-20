@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_empleador = models.BooleanField(default=False)
     intentos = models.IntegerField(default=0)
     codigo_acceso = models.IntegerField(default=0)
-    created_acceso = models.CharField(max_length=200)
+    created_acceso = models.CharField(max_length=200, blank=True)
     USERNAME_FIELD= "email"
     
     
