@@ -1,102 +1,68 @@
 # Crear variables tipo choices (tuplas)
 GENDER = [
-    ('femenino', 'Femenino'),
-    ('masculino', 'Masculino'),
-    ('otro', 'Otro'),
-    ('sin especificar','Sin especificar')
+    ('Femenino', 'Femenino'),
+    ('Masculino', 'Masculino'),
+    ('Otro', 'Otro'),
+    ('Sin especificar','Sin especificar')
 ]
 
 MARITAL = [
-    ('soltero','Soltero'),
-    ('casado','Casado'),
-    ('otro','Otro'),
-    ('sin especificar','Sin especificar')
+    ('Soltero','Soltero'),
+    ('Casado','Casado'),
+    ('Otro','Otro'),
+    ('Sin especificar','Sin especificar')
 ]
 
 MODALIDAD = [
-    ('presencial', 'Presencial'),
-    ('virtual', 'Virtual'),
-    ('hibrido','Hibrido'),
-    ('sin_especificar', 'Sin especificar')
+    ('Presencial', 'Presencial'),
+    ('Virtual', 'Virtual'),
+    ('Hibrido','Hibrido'),
+    ('Sin especificar', 'Sin especificar')
 ]
 
 TIPO_TRABAJO = [
-("tiempo_completo","Tiempo completo",),
-("medio_tiempo","Medio tiempo"),
-("proyecto","Proyecto"),
-("sin_especificar", "Sin especificar")
-]
+( "Tiempo Completo","Tiempo Completo",),
+("Medio Tiempo","Medio Tiempo"),
+("Proyecto","Proyecto"),
+("Sin especificar", "Sin especificar")
+]    
 
 AREAS = [
-    ("marketing","Marketing"),
-    ("ventas","Ventas"),
-    ("humanidades","Humanidades"),
-    ("administración","Administración"),
-    ("industria","Industria"),
-    ("analisis de Datos","Analista de Datos"),
-    ("tecnología","Tecnología"),
-    ("desarrollo_software","Desarrollo de Software"),
-    ("ciencias_exactas","Ciencias Exactas")
+    ("Marketing","Marketing"),
+    ("Ventas","Ventas"),
+    ("Humanidades","Humanidades"),
+    ("Administración","Administración"),
+    ("Industria","Industria"),
+    ("Analisis de Datos","Analisis de Datos"),
+    ("Tecnología","Tecnología"),
+    ("Desarrollo de software","Desarrollo de Software"),
+    ("Ciencias Exactas","Ciencias Exactas")
 ]
 
 NIVEL_EXPERIENCIA = [
-    ("inexperto", "Becario"),
-    ("sin_experiencia_laboral", "Primer Empleo"),
-    ("poca", "Poca Experiencia"),
-    ("medio", "Experiencia Media"),
-    ("alto", "Mucha Experiencia"),
-    ("superior","Cargos Ejecutivos")
+    ("Becario",  "Becario"),
+    ("Primer Empleo",  "Primer Empleo"),
+    ("Poca Experiencia", "Poca Experiencia"),
+    ("Experiencia Media", "Experiencia Media"),
+    ("Mucha experiencia" ,"Mucha Experiencia"),
+    ("Cargos ejecutivos", "Cargos ejecutivos")
 ]
 
 NIVEL = [
-    ('CARRERA TECNICA', 'CARRERA TECNICA'),
-    ('UNIVERSIDAD', 'UNIVERSIDAD'),
-    ('MAESTRIA', 'MAESTRIA'),
-    ('DOCTORADO', 'DOCTORADO'),
-    ('DIPLOMADO', 'DIPLOMADO'),
-    ('CURSO', 'CURSO'),
-    ('CERTIFICACION', 'CERTIFICACION'),
-    ('OTRO', 'OTRO')
+    ('Carrera tecnica', 'Carrera tecnica'),
+    ('Universidad', 'Universidad'),
+    ('Maestria', 'Maestria'),
+    ('Doctorado', 'Doctorado'),
+    ('Diplomado', 'Diplomado'),
+    ('Curso', 'Curso'),
+    ('Certificacion', 'Certificacion'),
+    ('Otro', 'Otro')
 ]
 
 ESTATUS = [
-    ('FINALIZADO', 'FINALIZADO'),
-    ('EN CURSO', 'EN CURSO'),
-    ('TRUNCO', 'TRUNCO'),
-    ('OTRO', 'OTRO')
+    ('Finalizado', 'Finalizado'),
+    ('En Curso', 'En Curso'),
+    ('Trunco', 'Trunco'),
+    ('Otro', 'Otro')
 ]
 
-ESTADOS = [
-    ("Aguascalientes","AGUASCALIENTES"),
-    ("Baja California","BAJA_CALIFORNIA"),
-    ("Baja California Sur","BAJA_CALIFORNIA_SUR"),
-    ("Campeche","CAMPECHE"),
-    ("Chiapas","CHIAPAS"),
-    ("Chihuahua","CHIHUAHUA"),
-    ("Ciudad de México","CD_MEX"),
-    ("Coahuila","COAHUILA"),
-    ("Colima","COLIMA"),
-    ("Durango","DURANGO"),
-    ("Guanajuato","GUANAJUATO"),
-    ("Guerrero","GUERRERO"),
-    ("Hidalgo","HIDALGO"),
-    ("Jalisco","JALISCO"),
-    ("Estado de México","EDO_MEX"),
-    ("Michoacán","MICHOACAN"),
-    ("Morelos","MORELOS"),
-    ("Nayarit","NAYARIT"),
-    ("Nuevo León","NUEVO_LEON"),
-    ("Oaxaca","OAXACA"),
-    ("Puebla","PUEBLA"),
-    ("Querétaro","QUERETARO"),
-    ("Quintana Roo","QUINTANA_ROO"),
-    ("San Luis Potosí","SAN_LUIS_POTOSI"),
-    ("Sinaloa","SINALOA"),
-    ("Sonora","SONORA"),
-    ("Tabasco","TABASCO"),
-    ("Tamaulipas","TAMAULIPAS"),
-    ("Tlaxcala","TLAXCALA"),
-    ("Veracruz","VERACRUZ"),
-    ("Yucatán","YUCATAN"),
-    ("Zacatecas","ZACATECAS")
-]
