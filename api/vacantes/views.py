@@ -73,9 +73,10 @@ class VacantesFilterList(generics.GenericAPIView):
     
     def get(self, request, vacante_id):
         vacante=VacantesModel.objects.filter(vacante_id= vacante_id)
-        preguntas= PreguntasModel.objects.filter(pk__in = vacante)
-        serializer =PreguntasVacantesSerializer(vacante, many=True)
-        serializer2 =PreguntasVacantesSerializer(preguntas, many=True)
+        preguntas= PreguntasModel.objects.filter(vacante_id=vacante_id)
+        
+        serializer = VacantesSerializer(vacante, many=True)
+        serializer2 = PreguntasSerializer(preguntas, many=True)
         return Response({'vacantes':serializer.data, 
                          'preguntas':serializer2.data})
     
