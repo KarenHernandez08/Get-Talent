@@ -76,7 +76,7 @@ class VacantesFilterList(generics.GenericAPIView):
         preguntas= PreguntasModel.objects.filter(vacante_id=vacante_id)
         
         serializer = VacantesSerializer(vacante, many=True)
-        serializer2 = PreguntasSerializer(preguntas, many=True)
+        serializer2 =PreguntasSerializer(preguntas, many=True)
         return Response({'vacantes':serializer.data, 
                          'preguntas':serializer2.data})
     
