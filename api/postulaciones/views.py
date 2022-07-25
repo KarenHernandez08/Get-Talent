@@ -6,27 +6,26 @@ from rest_framework import permissions
 from solicitantes.models import *
 from vacantes.models import *
 from .serializers import PostulacionesSerializer
-#from postulaciones.renderers import PostulacionesRenderer
-
-
-
+from .models import Postula
 
 # Create your views here.
 
 class PostulacionesView(generics.GenericAPIView): 
     permission_classes = [permissions.IsAuthenticated]
-    #renderer_classes=(PostulacionesRenderer,)
+
     serializer_class = PostulacionesSerializer
      
     def post(self, request, vacante_id):  
         data = request.data
         solicitante_instance = request.user
         id_user = solicitante_instance.id
-        id_usuario =data.get('user_id')
         es_empleador= solicitante_instance.is_empleador
+        id_usuario =data.get('user_id')
+        vacante = data.get('vacante_id')
         
+        verificar = bool(Postula.objects.filter(user_id = id_usuario, vacante_id=vacante))
+        print(verificar)
         informacion_personal = bool(InfoPesonalModel.objects.filter(user_id= id_user))
-        print(informacion_personal)
         informacion_academica = bool(InfoAcademicaModel.objects.filter (user_id = id_user))
         video_solicitante =bool(VideoSolicitanteModel.objects.filter (user_id = id_user))
         intereses = bool(InteresModel.objects.filter(user_id = id_user))
@@ -37,6 +36,8 @@ class PostulacionesView(generics.GenericAPIView):
                     return Response('la vacante no existe', status = status.HTTP_400_BAD_REQUEST)
             if es_empleador == True:    
                     return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+            if verificar == True:
+                return Response('Ya te postulaste a esta vacante', status=status.HTTP_401_UNAUTHORIZED)
                 
                 
             elif es_empleador == False:
@@ -46,8 +47,8 @@ class PostulacionesView(generics.GenericAPIView):
                     return Response('No ha colocado información academica', status = status.HTTP_400_BAD_REQUEST)
                 if video_solicitante == False:
                     return Response('El video es importante, subir link de su video', status = status.HTTP_400_BAD_REQUEST)
-                #if intereses == False:
-                    #return Response('El video es importante, subir link de su video', status = status.HTTP_400_BAD_REQUEST) 
+                if intereses == False:
+                    return Response('Los interes no se han colocado', status = status.HTTP_400_BAD_REQUEST) 
                 if id_usuario == id_user:           
                         
                     serializer = PostulacionesSerializer(data=request.data)

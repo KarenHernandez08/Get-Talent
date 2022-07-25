@@ -8,6 +8,7 @@ from users.views import ChangePasswordView
 from users.views import PasswordResetEmailView
 from users.views import PasswordResetView
 from users.views import CodigoView
+from users.views import LogoutView
 
 
 
@@ -30,6 +31,8 @@ urlpatterns = [
      path('reset-password/', PasswordResetView.as_view(), name='reset-password'),
 
      path('recovery/codigo-acceso/', CodigoView.as_view()),
+     
+     path('logout/', LogoutView.as_view(), name="logout"),
 
 
 ]
