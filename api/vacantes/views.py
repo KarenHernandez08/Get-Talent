@@ -49,7 +49,7 @@ class VacantesRegistroView(generics.GenericAPIView):
                     serializer.is_valid(raise_exception=True)
                     serializer.save()
                     return Response('Autorización de Empleador Exitosa. Información de Vacante Registrada', status=status.HTTP_201_CREATED)
-                return Response('No se puede guardar la informcaición')
+                return Response('No se puede guardar la información')
         except:
             serializer.is_valid(raise_exception=True)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

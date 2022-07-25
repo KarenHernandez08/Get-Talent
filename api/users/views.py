@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.models import User
 from users.serializers import (CodigoSerializer, LoginSerializer, UserSignupSerializer, 
                              EmailVerificationSerializer, VerifySerializer,PasswordResetEmailSerializer,
-                              PasswordResetSerializer, ChangePasswordSerializer,CodigoSerializer)
+                              PasswordResetSerializer, ChangePasswordSerializer,CodigoSerializer, LogoutSerializer)
 from .utils import Util #importamos nuestra clase y metodo de enviar email
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -270,5 +270,19 @@ class CodigoView(generics.GenericAPIView):
             return Response('Codigo de Acceso exitoso', status=status.HTTP_201_CREATED)
         except:
             return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
+        
+
+class LogoutView(generics.GenericAPIView):
+    serializer_class = LogoutSerializer
+
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response('Ha cerrado sesión', status=status.HTTP_204_NO_CONTENT)
     
     
