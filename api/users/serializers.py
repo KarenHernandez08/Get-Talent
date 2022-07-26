@@ -143,9 +143,17 @@ class PasswordResetEmailSerializer(serializers.Serializer):
             print('codigo acceso', link)
             #GUARDAR CODIGO ACCESO MODELO
             # Send EMail
-            body = 'Hola, tu código de acceso para cambiar la contraseña es: '+ link
+            # Send EMail
+            body= f"""Hola,
+              Tu código de acceso para cambiar tu contrseña es: 
+              {link}
+              Si no solicitaste este correo, por favor ignoralo. 
+              Recuerda no compartir tus contraseñas.  
+              
+              Reuerda,¡Tu haces a Get Talent!
+              Valentis.Get-Talent"""
             data = {
-                'email_subject':'Instrucciones para cambiar contraseña',
+                'email_subject':'Cambio de contraseña',
                 'email_body':body,
                 'to_email':user.email
             }
@@ -214,12 +222,9 @@ class PasswordResetSerializer(serializers.Serializer):
                     if not any(x in special_characters for x in new_password):
                         raise ValidationError('La contraseña debe contener al menos un caracter especial.')
                     
-                    #print(user.password)
                     user.set_password(new_password)
-                    #print(user.password)
                     user.created_acceso(0) #Reiniciamos codigo de acceso
                     user.save()
-                    
                     return data
                     
             else: 

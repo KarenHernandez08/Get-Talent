@@ -140,9 +140,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
           except:
                return Response('No se encontro ')
                          
-          
-               
-          
+                 
 class EmpleadorPostulacionesView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]
      def get(self,request, vacante_id):
@@ -191,8 +189,7 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                     'videos':serializer3.data 
                     })
           #except:
-               #return Response('No le corresponde la vacante')
-                    
+               #return Response('No le corresponde la vacante')            
 
 class ContactarPostulanteView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]#para saber que permisos tiene y quien la pyede usar
@@ -204,7 +201,7 @@ class ContactarPostulanteView(generics.GenericAPIView):
           id_user=usuario_instance.id
           data = request.data
           id_usuario =data.get('user_id')
-
+          informacion_empresa= bool(InfoEmpleadorModel.objects.filter(user_id = id_user))
           es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
          
           serializer = ContactarPostulanteSerializer(data=request.data) #traigo la informacion del endpoint
@@ -212,26 +209,24 @@ class ContactarPostulanteView(generics.GenericAPIView):
                if es_empleador == False:    # Si el usuario No es empleador 
                     return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
                elif es_empleador == True:
-                    
-                    serializer = ContactarPostulanteSerializer(data=request.data)
-                    print("entre a la validacion")
-                    serializer.is_valid(raise_exception=True)  #valido la información
-                    print("pase la validacion")
-                    return Response('Email automatico enviado al solicitante', status=status.HTTP_201_CREATED)
+                    if informacion_empresa == False:
+                         return Response('No ha colocado su información de empresa en su perfil', status = status.HTTP_400_BAD_REQUEST)
+                    elif informacion_empresa == True:
+                         serializer = ContactarPostulanteSerializer(data=request.data)
+                         serializer.is_valid(raise_exception=True)  #valido la información
+                         return Response('Email automatico enviado al solicitante', status=status.HTTP_201_CREATED)
           except:
                return Response('Error', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
      def get(self,request, postulacion_id):
           postulado_instancia = Postula.objects.get(id=postulacion_id)
           postulante = postulado_instancia.user_id_id
-          print(postulado_instancia)
-
+          
           solicitante_instancia = User.objects.filter(id=postulante)
-          print(postulante)
+          
           try: 
                
                serializer = PostulanteMailSerializer(solicitante_instancia, many=True)
                serializer.is_valid
                return Response(serializer.data, status=status.HTTP_200_OK)
           except:
-               return Response('Error', status=status.HTTP_400_BAD_REQUEST)      
-
+               return Response('Error', status=status.HTTP_400_BAD_REQUEST)

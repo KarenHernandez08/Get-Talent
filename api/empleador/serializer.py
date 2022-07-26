@@ -26,7 +26,6 @@ class InfoEmpleadorSerializers(serializers.ModelSerializer):
             response= super().to_representation(instance)
             response['user_id']=UserSignupSerializer(instance.user_id).data
             return response 
-        
 
 # Envio de email para contactar a l solcitante postulado
 class ContactarPostulanteSerializer(serializers.Serializer):
@@ -44,33 +43,22 @@ class ContactarPostulanteSerializer(serializers.Serializer):
         #mensaje=data.get('mensaje')
         #asunto = data.get('asunto')
         if Postula.objects.filter(id=id_postulacion).exists():
-            #Información de solicitante
-            #postulado_instancia = Postula.objects.get(id_postulacion = id)
             #print("INFO SOLICITANTE")
             solicitante_id = postulado_instancia.user_id_id
-            #print("id_solicitante",solicitante_id)
             email_solicitante = User.objects.get(id=solicitante_id)
-            #print("solicitante instancia",solicitante_instancia)
-            #email_solicitante = solicitante_instancia.email
-            #print("email_solicitante",email_solicitante)
             solicitante_name = InfoPesonalModel.objects.get(user_id_id=solicitante_id)
-            #print("instancia personal", solcitante_info)
-            #solicitante_name = solcitante_info.name
-            #print("name",solicitante_name)
-            #Empresa informacion 
+            
             #print("EMPRESA INFORMACION")
             vacante_id_id = postulado_instancia.vacante_id_id
-            #print("vacante id",vacante_id_id)
-            #vacante_instancia = VacantesModel.objects.get(vacante_id_id = 3)
-            #print("Vacante instancia",vacante_instancia)
-            #print("empleador instancia",empleador_instancia)
+            # print("vacante id",vacante_id_id)
+            # vacante_instancia = VacantesModel.objects.get(vacante_id= 1)
+            # print("Vacante instancia", vacante_instancia)
+            # print("empleador instancia",empleador_instancia)
             email_empleador = empleador_instancia.email
-            #print("emplador email",email_empleador)
             id_empresa = empleador_instancia.id
-            #print("empresa id",id_empresa)
             company_instancia = InfoEmpleadorModel.objects.get(user_id_id = id_empresa)
             company_name = company_instancia.empresa
-            #print("namecompany ",company_name)
+    
             body= f"""Hola, {solicitante_name },
               La compañía {company_name} esta interesada en tí,
               para la vacante que te postulaste {vacante_id_id}.
@@ -84,7 +72,19 @@ class ContactarPostulanteSerializer(serializers.Serializer):
                 'to_email':email_solicitante
             }
             Util.send_email(data)
-            print("envie el correo")
+            print("envie el correo de usuario")
+            email_adicional =  solicitante_name.additional_mail
+            if email_adicional:
+                 print("si exite mail")
+                 data = {
+                    'email_subject':'Seguimiento Postulación GET-TALENT',
+                    'email_body':body,
+                    'to_email':email_adicional
+                 }
+                 Util.send_email(data)
+                 print("envie el correo adicional de usuario")
+            elif not email_adicional:
+                print("No exite mail adicional")
             return data
             # data = {
             #     'email_subject': asunto,
