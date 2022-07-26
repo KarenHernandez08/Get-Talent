@@ -64,6 +64,7 @@ class VacantesListView(generics.GenericAPIView):
         preguntas= PreguntasModel.objects.filter(pk__in = vacante)
         serializer =VacantesSerializer(vacante, many=True)
         serializer2 =PreguntasSerializer(preguntas, many=True)
+        
         return Response({'vacantes':serializer.data, 
                          'preguntas':serializer2.data})
 
@@ -81,55 +82,52 @@ class VacantesFilterList(generics.GenericAPIView):
                          'preguntas':serializer2.data})
     
  
-class VacantesFilterListArea(generics.GenericAPIView): 
-    permission_classes= [permissions.IsAuthenticated]
-    
-    def get(self, request, area):
-        area= VacantesModel.objects.filter(area__iexact=area)
-        serializer = VacantesSerializer(area, many=True)
-        return Response(serializer.data)
-    
-class VacantesFilterListEstado(generics.GenericAPIView): 
-    permission_classes= [permissions.IsAuthenticated]
-    
-    def get(self, request, estado):
-        estado = VacantesModel.objects.filter(estado__iexact=estado)
-        serializer = VacantesSerializer(estado, many=True)
-        return Response(serializer.data)
-    
-class VacantesFilterListTipo(generics.GenericAPIView): 
-    permission_classes= [permissions.IsAuthenticated]
-    
-    def get(self, request, tipo_trabajo):
-        print(tipo_trabajo)
-        tipo_trabajo= VacantesModel.objects.filter(tipo_trabajo__iexact=tipo_trabajo)
-        serializer= VacantesSerializer(tipo_trabajo, many=True)
-        return Response(serializer.data)
-
-class VacantesFilterListExperiencia(generics.GenericAPIView):
+class VacantesFilter(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
-    def get(self, request, experiencia):
-        experiencia = VacantesModel.objects.filter(experiencia__iexact = experiencia)
-        serializer= VacantesSerializer(experiencia, many = True)
-        return Response( serializer.data)
-
-class VacantesFilterListModalidad(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, texto):
+        area= bool(VacantesModel.objects.filter(area__iexact=texto))
+        estado = bool(VacantesModel.objects.filter(estado__iexact=texto))
+        tipo_trabajo = bool(VacantesModel.objects.filter(tipo_trabajo__iexact=texto)) 
+        experiencia = bool(VacantesModel.objects.filter(experiencia__iexact = texto))
+        modalidad = bool(VacantesModel.objects.filter(modalidad__iexact = texto))
+        name = bool (VacantesModel.objects.filter(name__iexact = texto))
+        
+        if area == True:
+            area = VacantesModel.objects.filter(area__iexact=texto)
+            serializer = VacantesSerializer(area, many=True)
+            return Response(serializer.data)
+        if estado == True:
+            estado = VacantesModel.objects.filter(estado__iexact=texto)
+            serializer = VacantesSerializer(estado, many=True)
+            return Response(serializer.data)
+        if tipo_trabajo == True:
+            tipo_trabajo = VacantesModel.objects.filter(tipo_trabajo__iexact=texto)
+            serializer = VacantesSerializer(tipo_trabajo, many=True)
+            return Response(serializer.data)
+        if experiencia == True:
+            experiencia = VacantesModel.objects.filter(experiencia__iexact = texto)
+            serializer= VacantesSerializer(experiencia, many = True)
+            return Response( serializer.data)
+        if modalidad == True:
+            modalidad = VacantesModel.objects.filter(modalidad__iexact = texto)
+            serializer= VacantesSerializer(modalidad, many = True)
+            return Response( serializer.data)
+        if name == True:
+            name = VacantesModel.objects.filter(name__iexact = texto)
+            serializer= VacantesSerializer(name, many = True)
+            return Response( serializer.data)
+            
+   
+        else:
+            return Response('No se encontro')
     
-    def get(self, request, modalidad):
-        modalidad = VacantesModel.objects.filter(modalidad__iexact = modalidad)
-        serializer= VacantesSerializer(modalidad, many = True)
-        return Response( serializer.data)
 
-class VacantesFilterListNombre(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     
-    def get(self, request, name):
-        name = VacantesModel.objects.filter(name__iexact = name)
-        serializer= VacantesSerializer(name, many = True)
-        return Response( serializer.data)
 
+
+            
+        
 
         
     

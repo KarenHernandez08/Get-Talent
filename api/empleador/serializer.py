@@ -1,8 +1,9 @@
 
 from rest_framework import serializers
 from empleador.models import InfoEmpleadorModel
-from .models import *
+from postulaciones.models import *
 from users.serializers import *
+from solicitantes.models import*
 
 
 class InfoEmpleadorSerializers(serializers.ModelSerializer):

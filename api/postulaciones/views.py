@@ -26,8 +26,6 @@ class PostulacionesView(generics.GenericAPIView):
         verificar = bool(Postula.objects.filter(user_id = id_usuario, vacante_id=vacante))
         print(verificar)
         informacion_personal = bool(InfoPesonalModel.objects.filter(user_id= id_user))
-        informacion_academica = bool(InfoAcademicaModel.objects.filter (user_id = id_user))
-        video_solicitante =bool(VideoSolicitanteModel.objects.filter (user_id = id_user))
         intereses = bool(InteresModel.objects.filter(user_id = id_user))
         vacante=bool(VacantesModel.objects.filter(vacante_id= vacante_id))
          
@@ -43,10 +41,6 @@ class PostulacionesView(generics.GenericAPIView):
             elif es_empleador == False:
                 if informacion_personal == False:
                     return Response('No ha colocado su información personal', status = status.HTTP_400_BAD_REQUEST)
-                if informacion_academica == False:
-                    return Response('No ha colocado información academica', status = status.HTTP_400_BAD_REQUEST)
-                if video_solicitante == False:
-                    return Response('El video es importante, subir link de su video', status = status.HTTP_400_BAD_REQUEST)
                 if intereses == False:
                     return Response('Los interes no se han colocado', status = status.HTTP_400_BAD_REQUEST) 
                 if id_usuario == id_user:           
