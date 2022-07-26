@@ -251,9 +251,7 @@ class PasswordResetView(generics.GenericAPIView):
     def post(self, request):
         try:
             serializer = PasswordResetSerializer(data=request.data)
-            print("ENTRANDO A LA VALIDACION")
             serializer.is_valid(raise_exception=True)
-            print("PASE LA VALIDACION")
             #serializer.save()
             return Response('Nueva contraseña guardada con exito', status=status.HTTP_201_CREATED)
         except:

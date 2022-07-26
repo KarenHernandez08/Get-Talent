@@ -23,7 +23,8 @@ from vacantes.serializer import PreguntasVacantesSerializer
 from .models import *
 from users.models import User
 from empleador.models import InfoEmpleadorModel
-from empleador.serializer import InfoEmpleadorSerializers
+from empleador.serializer import (ContactarPostulanteSerializer, InfoEmpleadorSerializers, 
+PostulanteMailSerializer)
 from empleador.renderers import EmpleadorRenderer
 
 # Create your views here. crear Post historia 9
@@ -162,6 +163,45 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
           #except:
                #return Response('No le corresponde la vacante')
                     
+
+class ContactarPostulanteView(generics.GenericAPIView):
+     permission_classes = [permissions.IsAuthenticated]#para saber que permisos tiene y quien la pyede usar
+     renderer_classes = (EmpleadorRenderer,)#autodocumentar en el swagger
+     serializer_class = ContactarPostulanteSerializer
+
+     def post(self, request, postulacion_id):#Crear y guardar información, el usuario_id vendrá dado desde el endpoint
+          usuario_instance = request.user#Aca llamo del modelo User la información del usuario con el id dado
+          id_user=usuario_instance.id
+          data = request.data
+          id_usuario =data.get('user_id')
+
+          es_empleador = usuario_instance.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
+         
+          serializer = ContactarPostulanteSerializer(data=request.data) #traigo la informacion del endpoint
+          try:
+               if es_empleador == False:    # Si el usuario No es empleador 
+                    return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
+               elif es_empleador == True:
+                    
+                    serializer = ContactarPostulanteSerializer(data=request.data)
+                    print("entre a la validacion")
+                    serializer.is_valid(raise_exception=True)  #valido la información
+                    print("pase la validacion")
+                    return Response('Email automatico enviado al solicitante', status=status.HTTP_201_CREATED)
+          except:
+               return Response('Error', status=status.HTTP_400_BAD_REQUEST)#Respuesta para sabe si esta bien
+     def get(self,request, postulacion_id):
+          postulado_instancia = Postula.objects.get(id=postulacion_id)
+          postulante = postulado_instancia.user_id_id
+          print(postulado_instancia)
+
+          solicitante_instancia = User.objects.filter(id=postulante)
+          print(postulante)
+          try: 
                
-               
+               serializer = PostulanteMailSerializer(solicitante_instancia, many=True)
+               serializer.is_valid
+               return Response(serializer.data, status=status.HTTP_200_OK)
+          except:
+               return Response('Error', status=status.HTTP_400_BAD_REQUEST)      
 

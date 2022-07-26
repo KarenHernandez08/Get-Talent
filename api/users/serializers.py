@@ -214,8 +214,10 @@ class PasswordResetSerializer(serializers.Serializer):
                     if not any(x in special_characters for x in new_password):
                         raise ValidationError('La contraseña debe contener al menos un caracter especial.')
                     
+                    #print(user.password)
                     user.set_password(new_password)
-                    #user.created_acceso(0) #Reiniciamos codigo de acceso
+                    #print(user.password)
+                    user.created_acceso(0) #Reiniciamos codigo de acceso
                     user.save()
                     
                     return data
