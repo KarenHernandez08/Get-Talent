@@ -58,9 +58,10 @@ class UserSignupView(generics.GenericAPIView):
             # la absurl se refiere al link que al usuario le llegara, en este caso el dominio mas el token para validar al usuario
             absurl='http://'+ current_site +relative_link+"?token="+ str(token) 
             #el mensaje que le llegara en el correo mas la absurl
-            email_body='Hola, Selecciona el siguiente link para verificar tu correo.\n'+absurl 
+            email_body='Bienvenido a Get Talent \n ''Para poder activar tu cuenta y puedas disfrutar de los beneficios del sitio web, por favor selecciona el siguiente link.\n \n'+absurl +  '\n \n \n \n \nEsperamos que tu estancia sea agradable. \n "Recuerda, tu haces a Get Talent"'
+
             #Data que vamos a enviar a Util
-            data={'email_body':email_body, 'to_email':user.email, 'email_subject': 'Verifica tu correo'}
+            data={'email_body':email_body, 'to_email':user.email, 'email_subject': 'Verificación de correo'}
  
 
             #aqui invocamos el metodo y mandamos la data para utils.py
@@ -192,9 +193,9 @@ class Verificar(generics.GenericAPIView):
                 # la absurl se refiere al link que al usuario le llegara, en este caso el dominio mas el token para validar al usuario
                 absurl='http://'+ current_site +relative_link+"?token="+ str(token) 
                 #el mensaje que le llegara en el correo mas la absurl
-                email_body='Hola, Selecciona el siguiente link para verificar tu correo.\n'+absurl 
+                email_body='Bienvenido a Get Talent \n''Para poder activar tu cuenta y puedas disfrutar de los beneficios del sitio web, por favor selecciona el siguiente link.\n \n'+absurl +  '\n \n \n \n \nEsperamos que tu estancia sea agradable. \n "Recuerda, tu haces a Get Talent"'
                 #Data que vamos a enviar a Util
-                data={'email_body':email_body, 'to_email':user.email, 'email_subject': 'Verifica tu correo'}
+                data={'email_body':email_body, 'to_email':user.email, 'email_subject': 'Verificación de correo'}
     
 
                 #aqui invocamos el metodo y mandamos la data para utils.py

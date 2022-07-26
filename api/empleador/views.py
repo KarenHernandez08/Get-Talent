@@ -78,37 +78,67 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
           
           obtener_id=users.id
           
-          es_empleador = users.is_empleador #aca traigo del usuario, solo el dado "is_empleador"
+          es_empleador = users.is_empleador #aca traigo del usuario, solo el dato "is_empleador"
           
-          empleador=bool(InfoEmpleadorModel.objects.get(user_id=obtener_id))
+          empleador=bool(InfoEmpleadorModel.objects.filter(user_id=obtener_id))
           print(empleador)
+          vacantes= bool(VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id'))
+          print(vacantes)
+          
           try:
                if es_empleador == False:    # Si el usuario No es empleador 
                     return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
-               elif es_empleador == True:
+               if empleador ==False:
+                    if vacantes == False:
+                         return Response('No se encontro ninguna información')
+                    
+               if es_empleador == True:
                     if empleador == True:
+                         if vacantes ==False:
+                              empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
+                              serializer=InfoEmpleadorSerializers(empleador)
+                              return Response({
+                                   'Información de la empresa':serializer.data
+                                   })
+               
+               if es_empleador == True:
+                    if empleador == False:
+                         if vacantes ==True:
                          
-                         empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
-                         vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
-                         preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
-                         serializer=InfoEmpleadorSerializers(empleador)
-                         serializer2 = VacantesSerializer(vacantes, many =True)
-                         serializer3 = PreguntasSerializer(preguntas, many = True)
+                              vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
+                              preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
                               
-                         areas={'preguntas': serializer3.data}
-                         vacantes= {'Vacantes':serializer2.data}
-                         unir=dict(**vacantes, **areas)
-                         return Response({
-                              'Información de la empresa':serializer.data, 
-                              'Vacantes':serializer2.data,
-                              'Preguntas':serializer3.data
-                              })
+                              serializer2 = VacantesSerializer(vacantes, many =True)
+                              serializer3 = PreguntasSerializer(preguntas, many = True)
+                                   
+                              return Response({
+                                   'Vacantes':serializer2.data,
+                                   'Preguntas':serializer3.data
+                                   })
+                              
+               
+                    
+               if es_empleador == True:
+                    if empleador == True:
+                         if vacantes ==True:
+                         
+                              empleador=InfoEmpleadorModel.objects.get(user_id=obtener_id)
+                              vacantes= VacantesModel.objects.filter (user_id = obtener_id, is_active=True).order_by('user_id')
+                              preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+                              serializer=InfoEmpleadorSerializers(empleador)
+                              serializer2 = VacantesSerializer(vacantes, many =True)
+                              serializer3 = PreguntasSerializer(preguntas, many = True)
+                                   
+                              areas={'preguntas': serializer3.data}
+                              vacantes= {'Vacantes':serializer2.data}
+                              unir=dict(**vacantes, **areas)
+                              return Response({
+                                   'Información de la empresa':serializer.data, 
+                                   'Vacantes':serializer2.data,
+                                   'Preguntas':serializer3.data
+                                   })
           except:
-               return Response({
-                              'Información de la empresa':serializer.data, 
-                              'Vacantes':'Aun no coloca vacantes',
-                              
-                              })
+               return Response('No se encontro ')
                          
           
                
