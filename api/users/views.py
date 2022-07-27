@@ -257,7 +257,7 @@ class PasswordResetView(generics.GenericAPIView):
             #serializer.save()
             return Response('Nueva contraseña guardada con exito', status=status.HTTP_201_CREATED)
         except:
-            return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
+            return Response('El código de acceso no es el correcto o ya expiro', status=status.HTTP_400_BAD_REQUEST)
     
 class CodigoView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
