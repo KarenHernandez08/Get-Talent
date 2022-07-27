@@ -8,6 +8,7 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken #para poder crear los tokens
+from rest_framework_simplejwt.tokens import TokenError
 from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
@@ -266,9 +267,9 @@ class CodigoView(generics.GenericAPIView):
         try:
             serializer = CodigoSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            return Response('Codigo de Acceso exitoso', status=status.HTTP_201_CREATED)
+            return Response('Código de Acceso exitoso', status=status.HTTP_201_CREATED)
         except:
-            return Response('El token ya expiro o los datos son incorrectos', status=status.HTTP_400_BAD_REQUEST)
+            return Response('El código expiro', status=status.HTTP_400_BAD_REQUEST)
         
 
 class LogoutView(generics.GenericAPIView):
@@ -280,8 +281,10 @@ class LogoutView(generics.GenericAPIView):
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        try:
+            serializer.save()
+            return Response('Ha cerrado sesión', status=status.HTTP_204_NO_CONTENT)
+        except TokenError:
+            return Response('El token expiro')
 
-        return Response('Ha cerrado sesión', status=status.HTTP_204_NO_CONTENT)
-    
     

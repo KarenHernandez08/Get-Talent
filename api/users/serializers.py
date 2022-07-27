@@ -224,6 +224,8 @@ class PasswordResetSerializer(serializers.Serializer):
                     
                     user.set_password(new_password)
                     user.created_acceso(0) #Reiniciamos codigo de acceso
+                    user.intentos=0
+                    user.is_active=True
                     user.save()
                     return data
                     
@@ -269,21 +271,18 @@ class CodigoSerializer(serializers.Serializer):
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
-    default_error_message = {
-        'bad_token': ('El Token ha expirado o es invalido')
-    }
-
     def validate(self, attrs):
         self.token = attrs['refresh']
         return attrs
 
     def save(self, **kwargs):
+ 
+        RefreshToken(self.token).blacklist()
 
-        try:
-            RefreshToken(self.token).blacklist()
+            
 
-        except TokenError:
-            self.fail('bad_token')
+
+   
            
            
      

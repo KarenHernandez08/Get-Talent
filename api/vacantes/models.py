@@ -14,7 +14,6 @@ class VacantesModel(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE,default='', verbose_name= 'Empresa') 
     descripcion = models.TextField ( max_length=500)
     requisitos = models.TextField ( max_length=300)
-    localidad = models.CharField ( default = 'No aplica' ,max_length=30)
     sueldo = models.DecimalField (default="0.0",max_digits=30 , decimal_places=2) 
     tipo_trabajo = models.CharField(max_length=30, choices=TIPO_TRABAJO)
     modalidad = models.CharField(max_length=20, choices=MODALIDAD)

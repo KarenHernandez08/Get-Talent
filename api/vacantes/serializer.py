@@ -8,7 +8,7 @@ from vacantes.models import (
 class VacantesSerializer (serializers.ModelSerializer):
     class Meta:
         model = VacantesModel
-        fields = ['vacante_id', 'is_active', 'name', 'descripcion', 'requisitos','localidad', 'sueldo', 'tipo_trabajo',
+        fields = ['vacante_id', 'is_active', 'name', 'descripcion', 'requisitos', 'sueldo', 'tipo_trabajo',
                   'modalidad', 'estado', 'area', 'experiencia', 'user_id']
     
     def validate(self, attr):
@@ -29,7 +29,7 @@ class PreguntasVacantesSerializer (serializers.ModelSerializer):
     class Meta:
         model = VacantesModel
         
-        fields = ['name','tipo_trabajo','descripcion','preguntasmodel','sueldo', 'requisitos', 'localidad', 'modalidad', 'vacante_video', 'estado', 'area', 'experiencia', 'user_id']
+        fields = ['name','tipo_trabajo','descripcion','preguntasmodel','sueldo', 'requisitos', 'modalidad', 'vacante_video', 'estado', 'area', 'experiencia', 'user_id']
         
     
     def create(self, validated_data):

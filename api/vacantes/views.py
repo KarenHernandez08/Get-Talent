@@ -121,7 +121,8 @@ class VacantesFilter(generics.GenericAPIView):
    
         else:
             return Response('No se encontro')
-    
+
+        
 
     
 
@@ -129,5 +130,4 @@ class VacantesFilter(generics.GenericAPIView):
             
         
 
-        
-    
+          
