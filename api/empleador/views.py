@@ -163,15 +163,12 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                          vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
                          preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
                          postulacion= Postula.objects.filter(vacante_id = vacante_id)
-                         
                          post = Postula.objects.filter(vacante_id = vacante_id)
+                         #user = User.objects.filter(InfoPersonalModel__user_id = post.user_id)
+                              
+                         #solicitante = InfoPesonalModel.objects.filter(user_id_id= post.user_id).order_by('user_id_id')
+                         solicitante = InfoPesonalModel.objects.filter(User__id =post.user_id).filter(User__id= post.user_id).order_by('id')
                          
-                         #solicitantes = InfoPesonalModel.objects.all().filter(name= post.user_id)
-                         #print(solicitantes)
-                              
-                         #solicitante = InfoPesonalModel.objects.filter(pk= post.user_id).order_by('user_id')
-                         solicitante = InfoPesonalModel.objects.all().get('user_id'). split(user_id =postulacion.user_id).order_by('user_id')
-                              
                          serializer = VacantesSerializer(vacantes, many =True)
                          serializer2 = PreguntasSerializer(preguntas, many = True)
                          serializer3 = PostulacionesSerializer(postulacion, many = True)
