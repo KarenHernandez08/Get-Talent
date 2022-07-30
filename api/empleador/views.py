@@ -145,48 +145,46 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]
      def get(self,request, vacante_id):
           users=request.user
-          print(users)
           obtener_id=users.id
-          print(obtener_id)
           es_empleador = users.is_empleador 
-          print(es_empleador)
           postulacion= bool(Postula.objects.filter(vacante_id = vacante_id))
           vacantes= bool(VacantesModel.objects.filter (user_id = obtener_id, vacante_id = vacante_id))
-          print(vacantes)
-          print (postulacion)
-          #try:
-          if es_empleador == False:    
-                    return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
-          elif es_empleador == True:
-               if postulacion ==True:
-                    if vacantes == True:
-                         vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
-                         preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
-                         postulacion= Postula.objects.filter(vacante_id = vacante_id)
-                         post = Postula.objects.filter(vacante_id = vacante_id)
-                         #user = User.objects.filter(InfoPersonalModel__user_id = post.user_id)
-                              
-                         #solicitante = InfoPesonalModel.objects.filter(user_id_id= post.user_id).order_by('user_id_id')
-                         solicitante = InfoPesonalModel.objects.filter(User__id =post.user_id).filter(User__id= post.user_id).order_by('id')
-                         
-                         serializer = VacantesSerializer(vacantes, many =True)
-                         serializer2 = PreguntasSerializer(preguntas, many = True)
-                         serializer3 = PostulacionesSerializer(postulacion, many = True)
-                         serializer4 = InfoPersonalSerializer(solicitante, many =True)   
-                         
-                             
-               else:
-                    return Response('Aun nadie se postula a la vacante')
+          try:
+               if es_empleador == False:    
+                         return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+               if vacantes == False:
+                    return Response ("No puede ver las postulaciones de la vacante porque no le corresponde")
                     
-                    
+               elif es_empleador == True:
+                    if postulacion ==True:
+                         if vacantes == True:
+                              vacantes= VacantesModel.objects.filter (vacante_id = vacante_id)
+                              preguntas= PreguntasModel.objects.filter(pk__in = vacantes)
+                              postulacion= Postula.objects.filter(vacante_id = vacante_id)
+                         
+                              sls = []
+                              for post in postulacion:
+                                   solicitante = InfoPesonalModel.objects.get(user_id= post.user_id)                                    
+                                   sls.append(solicitante)
+                                   
+                              serializer = VacantesSerializer(vacantes, many =True)
+                              serializer2 = PreguntasSerializer(preguntas, many = True)
+                              serializer3 = PostulacionesSerializer(postulacion, many = True)
+                              serializer4 = InfoPersonalSerializer(sls, many =True)   
+                                          
+                    else:
+                         return Response('Aun nadie se postula a la vacante')
                return Response({
-                    'Vacante':serializer.data, 
-                    'Preguntas':serializer2.data,
-                    'Solicitantes que se postularon':serializer4.data,
-                    'videos':serializer3.data 
-                    })
-          #except:
-               #return Response('No le corresponde la vacante')            
+                                   'Vacante':serializer.data, 
+                                   'Preguntas':serializer2.data,
+                                   'Solicitantes que se postularon':serializer4.data,
+                                   'videos':serializer3.data 
+                                   })
+                         
+                    
+               
+          except:
+               return Response('Error')            
 
 class ContactarPostulanteView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]#para saber que permisos tiene y quien la pyede usar
@@ -204,7 +202,7 @@ class ContactarPostulanteView(generics.GenericAPIView):
           serializer = ContactarPostulanteSerializer(data=request.data) #traigo la informacion del endpoint
           try:
                if es_empleador == False:    # Si el usuario No es empleador 
-                    return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
+                    return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
                elif es_empleador == True:
                     if informacion_empresa == False:
                          return Response('No ha colocado su información de empresa en su perfil', status = status.HTTP_400_BAD_REQUEST)
