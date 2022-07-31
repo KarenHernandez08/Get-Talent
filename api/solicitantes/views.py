@@ -282,35 +282,36 @@ class InformacionView (generics.GenericAPIView):
 class SolicitantesPostulacionesView (generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
-    def get(request):
+    def get(self, request):
         users = request.user
         obtener_id= users.id
-        print(obtener_id)
+        print (obtener_id)
         
-        postulaciones = Postula.objects.filter(user_id = obtener_id)
+        postulaciones = Postula.objects.filter(user_id = obtener_id).first()
+        print(postulaciones)
+        
+        """for x in postulaciones:
+            print(x.vacante_id)"""
+        
+        
+        #vacante = VacantesModel.objects.filter(vacante_id = postulaciones.vacante_id)
+        #print(type(vacante))
         #vacantes= Postula.objects.all()
-        #vacante = VacantesModel.objects.filter(vacante_id= vacantes.vacante_id)
-        #solicitante = VacantesModel.objects.filter(vacante_id = postulaciones.vacante_id).order_by('vacante_id')
+        vacante = VacantesModel.objects.all().filter(vacante_id= postulaciones.vacante_id).order_by('vacante_id')
         
-        """sls = [] 
-        for post in postulaciones:
-            #print (post.vacante_id)
-            solicitante = VacantesModel.objects.filter(vacante_id = post.vacante_id) 
-                                              
-            sls.append(solicitante)"""
-            #print(sls)
+        
         #vacante = Postula.objects.filter(vacante_id = post.vacante_id)
         
         serializer = PostulacionesSerializer(postulaciones, many=True)
-                #serializer2 = VacantesSerializer(vacante, many =True)
-        #serializer4 = VacantesSerializer(solicitante, many =True)  
+        serializer2 = VacantesSerializer(vacante, many =True)
         
         return Response({
-                
-                'video':serializer.data,
-                
-                
-                })
+            'video':serializer.data,
+            'vacante':serializer2.data
+            
+            
+            })
+
     
     
    
