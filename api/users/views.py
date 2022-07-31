@@ -283,7 +283,7 @@ class LogoutView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             serializer.save()
-            return Response('Ha cerrado sesión', status=status.HTTP_204_NO_CONTENT)
+            return Response({"mensaje":"Ha cerrado sesión"}, status=status.HTTP_200_OK)
         except TokenError:
             return Response('El token expiro')
 
