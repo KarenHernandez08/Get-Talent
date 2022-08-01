@@ -177,7 +177,7 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                return Response({
                                    'Vacante':serializer.data, 
                                    'Preguntas':serializer2.data,
-                                   'Solicitantes que se postularon':serializer4.data,
+                                   'Solicitantes':serializer4.data,
                                    'videos':serializer3.data 
                                    })
                          

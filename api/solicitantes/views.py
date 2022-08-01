@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework import permissions
+from vacantes.serializer import PreguntasSerializer
+from vacantes.models import PreguntasModel
 from vacantes.models import VacantesModel
 
 from vacantes.serializer import VacantesSerializer
@@ -287,29 +289,20 @@ class SolicitantesPostulacionesView (generics.GenericAPIView):
         obtener_id= users.id
         print (obtener_id)
         
-        postulaciones = Postula.objects.filter(user_id = obtener_id).first()
+        sls = []
+        postulaciones = Postula.objects.filter(user_id = obtener_id)
         print(postulaciones)
+        for x in postulaciones:
+            vacante = VacantesModel.objects.get(vacante_id = x.vacante_id_id)
+            
+            sls.append(vacante)
         
-        """for x in postulaciones:
-            print(x.vacante_id)"""
+        serializer2 = VacantesSerializer(sls, many =True)
         
-        
-        #vacante = VacantesModel.objects.filter(vacante_id = postulaciones.vacante_id)
-        #print(type(vacante))
-        #vacantes= Postula.objects.all()
-        vacante = VacantesModel.objects.all().filter(vacante_id= postulaciones.vacante_id).order_by('vacante_id')
-        
-        
-        #vacante = Postula.objects.filter(vacante_id = post.vacante_id)
-        
-        serializer = PostulacionesSerializer(postulaciones, many=True)
-        serializer2 = VacantesSerializer(vacante, many =True)
-        
+
         return Response({
-            'video':serializer.data,
-            'vacante':serializer2.data
-            
-            
+            'vacantes':serializer2.data
+
             })
 
     
