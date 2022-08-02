@@ -166,7 +166,7 @@ class InformacionView (generics.GenericAPIView):
                         if interes == False:
                            
                             
-                            return Response ('Aun no tienes información')
+                            return Response ('Aun no tienes información', status= status.HTTP_400_BAD_REQUEST)
             
             if informacion_perso == True:
                 if informacion_acade == False:
@@ -274,7 +274,7 @@ class InformacionView (generics.GenericAPIView):
             
       
         except:
-            return Response ('Falta información por llenar')
+            return Response ('Falta información por llenar', status= status.HTTP_400_BAD_REQUEST)
           
           
 class SolicitantesPostulacionesView (generics.GenericAPIView):
@@ -284,20 +284,21 @@ class SolicitantesPostulacionesView (generics.GenericAPIView):
         users = request.user
         obtener_id= users.id
         print (obtener_id)
-        
-        sls = []
-        postulaciones = Postula.objects.filter(user_id = obtener_id)
-        print(postulaciones)
-        for x in postulaciones:
-            vacante = VacantesModel.objects.get(vacante_id = x.vacante_id_id)
+        try:    
+            sls = []
+            postulaciones = Postula.objects.filter(user_id = obtener_id)
+            print(postulaciones)
+            for x in postulaciones:
+                vacante = VacantesModel.objects.get(vacante_id = x.vacante_id_id)
+                
+                sls.append(vacante)
             
-            sls.append(vacante)
-        
-        serializer2 = VacantesSerializer(sls, many =True)
-        
+            serializer2 = VacantesSerializer(sls, many =True)
+            
 
-        return Response({
-            'vacantes':serializer2.data
-
-            })
+            return Response({
+                'vacantes':serializer2.data})
+            
+        except:
+            return Response('error', status= status.HTTP_400_BAD_REQUEST)
     
