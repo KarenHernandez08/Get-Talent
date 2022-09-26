@@ -87,7 +87,9 @@ class VacantesFilter(generics.GenericAPIView):
     
     def get(self, request, texto):
         area= bool(VacantesModel.objects.filter(area__iexact=texto))
+        print('area',area)
         estado = bool(VacantesModel.objects.filter(estado__iexact=texto))
+        print('estado',estado)
         tipo_trabajo = bool(VacantesModel.objects.filter(tipo_trabajo__iexact=texto)) 
         experiencia = bool(VacantesModel.objects.filter(experiencia__iexact = texto))
         modalidad = bool(VacantesModel.objects.filter(modalidad__iexact = texto))
