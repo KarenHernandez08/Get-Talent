@@ -73,13 +73,25 @@ class VacantesFilterList(generics.GenericAPIView):
     permission_classes= [permissions.IsAuthenticated]
     
     def get(self, request, vacante_id):
-        vacante=VacantesModel.objects.filter(vacante_id= vacante_id)
-        preguntas= PreguntasModel.objects.filter(vacante_id=vacante_id)
-        
-        serializer = VacantesSerializer(vacante, many=True)
-        serializer2 =PreguntasSerializer(preguntas, many=True)
-        return Response({'vacantes':serializer.data, 
-                         'preguntas':serializer2.data})
+        vacante=bool(VacantesModel.objects.filter(vacante_id= vacante_id))
+        print(vacante)
+        preguntas= bool(PreguntasModel.objects.filter(vacante_id=vacante_id))
+        print(preguntas)
+        try:
+            if vacante ==False:
+                if preguntas == False:
+                    return Response ('no existe la vacante', status=status.HTTP_400_BAD_REQUEST)
+            if vacante == True:
+                if preguntas == True:
+                    vacante=VacantesModel.objects.filter(vacante_id= vacante_id)
+                    preguntas= PreguntasModel.objects.filter(vacante_id=vacante_id)
+                    
+                    serializer = VacantesSerializer(vacante, many=True)
+                    serializer2 =PreguntasSerializer(preguntas, many=True)
+                    return Response({'vacantes':serializer.data, 
+                                    'preguntas':serializer2.data})
+        except:
+            return Response('error', status= status.HTTP_400_BAD_REQUEST)
     
  
 class VacantesFilter(generics.GenericAPIView):
@@ -122,7 +134,7 @@ class VacantesFilter(generics.GenericAPIView):
             
    
         else:
-            return Response('No se encontro')
+            return Response('No se encontro', status= status.HTTP_400_BAD_REQUEST)
 
         
 

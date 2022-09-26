@@ -90,7 +90,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
                     return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
                if empleador ==False:
                     if vacantes == False:
-                         return Response('No se encontro ninguna información')
+                         return Response('No se encontro ninguna información', status= status.HTTP_400_BAD_REQUEST)
                     
                if es_empleador == True:
                     if empleador == True:
@@ -138,7 +138,7 @@ class InfoEmpleadorPostView(generics.GenericAPIView):
                                    'Preguntas':serializer3.data
                                    })
           except:
-               return Response('No se encontro ')
+               return Response('No se encontro ', status= status.HTTP_400_BAD_REQUEST)
                          
                  
 class EmpleadorPostulacionesView(generics.GenericAPIView):
@@ -153,7 +153,7 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                if es_empleador == False:    
                          return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
                if vacantes == False:
-                    return Response ("No puede ver las postulaciones de la vacante porque no le corresponde")
+                    return Response ("No puede ver las postulaciones de la vacante porque no le corresponde", status= status.HTTP_400_BAD_REQUEST)
                     
                elif es_empleador == True:
                     if postulacion ==True:
@@ -173,7 +173,7 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                               serializer4 = InfoPersonalSerializer(sls, many =True)   
                                           
                     else:
-                         return Response('Aun nadie se postula a la vacante')
+                         return Response('Aun nadie se postula a la vacante', status= status.HTTP_400_BAD_REQUEST)
                return Response({
                                    'Vacante':serializer.data, 
                                    'Preguntas':serializer2.data,
@@ -184,7 +184,7 @@ class EmpleadorPostulacionesView(generics.GenericAPIView):
                     
                
           except:
-               return Response('Error')            
+               return Response('Error', status= status.HTTP_400_BAD_REQUEST)             
 
 class ContactarPostulanteView(generics.GenericAPIView):
      permission_classes = [permissions.IsAuthenticated]#para saber que permisos tiene y quien la pyede usar
@@ -202,7 +202,7 @@ class ContactarPostulanteView(generics.GenericAPIView):
           serializer = ContactarPostulanteSerializer(data=request.data) #traigo la informacion del endpoint
           try:
                if es_empleador == False:    # Si el usuario No es empleador 
-                    return Response('No tienes autorización', status=status.HTTP_401_UNAUTHORIZED)
+                    return Response('No tienes autorización para subir Información de Empresas', status=status.HTTP_401_UNAUTHORIZED)
                elif es_empleador == True:
                     if informacion_empresa == False:
                          return Response('No ha colocado su información de empresa en su perfil', status = status.HTTP_400_BAD_REQUEST)
