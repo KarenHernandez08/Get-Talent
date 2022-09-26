@@ -1,3 +1,19 @@
+# ¿Qué es Get Talent?
+
+Get-talent es una plataforma donde empresas y candidatos , interactúan de manera virtual y exploran las distintas áreas laborales, obteniendo así un mayor alcance en la empleabilidad, que lo diferencia de otras plataformas como LinkedIn, Computrabajo, etc…
+
+Es que desde un comienzo los aspirantes tienen contacto directo a través de un
+video de manera online, contestando una serie de preguntas que la empresa solicita como primer paso, para poder aplicar a la vacante, desdé el primer momento les está dando una mayor probabilidad de poder quedar en el empleo que están solicitando, ya que muchas otras solo envían mensaje o piden solo el CV sumándose así a los miles de cv ignorados u olvidados en bandejas de Correos electrónicos.
+
+## Qué buscamos como plataforma:
+- 1- Posicionar a las grandes empresas.
+- 2- Tener un crecimiento en empleabilidad para México.
+- 3- Que tanto mujeres como hombres puedan contar con un salario digno desde el comienzo.
+
+## Desarrollo Backend
+
+Durante 7 meses el equipo de backend desarrollo las apis de Get Talent, mismas donde pueden visualizarse [aquí](https://gettalent-6.herokuapp.com/), donde usamos tecnología como python con django, heroku, PostgreSQL, docker, jwt Token, pipenv y venv como entorno virtual, swagger para el uso de documentación y usamos el servidor de correos gmail para poder hacer uso de envio de emails
+
 # Plantilla básica de un proyecto de Django con Django Rest Framework
 
 El objetivo de este repositorio es usarlo como una plantilla, esqueleto o también llamado `boilerplate` inicial para cualquier proyecto de API REST que use Django.
