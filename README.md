@@ -197,10 +197,8 @@ En todos los casos antes de levantarlo se deben cumplir los siguientes requisito
 
 ### En un servidor de Heroku (3)
 
-TODO
-
-
 ⌨️ con ❤️ por Gabriella Martínez 😊
+
 
 
 **Referencias:**
